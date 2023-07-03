@@ -1,0 +1,125 @@
+metadata: 
+  title: |
+    Dashboard
+  short title: |
+    Thanks
+  show login: False
+  allow registration: False
+  exit url: "http://lexyalgo.com/"
+  exit link: exit
+  exit label: |
+    Exit
+
+---
+metadata:
+  temporary session: True
+  hidden: True
+---
+features:
+  css: buttons.css
+---
+modules:
+  - .read_data
+  
+---
+objects:
+  - company_logo: DAStaticFile.using(filename='logo.png')
+---
+mandatory: True
+code: |
+  set_parts(logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
+---
+initial: True
+code: |
+  if not user_logged_in():
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3AsignIn_signUp.yml') 
+---
+
+mandatory: True
+code: |
+  current_page = 0
+  next_id_of_page = [None]
+  de = []
+---
+reconsider: True
+code: |
+  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3Aedit_profile.yml', 'label': 'Edit Profile'},{'url': url_of('change_password'), 'label': 'Change password'} ]
+  dashData = dash()
+  current_info = user_info()
+  list_of_interviews1 = len(dashData)
+  list_of_interviews = []
+  (items, next_id) = interview_list(next_id=next_id_of_page[current_page])
+  if len(next_id_of_page) == current_page + 1 and next_id is not None:
+    next_id_of_page.append(next_id)
+  del next_id
+  for info in items:
+    if not info['metadata'].get('hidden', False):
+      list_of_interviews.append(info)
+
+    del info
+  if len(list_of_interviews) > 0:
+    list_of_interviews += [dict()]
+  set_save_status('overwrite')
+---
+code: |
+  if row_item['title'] == 'Sign in button' or row_item['title'] == 'Registration Page':
+    row_item = ''
+---
+table css class: table table-striped
+mandatory: True
+question: |
+  Resume an interview
+  ${ action_button_html(url_of('https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3Aqdro.yml&new_session=1'), label="Create new QDRO", color="danger", size="md", new_window=True) }
+subquestion: |
+  % if len(dashData) > 0:
+  Click on edit button to edit an interview.
+  ${ int_table }
+  % else:
+  You do not have any sessions.
+  % endif
+
+  % if current_page > 0:
+  ${ action_button_html(url_action('change_page', direction=-1), label="Prev", icon='chevron-left', size='md', color='secondary') }
+  % endif
+  % if current_page + 1 < len(next_id_of_page):
+  ${ action_button_html(url_action('change_page', direction=1), label="Next", icon='chevron-right', size='md', color='secondary') }
+  % endif
+---
+table: int_table
+rows: dashData
+hidden rows: list_of_interviews
+columns:
+  - Id: |
+      row_item['id']
+  - Case Name: |
+      '<b  class="title">' + str(row_item['data']['petitioner_field']['petitioner.name.first'] + ' ' + row_item['data']['petitioner_field']['petitioner.name.middle'] + ' ' + row_item['data']['petitioner_field']['petitioner.name.last'] + ' vs. ' + row_item['data']['respondent_field']['respondent.name.first']+ ' ' + row_item['data']['respondent_field']['respondent.name.middle'] + ' ' + row_item['data']['respondent_field']['respondent.name.last']) + '</b>'
+  - Plan Name: |
+      row_item['data']['other_plan'] if row_item['data']['add_other_plan'] else row_item['data']['plan_name']
+  - Creation Date: |
+      row_item['modified_date'].date()
+  - Edit: |
+      '<a target= "_blank" class="btn btn-sm btn-warning btn-darevisit" href="' + interview_url(i=row_item['filename']) + '&id=' + str(row_item['id']) + '&new_session=1">Edit</a>'
+  - Delete: |
+      action_button_html(url_action('delete_ev',id=row_item['id']), label="Delete", color='warning')
+---
+event: change_page
+code: |
+  current_page += int(action_argument('direction'))
+---
+event: delete_ev
+code: |
+  de = delete_data(str(action_argument('id')))
+  log(de, "success")
+---
+event: delete
+code: |
+  if interview_list(
+      action='delete',
+      filename=action_argument('filename'),
+      session=action_argument('session')):
+    log("Deleted interview", "success")
+---
+event: delete_all
+code: |
+  interview_list(action='delete_all')
+  log("Deleted interviews", "success")

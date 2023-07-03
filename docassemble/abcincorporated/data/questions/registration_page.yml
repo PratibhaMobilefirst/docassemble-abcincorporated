@@ -1,0 +1,218 @@
+metadata: 
+  title: |
+    Registration Page
+  short title: |
+    Thanks
+  show login: False
+  allow registration: False
+  exit url: "https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3Adashboard.yml#page1"
+  exit link: exit
+  exit label: |
+    My Interviews
+  error action: on_error
+---
+modules:
+  - .read_data
+  - .registered_emails
+---
+objects:
+  - user: Individual
+  - company_logo: DAStaticFile.using(filename='logo.png')
+---
+mandatory: True
+code: |
+  set_parts(logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
+---
+features:
+  css: buttons.css
+---
+code: |
+  jsond = {
+    'user.name.middle':user.name.middle,
+    'user.address.address':user.address.address,
+    'user.address.unit':user.address.unit,
+    'user.address.city':user.address.city,
+    'user.address.state':user.address.state,
+    'user.address.zip_code':user.address.zip_code,
+    'user_type':user_type,
+    'bar_number':bar_num,
+    'phone_number':phone_number,
+    'dob':str(dob),
+  }
+  user_data = add_registered_data(jsond,infor)
+---
+code: |
+  if user_type == 'lawyer':
+    bar_num = bar_number
+  else:
+    bar_num = ''
+---
+mandatory: True
+field: registration_main
+question: |
+  Member Registration
+subquestion: | 
+  Already Registered? [Sign in](https://doc.lexyalgo.com/user/sign-in)
+  > Required fields are marked as <span class = "astric">*</span>
+css: |
+  <style>
+    .astric {
+       color: red;
+    }
+     [data-title]:hover:after {
+     opacity: 1;
+     transition: all 0.1s ease 0.5s;
+     visibility: visible;
+    }
+    [data-title]:after {
+    content: attr(data-title);
+    background-color:white;
+    color: black;
+    font-size: 18px;
+    position: absolute;
+    padding: 5px;
+    bottom: -2em;
+    left: 10%;
+    white-space: nowrap;
+    box-shadow: 1px 1px 3px #222222;
+    opacity: 0;
+    z-index: 99999;
+    visibility: hidden;
+    }
+    [data-title] {
+    position: relative;
+    }  
+  </style>
+fields:
+  - First Name: user.name.first
+    help: |
+      Use only letters and
+      underscores.
+  - Middle Name: user.name.middle
+    required: false
+  - Last Name: user.name.last
+  - Address Line1: user.address.address
+    address autocomplete: True
+  - Address Line2: user.address.unit
+    required: false
+  - City: user.address.city
+  - State: user.address.state
+    code: |
+      states_list()
+  - Zip Code: user.address.zip_code
+  - User Type: user_type
+    choices:
+      - Lawyer: lawyer
+      - User: user
+  - Bar Number: bar_number
+    show if:
+      variable: user_type
+      is: lawyer
+  - E-mail Address: email
+    datatype: email
+  - Date of Birth: dob
+    hint: MM/DD/YYYY
+    datatype: date 
+  - Phone number: phone_number
+validation code: |
+  if not phone_number_is_valid(phone_number):
+    validation_error("Please enter a valid phone number", field="phone_number")
+  phone_number = phone_number_formatted(phone_number)
+  if email in registered_user():
+    validation_error("The email address provided has already been registered.", field="email")  
+
+---
+
+mandatory: True
+field: registration_confirm
+question: |
+  Member Registration
+subquestion: | 
+  Confirmation Page
+fields:
+  - First Name: user.name.first
+    disable others: True
+  - Middle Name: user.name.middle
+    required: false
+  - Last Name: user.name.last
+  - Address Line1: user.address.address
+    address autocomplete: True
+  - Address Line2: user.address.unit
+    required: false
+  - City: user.address.city
+  - State: user.address.state
+    code: |
+      states_list()
+  - Zip Code: user.address.zip_code
+  - User Type: user_type
+    choices:
+      - Lawyer: lawyer
+      - User: user
+  - Bar Number: bar_number
+    show if:
+      variable: user_type
+      is: lawyer
+  - E-mail Address: email
+    datatype: email
+  - Phone: phone_number
+    required: false
+  - Date of Birth: dob
+    hint: MM/DD/YYYY
+    datatype: date 
+    disable others:
+      - member_name
+back button: registration_main
+continue button label: Confirm
+back button label: |
+  Edit Registration
+---
+field: password_section
+question: | 
+  Confirm your password 
+fields:
+  - Password: password
+    datatype: password
+  - note: |
+      ### Password must have:
+      * Use 6-20 characters. Letters are case-sensitive.
+      * Password must include one capital and small letter.
+      * Password must include number.
+      * Password must include one special character (like '@$').
+      * Password will not include spaces.
+  - Confirm Password: confirm_password
+    datatype: password
+validation code: |
+  if not len(password)>=6 and len(password)<=20:
+    validation_error('Password length must be between 6-20.')
+  if not password == confirm_password:
+    validation_error("Password didn't match")
+  if not re.search("[a-z]", password):
+    validation_error("Password must include small letters")
+  if not re.search("[A-Z]", password):
+    validation_error("Password must include Capital letters")
+  if not re.search("[0-9]", password):
+    validation_error("Password must include 0-9")
+  if re.search("\s" , password):
+    validation_error("Password won't include spaces")
+  if not re.search("[_!#$%&'()*+,-./:;<=>?@[\]^_`{|}~]" , password):
+    validation_error("Password must include special character")
+
+---
+mandatory: True
+code: |
+  if len(password)>=6 and len(password)<=20:
+    if password == confirm_password:
+      infor = create_user(email, password)
+      set_user_info(user_id= infor, first_name=user.name.first, middle_name=user.name.middle, last_name=user.name.last, Address= user.address.address, Unit=user.address.unit, City=user.address.city, State=user.address.state, Zip_code= user.address.zip_code, Phone_number=phone_number, Date_of_birth=dob)
+      
+---
+mandatory: true
+prevent going back: True
+question: |
+  Welcome **${user.name}** You have successfully registered yourself.${ user_data }
+  Please [sign in](https://doc.lexyalgo.com/user/sign-in).
+event: welcome
+
+
+
+---

@@ -1,0 +1,38 @@
+metadata:
+  title: Sign in 
+  example start: 1
+  example end: 2
+  documentation: "https://docassemble.org/docs/questions.html#signin"
+  show login: False
+  allow registration: False
+  exit url: "https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:data/questions/registration_page.yml"
+  exit link: exit
+  exit label: |
+    Sign Up
+---
+
+objects:
+  - company_logo: DAStaticFile.using(filename='logo.png')
+
+---
+mandatory: True
+code: |
+  set_parts( logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
+---
+features:
+  css: buttons.css
+---
+initial: True
+code: |
+  if user_logged_in():
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3Awelcome.yml')
+    
+  else:
+    command('leave', url='https://doc.lexyalgo.com/user/sign-in')
+---
+question: |
+  Please sign in
+buttons:
+  - Sign in: signin
+sets: sign_in_page
+---

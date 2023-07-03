@@ -1,0 +1,143 @@
+metadata:
+  title: Profile
+  documentation: "https://docassemble.org/docs/objects.html#DAGlobal"
+  example start: 1
+  example end: 7
+---
+modules:
+  - .read_data
+---
+features:
+  css: buttons.css
+---
+objects:
+  - profile: DAGlobal.using(key='profile')
+  - profile.user: Individual
+  - profile.preferences: DADict
+  - company_logo: DAStaticFile.using(filename='logo.png')
+---
+mandatory: True
+code: |
+  set_parts(logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
+---
+initial: True
+code: |
+  if not user_logged_in():
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3AsignIn_signUp.yml')  
+---
+initial: True 
+code: |
+  if 'id' in url_args:
+    origin_of_interviewee = url_args['id']
+  else:
+    origin_of_interviewee = 'unknown'
+---
+mandatory: True
+code: |
+  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3Adashboard.yml', 'label': 'Dashboard'} ]
+  register_data = display_register_data(origin_of_interviewee)
+  data_from_registration = reg()
+  multi_user = True
+  screen = {item: True for item in ['name', 'address', 'preferences']}
+  user_data1 = [{
+    'profile.user.name.first': register_data[0]['first_name'],
+    'profile.user.name.middle': data_from_registration[0]['user.name.middle'],
+    'profile.user.name.last': register_data[0]['last_name'],
+    'profile.user.address.address': data_from_registration[0]['user.address.address'],
+    'profile.user.address.unit': data_from_registration[0]['user.address.unit'],
+    'profile.user.address.city': data_from_registration[0]['user.address.city'],
+    'profile.user.address.state': data_from_registration[0]['user.address.state'],
+    'profile.user.address.zip': data_from_registration[0]['user.address.zip_code'],
+    'profile.preferences.bar_number': data_from_registration[0]['bar_number']
+    }]
+---
+initial: true
+code: |
+  jsond = {
+    'user.name.first':user_data1[0]['profile.user.name.first'],
+    'user.name.middle':user_data1[0]['profile.user.name.middle'],
+    'user.name.last':user_data1[0]['profile.user.name.last'],
+    'user.address.address':user_data1[0]['profile.user.address.address'],
+    'user.address.unit':user_data1[0]['profile.user.address.unit'],
+    'user.address.city':user_data1[0]['profile.user.address.city'],
+    'user.address.state':user_data1[0]['profile.user.address.state'],
+    'user.address.zip_code':user_data1[0]['profile.user.address.zip'],
+    'bar_number':user_data1[0]['profile.preferences.bar_number'],
+    'user_type':data_from_registration[0]['user_type'],
+    'phone_number':data_from_registration[0]['phone_number'],
+    'dob':data_from_registration[0]['dob'],
+    }
+  user_data = update_profile(jsond)
+  user_data = update_profile1(jsond)
+
+
+
+---
+mandatory: True
+field: profile_page
+question: |
+  Edit your profile ${ update_profile(jsond) }${ update_profile1(jsond) } 
+review:
+  - label: Edit
+    field: screen['name']
+    button: |
+      #### Name
+  - label: Edit
+    field: screen['address']
+    button: |
+      #### Address
+  - label: Edit
+    fields: screen['preferences']
+    button: |
+      #### Bar Number
+
+skip undefined: False
+---
+question: |
+  Your name 
+fields:
+  - First name: profile.user.name.first
+    default: |
+      ${ user_data1[0]['profile.user.name.first'] }
+  - Middle name: profile.user.name.middle
+    default: |
+      ${ user_data1[0]['profile.user.name.middle'] }
+    required: False
+  - Last name: profile.user.name.last
+    default: |
+      ${ user_data1[0]['profile.user.name.last'] }
+continue button field: screen['name']
+
+---
+question: |
+  Your address
+fields:
+  - Address: profile.user.address.address
+    default: |
+      ${ user_data1[0]['profile.user.address.address'] }
+    address autocomplete: True
+  - Unit: profile.user.address.unit
+    default: |
+      ${ user_data1[0]['profile.user.address.unit'] }
+    required: False
+  - City: profile.user.address.city
+    default: |
+      ${ user_data1[0]['profile.user.address.city'] }
+  - State: profile.user.address.state
+    default: |
+      ${ user_data1[0]['profile.user.address.state'] }
+    code: |
+      states_list()
+  - Zip: profile.user.address.zip
+    default: |
+      ${ user_data1[0]['profile.user.address.zip'] }
+continue button field: screen['address']
+---
+question: |
+  Bar Number
+fields:
+  - Bar Number: profile.preferences.bar_number
+    default: |
+      ${ user_data1[0]['profile.preferences.bar_number'] }
+continue button field: screen['preferences']
+

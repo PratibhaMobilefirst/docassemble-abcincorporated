@@ -1,0 +1,58 @@
+metadata:
+  title: Welcome
+  documentation: "https://docassemble.org/docs/objects.html#DAGlobal"
+  example start: 1
+  example end: 7
+
+---
+features:
+  css:
+    - buttons.css
+    - password_change.css
+---
+objects:
+  - company_logo: DAStaticFile.using(filename='logo.png')
+---
+mandatory: True
+code: |
+  set_parts( logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
+
+---
+initial: True
+code: |
+  if not user_logged_in():
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3AsignIn_signUp.yml')  
+
+---
+mandatory: True
+question: |
+  Welcome to the LexyAlgo QDRO Generator. 
+subquestion: |
+  This app creates a QDRO customized to your state, retirement plan, and divorce agreement. Best of all, the templates are produced in an editable Word format, so that you can continue to make changes as needed. By continuing, you agree to and acknowledge the following:
+  
+  * I understand that this is a template document service provided by LexyAlgo, LLC. 
+  * The use of this service does not make me a client of any law firm.
+  * The use of this website, forms and templates are not legal advice.
+  * These templates are not applicable to all cases, and if you are unsure if these templates best address your legal needs, you should seek the advice of an attorney first.
+  * I hold the LexyAlgo, LLC and any associated entities harmless from any consequences from my use of this template set.
+  * I have reviewed and agree to comply with the website [privacy-policy](https://www.lexyalgo.com/privacy-policy/) and [terms-and-conditions](https://www.lexyalgo.com/terms-and-conditions/).
+  
+fields:
+  - no label: agrees_to_tos
+    datatype: checkboxes
+    minlength: 1
+    choices:
+      - By clicking here, I state that I have read and understood the above terms and conditions.
+    validation messages:
+      minlength: |
+        You cannot continue unless you check this checkbox.
+continue button field: user_saw_intro 
+---
+initial: True
+code: |
+  if user_saw_intro == True:
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3Adashboard.yml')
+---
+need: agrees_to_tos
+question: |
+  Click here to sign in
