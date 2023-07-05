@@ -46,7 +46,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
 setup(name='docassemble.abcincorporated',
       version='0.0.1',
       description=('Package for Adding Favicon'),
-      long_description='# docassemble.abcincorporated\n\nPackage for Adding Favicon\n\n## Author\n\nPratibha1 Prati, pratibha.mobilefirst@gmail.com\n\n',
+      long_description='# docassemble.abcincorporated\r\n\r\nPackage for Adding Favicon\r\n\r\n## Author\r\n\r\nPratibha1 Prati, pratibha.mobilefirst@gmail.com\r\n\r\n',
       long_description_content_type='text/markdown',
       author='Pratibha Bharti',
       author_email='pratibha.mobilefirst@gmail.com',
