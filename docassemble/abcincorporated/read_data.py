@@ -123,7 +123,7 @@ def display_payment(mainid):
 def dash():
     conn = variables_snapshot_connection()
     cur = conn.cursor()
-    cur.execute("select * from interview where user_id="+ str(user_info().id))
+    cur.execute("select * from interview where user_id="+ str(user_info().id) + "ORDER BY id DESC")
     rows = cur.fetchall()
     results = []
     for row in rows:
