@@ -1769,7 +1769,7 @@ action buttons:
     color: warning
 attachment code: |
   [the_document, addendum]
-allow emailing: True
+allow emailing: False
 
 ---
 attachment:

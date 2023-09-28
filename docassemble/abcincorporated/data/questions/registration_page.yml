@@ -122,7 +122,6 @@ validation code: |
     validation_error("The email address provided has already been registered.", field="email")  
 
 ---
-
 mandatory: True
 field: registration_confirm
 question: |
