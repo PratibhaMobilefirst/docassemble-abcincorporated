@@ -1,0 +1,647 @@
+metadata: 
+  title: |
+    PeacockQDRO
+  short title: |
+    Thanks
+  show login: False
+  allow registration: False
+  exit url: "http://lexyalgo.com/"
+  exit link: exit
+  exit label: |
+    Exit
+
+---
+metadata:
+  temporary session: True
+  hidden: True
+---
+features:
+  css: intake_style.css
+---
+modules: 
+  - .read_data 
+  - .QDRO_post_api
+---
+objects:
+  - Petitioner: Individual
+  - Respondent: Individual
+  - ex_spouse: Individual
+  - company_logo: DAStaticFile.using(filename='peacocklogo.png')
+---
+mandatory: True
+code: |
+  set_parts(logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
+---
+code: |
+  if 'id' in url_args:
+    origin_of_interviewee = url_args['id']
+  else:
+    origin_of_interviewee = 'unknown' 
+---
+id: interview order
+mandatory: True
+code: |
+  qdro_intake_form
+  your_field
+  if who_are_you=='Petitioner/Plantiff':
+    jsond={
+      'who_are_you':who_are_you,
+      'your_field':{
+        'Petitioner.name.first': Petitioner.name.first ,
+        'Petitioner.name.last': Petitioner.name.last ,
+        'Petitioner.address.address':Petitioner.address.address,
+        'Petitioner.address.address2-':Petitioner.address.address2,
+        'Petitioner.address.city':Petitioner.address.city,
+        'Petitioner.address.state':Petitioner.address.state,
+        'Petitioner.address.zip':Petitioner.address.zip,
+        'Petitioner_email':Petitioner_email,
+        'Petitioner_phone':Petitioner_phone,
+        'Petitioner_birth_date':str(Petitioner_birth_date),
+        'Petitioner_social_security_number':Petitioner_social_security_number,
+      },
+      'ex_spouse_field':{
+        'ex_spouse.name.first': ex_spouse.name.first ,
+        'ex_spouse.name.last': ex_spouse.name.last,
+        'ex_spouse.address.address':ex_spouse.address.address,
+        'ex_spouse.address.address2-':ex_spouse.address.address2,
+        'ex_spouse.address.city':ex_spouse.address.city,
+        'ex_spouse.address.state':ex_spouse.address.state,
+        'ex_spouse.address.zip':ex_spouse.address.zip,
+        'ex_spouse_email':ex_spouse_email,
+        'ex_spouse_phone':ex_spouse_phone,
+        'ex_spouse_birth_date':str(ex_spouse_birth_date),
+        'ex_spouse_social_security_number':ex_spouse_social_security_number,
+      },
+      'client_attornery_in_the_past':client_attornery_in_the_past ,
+      'client_attornery_in_the_present':client_attornery_in_the_present if client_attornery_in_the_past=='Yes' else '',
+      
+      'ex_spouse_attornery_in_the_past':ex_spouse_attornery_in_the_past,
+      'ex_spouse_attornery_in_the_present':ex_spouse_attornery_in_the_present if ex_spouse_attornery_in_the_past =='Yes' else '',
+        
+      'case_filed_state':case_filed_state,
+      'case_number':case_number,
+      'date_of_marriage':str(date_of_marriage),
+      'date_of_valuation':str(date_of_valuation),
+      
+    }
+  else:
+    jsond={
+      'who_are_you':who_are_you,
+      'your_field':{
+        'Respondent.name.first': Respondent.name.first ,
+        'Respondent.name.last': Respondent.name.last ,
+        'Respondent.address.address':Respondent.address.address,
+        'Respondent.address.address2-':Respondent.address.address2,
+        'Respondent.address.city':Respondent.address.city,
+        'Respondent.address.state':Respondent.address.state,
+        'Respondent.address.zip':Respondent.address.zip,
+        'Respondent_email':Respondent_email,
+        'Respondent_phone':Respondent_phone,
+        'Respondent_birth_date':str(Respondent_birth_date),
+        'Respondent_social_security_number':Respondent_social_security_number,
+      },
+      'ex_spouse_field':{
+        'ex_spouse.name.first': ex_spouse.name.first ,
+        'ex_spouse.name.last': ex_spouse.name.last,
+        'ex_spouse.address.address':ex_spouse.address.address,
+        'ex_spouse.address.address2-':ex_spouse.address.address2,
+        'ex_spouse.address.city':ex_spouse.address.city,
+        'ex_spouse.address.state':ex_spouse.address.state,
+        'ex_spouse.address.zip':ex_spouse.address.zip,
+        'ex_spouse_email':ex_spouse_email,
+        'ex_spouse_phone':ex_spouse_phone,
+        'ex_spouse_birth_date':str(ex_spouse_birth_date),
+        'ex_spouse_social_security_number':ex_spouse_social_security_number,
+      },
+      'client_attornery_in_the_past':client_attornery_in_the_past ,
+      'client_attornery_in_the_present':client_attornery_in_the_present if client_attornery_in_the_past=='Yes' else '',
+      'ex_spouse_attornery_in_the_past':ex_spouse_attornery_in_the_past,
+      'ex_spouse_attornery_in_the_present':ex_spouse_attornery_in_the_present if ex_spouse_attornery_in_the_past =='Yes' else '',
+        
+      'case_filed_state':case_filed_state,
+      'case_number':case_number,
+      'date_of_marriage':str(date_of_marriage),
+      'date_of_valuation':str(date_of_valuation),
+      
+    }
+  ex_spouse_field
+  your_lawyer_representation
+  if client_attornery_in_the_past == 'Yes' and client_attornery_in_the_present=='Yes':
+    jsond={
+      'who_are_you':who_are_you,
+      'your_field':your_field,
+      'ex_spouse_field':{
+        'ex_spouse.name.first': ex_spouse.name.first ,
+        'ex_spouse.name.last': ex_spouse.name.last,
+        'ex_spouse.address.address':ex_spouse.address.address,
+        'ex_spouse.address.address2-':ex_spouse.address.address2,
+        'ex_spouse.address.city':ex_spouse.address.city,
+        'ex_spouse.address.state':ex_spouse.address.state,
+        'ex_spouse.address.zip':ex_spouse.address.zip,
+        'ex_spouse_email':ex_spouse_email,
+        'ex_spouse_phone':ex_spouse_phone,
+        'ex_spouse_birth_date':str(ex_spouse_birth_date),
+        'ex_spouse_social_security_number':ex_spouse_social_security_number,
+      },
+      'client_attornery_in_the_past':client_attornery_in_the_past ,
+      'client_attornery_in_the_present':client_attornery_in_the_present if client_attornery_in_the_past=='Yes' else '',
+      
+      'client_attorney_first_name':client_attorney_first_name,
+      'client_attorney_last_name':client_attorney_last_name,
+      'client_attorney_email':client_attorney_email,
+      'client_attorney_phone':client_attorney_phone,
+      
+      'ex_spouse_attornery_in_the_past':ex_spouse_attornery_in_the_past,
+      'ex_spouse_attornery_in_the_present':ex_spouse_attornery_in_the_present if ex_spouse_attornery_in_the_past =='Yes' else '',
+        
+      'case_filed_state':case_filed_state,
+      'case_number':case_number,
+      'date_of_marriage':str(date_of_marriage),
+      'date_of_valuation':str(date_of_valuation),
+      
+    }
+    
+  else:
+    jsond={
+      'who_are_you':who_are_you,
+      'your_field':your_field,
+      'ex_spouse_field':{
+        'ex_spouse.name.first': ex_spouse.name.first ,
+        'ex_spouse.name.last': ex_spouse.name.last,
+        'ex_spouse.address.address':ex_spouse.address.address,
+        'ex_spouse.address.address2-':ex_spouse.address.address2,
+        'ex_spouse.address.city':ex_spouse.address.city,
+        'ex_spouse.address.state':ex_spouse.address.state,
+        'ex_spouse.address.zip':ex_spouse.address.zip,
+        'ex_spouse_email':ex_spouse_email,
+        'ex_spouse_phone':ex_spouse_phone,
+        'ex_spouse_birth_date':str(ex_spouse_birth_date),
+        'ex_spouse_social_security_number':ex_spouse_social_security_number,
+      },
+      'client_attornery_in_the_past':client_attornery_in_the_past ,
+      'client_attornery_in_the_present':client_attornery_in_the_present if client_attornery_in_the_past=='Yes' else '',
+      
+      'client_attorney_first_name':'',
+      'client_attorney_last_name':'',
+      'client_attorney_email':'',
+      'client_attorney_phone':'',
+      
+      'ex_spouse_attornery_in_the_past':ex_spouse_attornery_in_the_past,
+      'ex_spouse_attornery_in_the_present':ex_spouse_attornery_in_the_present if ex_spouse_attornery_in_the_past =='Yes' else '',
+      
+      'case_filed_state':case_filed_state,
+      'case_number':case_number,
+      'date_of_marriage':str(date_of_marriage),
+      'date_of_valuation':str(date_of_valuation),
+    }    
+    
+  your_ex_spouse_lawyer_representation
+  if ex_spouse_attornery_in_the_past == 'Yes' and ex_spouse_attornery_in_the_present=='Yes':
+    jsond={
+      'who_are_you':who_are_you,
+      'your_field':{
+        'Petitioner.name.first': Petitioner.name.first if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner.name.last': Petitioner.name.last if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner.address.address':Petitioner.address.address if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner.address.address2-':Petitioner.address.address2 if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner.address.city':Petitioner.address.city if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner.address.state':Petitioner.address.state if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner.address.zip':Petitioner.address.zip if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner_email':Petitioner_email if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner_phone':Petitioner_phone if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner_birth_date':str(Petitioner_birth_date) if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner_social_security_number':Petitioner_social_security_number if who_are_you=='Petitioner/Plantiff' else '',
+        'Respondent.name.first': Respondent.name.first if who_are_you=='Respondent/Defendant' else '',
+        'Respondent.name.last': Respondent.name.last if who_are_you=='Respondent/Defendant' else '',
+        'Respondent.address.address':Respondent.address.address if who_are_you=='Respondent/Defendant' else '',
+        'Respondent.address.address2-':Respondent.address.address2 if who_are_you=='Respondent/Defendant' else '',
+        'Respondent.address.city':Respondent.address.city if who_are_you=='Respondent/Defendant' else '',
+        'Respondent.address.state':Respondent.address.state if who_are_you=='Respondent/Defendant' else '',
+        'Respondent.address.zip':Respondent.address.zip if who_are_you=='Respondent/Defendant' else '',
+        'Respondent_email':Respondent_email if who_are_you=='Respondent/Defendant' else '',
+        'Respondent_phone':Respondent_phone if who_are_you=='Respondent/Defendant' else '',
+        'Respondent_birth_date':str(Respondent_birth_date) if who_are_you=='Respondent/Defendant' else '',
+        'Respondent_social_security_number':Respondent_social_security_number if who_are_you=='Respondent/Defendant' else '',
+      },
+      'ex_spouse_field':{
+        'ex_spouse.name.first': ex_spouse.name.first ,
+        'ex_spouse.name.last': ex_spouse.name.last,
+        'ex_spouse.address.address':ex_spouse.address.address,
+        'ex_spouse.address.address2-':ex_spouse.address.address2,
+        'ex_spouse.address.city':ex_spouse.address.city,
+        'ex_spouse.address.state':ex_spouse.address.state,
+        'ex_spouse.address.zip':ex_spouse.address.zip,
+        'ex_spouse_email':ex_spouse_email,
+        'ex_spouse_phone':ex_spouse_phone,
+        'ex_spouse_birth_date':str(ex_spouse_birth_date),
+        'ex_spouse_social_security_number':ex_spouse_social_security_number,
+      },
+      'client_attornery_in_the_past':client_attornery_in_the_past ,
+      'client_attornery_in_the_present':client_attornery_in_the_present if client_attornery_in_the_past == 'Yes' else '',
+      
+      'client_attorney_first_name':client_attorney_first_name if (client_attornery_in_the_past == 'Yes' and client_attornery_in_the_present == 'Yes') else '',
+      'client_attorney_last_name':client_attorney_last_name if (client_attornery_in_the_past == 'Yes' and client_attornery_in_the_present == 'Yes') else '',
+      'client_attorney_email':client_attorney_email if (client_attornery_in_the_past == 'Yes' and client_attornery_in_the_present == 'Yes') else '',
+      'client_attorney_phone':client_attorney_phone if (client_attornery_in_the_past == 'Yes' and client_attornery_in_the_present == 'Yes') else '',
+      
+      'ex_spouse_attornery_in_the_past':ex_spouse_attornery_in_the_past,
+      'ex_spouse_attornery_in_the_present':ex_spouse_attornery_in_the_present if ex_spouse_attornery_in_the_past =='Yes' else '',
+        
+      'ex_spouse_attorney_first_name':ex_spouse_attorney_first_name,
+      'ex_spouse_attorney_last_name':ex_spouse_attorney_last_name,
+      'ex_spouse_attorney_email':ex_spouse_attorney_email,
+      'ex_spouse_attorney_phone':ex_spouse_attorney_phone,
+        
+      'case_filed_state':case_filed_state,
+      'case_number':case_number,
+      'date_of_marriage':str(date_of_marriage),
+      'date_of_valuation':str(date_of_valuation),
+      
+    }   
+  else:
+    jsond={
+      'who_are_you':who_are_you,
+      'your_field':{
+        'Petitioner.name.first': Petitioner.name.first if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner.name.last': Petitioner.name.last if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner.address.address':Petitioner.address.address if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner.address.address2-':Petitioner.address.address2 if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner.address.city':Petitioner.address.city if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner.address.state':Petitioner.address.state if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner.address.zip':Petitioner.address.zip if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner_email':Petitioner_email if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner_phone':Petitioner_phone if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner_birth_date':str(Petitioner_birth_date) if who_are_you=='Petitioner/Plantiff' else '',
+        'Petitioner_social_security_number':Petitioner_social_security_number if who_are_you=='Petitioner/Plantiff' else '',
+        'Respondent.name.first': Respondent.name.first if who_are_you=='Respondent/Defendant' else '',
+        'Respondent.name.last': Respondent.name.last if who_are_you=='Respondent/Defendant' else '',
+        'Respondent.address.address':Respondent.address.address if who_are_you=='Respondent/Defendant' else '',
+        'Respondent.address.address2-':Respondent.address.address2 if who_are_you=='Respondent/Defendant' else '',
+        'Respondent.address.city':Respondent.address.city if who_are_you=='Respondent/Defendant' else '',
+        'Respondent.address.state':Respondent.address.state if who_are_you=='Respondent/Defendant' else '',
+        'Respondent.address.zip':Respondent.address.zip if who_are_you=='Respondent/Defendant' else '',
+        'Respondent_email':Respondent_email if who_are_you=='Respondent/Defendant' else '',
+        'Respondent_phone':Respondent_phone if who_are_you=='Respondent/Defendant' else '',
+        'Respondent_birth_date':str(Respondent_birth_date) if who_are_you=='Respondent/Defendant' else '',
+        'Respondent_social_security_number':Respondent_social_security_number if who_are_you=='Respondent/Defendant' else '',
+      },
+      'ex_spouse_field':{
+        'ex_spouse.name.first': ex_spouse.name.first ,
+        'ex_spouse.name.last': ex_spouse.name.last,
+        'ex_spouse.address.address':ex_spouse.address.address,
+        'ex_spouse.address.address2-':ex_spouse.address.address2,
+        'ex_spouse.address.city':ex_spouse.address.city,
+        'ex_spouse.address.state':ex_spouse.address.state,
+        'ex_spouse.address.zip':ex_spouse.address.zip,
+        'ex_spouse_email':ex_spouse_email,
+        'ex_spouse_phone':ex_spouse_phone,
+        'ex_spouse_birth_date':str(ex_spouse_birth_date),
+        'ex_spouse_social_security_number':ex_spouse_social_security_number,
+      },
+      'client_attornery_in_the_past':client_attornery_in_the_past ,
+      'client_attornery_in_the_present':client_attornery_in_the_present if client_attornery_in_the_past == 'Yes' else '',
+      
+      'client_attorney_first_name':client_attorney_first_name if (client_attornery_in_the_past == 'Yes' and client_attornery_in_the_present == 'Yes') else '',
+      'client_attorney_last_name':client_attorney_last_name if (client_attornery_in_the_past == 'Yes' and client_attornery_in_the_present == 'Yes') else '',
+      'client_attorney_email':client_attorney_email if (client_attornery_in_the_past == 'Yes' and client_attornery_in_the_present == 'Yes') else '',
+      'client_attorney_phone':client_attorney_phone if (client_attornery_in_the_past == 'Yes' and client_attornery_in_the_present == 'Yes') else '',
+      'ex_spouse_attornery_in_the_past':ex_spouse_attornery_in_the_past,
+      'ex_spouse_attornery_in_the_present':ex_spouse_attornery_in_the_present if ex_spouse_attornery_in_the_past =='Yes' else '',
+        
+      'ex_spouse_attorney_first_name':'',
+      'ex_spouse_attorney_last_name':'',
+      'ex_spouse_attorney_email':'',
+      'ex_spouse_attorney_phone':'',
+        
+      'case_filed_state':case_filed_state,
+      'case_number':case_number,
+      'date_of_marriage':str(date_of_marriage),
+      'date_of_valuation':str(date_of_valuation),
+    } 
+    
+  case_details
+  final
+  respondent_attorney_first_name=''
+  respondent_attorney_last_name=''
+  respondent_attorney_phone=''
+  respondent_attorney_email=''
+  respondent_attorney_in_the_past=''
+  respondent_attorney_in_the_present=''
+  petitioner_attorney_first_name=''
+  petitioner_attorney_last_name=''
+  petitioner_attorney_phone=''
+  petitioner_attorney_email=''
+  petitoner_attorney_in_the_past=''
+  petitoner_attorney_in_the_present=''
+  
+---
+field: qdro_intake_form
+question: |
+  Welcome to PeacockQDROs.
+subquestion: |
+  This is the PeacockQDROs intake form for QDRO/DRO matters. Please fill everything out completely and carefully - we cannot draft orders without all required fields and anything left blank or misspelled will likely delay your case. After you fill this form out, you’ll receive an email to securely upload your divorce documents - the judgment/decree, settlement agreement or property division orders, and retirement account statements, if you have them.
+---
+field: your_field
+question: |
+  Tell us about you and your case.
+fields:
+  - In the divorce, I was/am the: who_are_you
+    datatype: radio
+    choices:
+      - Petitioner/Plantiff
+      - Respondent/Defendant
+  - Petitioner First Name: Petitioner.name.first
+    show if:
+      variable: who_are_you
+      is: Petitioner/Plantiff
+  - Petitioner Last Name: Petitioner.name.last
+    show if:
+      variable: who_are_you
+      is: Petitioner/Plantiff
+  - Petitioner Email: Petitioner_email
+    show if:
+      variable: who_are_you
+      is: Petitioner/Plantiff
+    datatype: email
+  - Petitioner Phone Number: Petitioner_phone
+    show if:
+      variable: who_are_you
+      is: Petitioner/Plantiff
+  - Petitioner Street Address: Petitioner.address.address
+    address autocomplete: True
+    show if:
+      variable: who_are_you
+      is: Petitioner/Plantiff
+  - Petitioner Street Address2: Petitioner.address.address2
+    show if:
+      variable: who_are_you
+      is: Petitioner/Plantiff
+    required: False
+  - Petitioner City: Petitioner.address.city
+    show if:
+      variable: who_are_you
+      is: Petitioner/Plantiff
+  - Petitioner State: Petitioner.address.state
+    show if:
+      variable: who_are_you
+      is: Petitioner/Plantiff
+  - Petitioner Zip: Petitioner.address.zip
+    show if:
+      variable: who_are_you
+      is: Petitioner/Plantiff
+  - Petitioner Birth Date: Petitioner_birth_date
+    show if:
+      variable: who_are_you
+      is: Petitioner/Plantiff
+    datatype: date
+  - Petitioner Social Security Number: Petitioner_social_security_number
+    datatype: ssn
+    show if:
+      variable: who_are_you
+      is: Petitioner/Plantiff
+  
+  - Respondent First Name: Respondent.name.first
+    show if:
+      variable: who_are_you
+      is: Respondent/Defendant
+  - Respondent Last Name: Respondent.name.last
+    show if:
+      variable: who_are_you
+      is: Respondent/Defendant
+  - Respondent Email: Respondent_email
+    show if:
+      variable: who_are_you
+      is: Respondent/Defendant
+    datatype: email
+  - Respondent Phone Number: Respondent_phone
+    show if:
+      variable: who_are_you
+      is: Respondent/Defendant
+  - Respondent Street Address: Respondent.address.address
+    address autocomplete: True
+    show if:
+      variable: who_are_you
+      is: Respondent/Defendant
+  - Respondent Street Address2: Respondent.address.address2
+    show if:
+      variable: who_are_you
+      is: Respondent/Defendant
+    required: False
+  - Respondent City: Respondent.address.city
+    show if:
+      variable: who_are_you
+      is: Respondent/Defendant
+  - Respondent State: Respondent.address.state
+    show if:
+      variable: who_are_you
+      is: Respondent/Defendant
+  - Respondent Zip: Respondent.address.zip
+    show if:
+      variable: who_are_you
+      is: Respondent/Defendant
+  - Respondent Birth Date: Respondent_birth_date
+    show if:
+      variable: who_are_you
+      is: Respondent/Defendant
+    datatype: date
+  - Respondent Social Security Number: Respondent_social_security_number
+    datatype: ssn
+    show if:
+      variable: who_are_you
+      is: Respondent/Defendant
+validation code: |
+  if who_are_you == 'Petitioner/Plantiff' and not phone_number_is_valid(phone_number_formatted(Petitioner_phone)):
+    validation_error('Phone number is not valid')
+  if who_are_you == 'Respondent/Defendant' and not phone_number_is_valid(phone_number_formatted(Respondent_phone)):
+    validation_error('Phone number is not valid')
+---
+field: ex_spouse_field
+question: |
+  Your ex-spouse's information
+fields:
+  - Ex-Spouse's First Name: ex_spouse.name.first
+  - Ex-Spouse's Last Name: ex_spouse.name.last
+  - Ex-Spouse's Email: ex_spouse_email
+    datatype: email
+  - Ex-Spouse's Phone: ex_spouse_phone
+  - Ex-Spouse's Street Address: ex_spouse.address.address
+    address autocomplete: True
+  - Ex-Spouse's Street Address2: ex_spouse.address.address2
+    required: False
+  - Ex-Spouse's City: ex_spouse.address.city
+  - Ex-Spouse's State: ex_spouse.address.state
+  - Ex-Spouse's Zip: ex_spouse.address.zip
+  - Ex-Spouse's Birth Date: ex_spouse_birth_date
+    datatype: date
+  - Ex-Spouse's Social Security Number: ex_spouse_social_security_number
+    datatype: ssn
+    hint: XXX-XX-XXXX
+validation code: |
+  if not phone_number_is_valid(phone_number_formatted(ex_spouse_phone)):
+    validation_error('Phone number is not valid')
+---
+field: your_lawyer_representation
+question: |
+  Please provide whether you were represented by a lawyer in the present or past.
+fields: 
+  - Were you represented by a divorce lawyer?: client_attornery_in_the_past
+    datatype: radio 
+    choices:
+      - Yes
+      - No
+      - Unsure
+  - Are you still represented by that lawyer?: client_attornery_in_the_present
+    datatype: radio 
+    choices:
+      - Yes
+      - No
+      - Unsure
+    show if:
+      variable: client_attornery_in_the_past
+      is: Yes
+  - Client’s Attorney's First Name: client_attorney_first_name
+    required: False
+    show if:
+      variable: client_attornery_in_the_present
+      is: Yes
+  - Client’s Attorney's Last Name: client_attorney_last_name
+    required: False
+    show if:
+      variable: client_attornery_in_the_present
+      is: Yes
+  - Client’s Attorney Email: client_attorney_email
+    required: False
+    show if:
+      variable: client_attornery_in_the_present
+      is: Yes
+  - Client’s Attorney Phone Number: client_attorney_phone
+    required: False
+    show if:
+      variable: client_attornery_in_the_present
+      is: Yes
+validation code: |
+  if client_attornery_in_the_past == 'Yes' and client_attornery_in_the_present == 'Yes' and not phone_number_is_valid(phone_number_formatted(client_attorney_phone)):
+    validation_error('Phone number is not valid')
+
+---
+field: your_ex_spouse_lawyer_representation
+question: |
+  Please provide whether your ex-spouse was represented by a lawyer in the present or past. 
+fields:
+  - Was your ex-spouse represented by a divorce lawyer?: ex_spouse_attornery_in_the_past
+    datatype: radio 
+    choices:
+      - Yes
+      - No
+      - Unsure
+  - Are your ex-spouse still represented by that lawyer?: ex_spouse_attornery_in_the_present
+    datatype: radio 
+    choices:
+      - Yes
+      - No
+      - Unsure
+    show if:
+      variable: ex_spouse_attornery_in_the_past
+      is: Yes
+  - Ex-spouse’s Attorney's First Name: ex_spouse_attorney_first_name
+    required: False
+    show if:
+      variable: ex_spouse_attornery_in_the_present
+      is: Yes
+  - Ex-spouse’s Attorney's Last Name: ex_spouse_attorney_last_name
+    required: False
+    show if:
+      variable: ex_spouse_attornery_in_the_present
+      is: Yes
+  - Ex-spouse’s Attorney Email: ex_spouse_attorney_email
+    required: False
+    show if:
+      variable: ex_spouse_attornery_in_the_present
+      is: Yes
+  - Ex-spouse’s Attorney Phone Number: ex_spouse_attorney_phone
+    required: False
+    show if:
+      variable: ex_spouse_attornery_in_the_present
+      is: Yes
+validation code: |
+  if ex_spouse_attornery_in_the_past == 'Yes' and ex_spouse_attornery_in_the_present == 'Yes' and not phone_number_is_valid(phone_number_formatted(client_attorney_phone)):
+    validation_error('Phone number is not valid')
+---
+field: case_details
+question: |
+  We'll now need some information on your case and divorce. Do your best - many of these dates can be found in your divorce decree or settlement agreement.
+subquestion: |
+  To make this easier, you'll want copies of your divorce paperwork handy. We're going to need court, party, and attorney information from those forms. Do your best, but if you run into any trouble, feel free to reach out via email or call us at 929-43-QDROS.
+  <img src="https://res.cloudinary.com/diopa1nuw/image/upload/v1692180471/instructions_fqscns.png" width='100%' alt="instructions image">
+fields:
+  - In what state is this case filed?: case_filed_state
+    choices:
+      - CA
+      - IA
+      - KS
+      - MO
+      - ND
+      - NJ
+      - NY
+  - Case Number: case_number
+    datatype: integer
+  - Date Of Marriage: date_of_marriage
+    datatype: date
+  - Does your divorce agreement provide a date of valuation for assets? If unsure, leave blank.: date_of_valuation
+    datatype: date
+    required: False
+---
+mandatory: True
+code: |
+    input_fields = {
+        "general_field_9b90": str(date_of_valuation),
+        "custom_field_18762": str(date_of_marriage),
+        "custom_field_18759": case_number,
+        "custom_field_19646": case_filed_state,
+        "general_field_68e5": who_are_you,
+        "last_name": ex_spouse.name.last,
+        "first_name": ex_spouse.name.first,
+        "general_field_de6d": client_attornery_in_the_past,
+        "general_field_ae66": client_attornery_in_the_present if client_attornery_in_the_past=="Yes" else '' ,
+        "custom_field_18764": '',
+        "general_field_7d27": '',
+        "general_field_6350": '',
+        "custom_field_18763": '',
+        "custom_field_19084": client_attorney_phone if (who_are_you=='Respondent/Defendant' and client_attornery_in_the_past=='Yes' and client_attornery_in_the_present=='Yes') else (ex_spouse_attorney_phone if ex_spouse_attornery_in_the_past=='Yes' and ex_spouse_attornery_in_the_present=='Yes' else ''), 
+        "custom_field_19086": client_attorney_email if (who_are_you=='Respondent/Defendant' and client_attornery_in_the_past=='Yes' and client_attornery_in_the_present=='Yes') else (ex_spouse_attorney_email if ex_spouse_attornery_in_the_past=='Yes' and ex_spouse_attornery_in_the_present=='Yes' else '') ,
+        "custom_field_19577": client_attorney_last_name if (who_are_you=='Respondent/Defendant' and client_attornery_in_the_past=='Yes' and client_attornery_in_the_present=='Yes') else (ex_spouse_attorney_last_name if ex_spouse_attornery_in_the_past=='Yes' and ex_spouse_attornery_in_the_present=='Yes' else ''),
+        "custom_field_19576": client_attorney_first_name if (who_are_you=='Respondent/Defendant' and client_attornery_in_the_past=='Yes' and client_attornery_in_the_present=='Yes') else (ex_spouse_attorney_first_name if ex_spouse_attornery_in_the_past=='Yes' and ex_spouse_attornery_in_the_present=='Yes' else ''),
+        
+         "custom_field_19076": client_attorney_phone if (who_are_you=='Petitioner/Plantiff' and client_attornery_in_the_past=='Yes' and client_attornery_in_the_present=='Yes') else (ex_spouse_attorney_phone if ex_spouse_attornery_in_the_past=='Yes' and ex_spouse_attornery_in_the_present=='Yes' else ''),
+        "custom_field_19078": client_attorney_email if (who_are_you=='Petitioner/Plantiff' and client_attornery_in_the_past=='Yes' and client_attornery_in_the_present=='Yes') else (ex_spouse_attorney_email if ex_spouse_attornery_in_the_past=='Yes' and ex_spouse_attornery_in_the_present=='Yes' else ''),
+        "custom_field_19575": client_attorney_last_name if (who_are_you=='Petitioner/Plantiff'  and client_attornery_in_the_past=='Yes' and client_attornery_in_the_present=='Yes') else (ex_spouse_attorney_last_name if ex_spouse_attornery_in_the_past=='Yes' and ex_spouse_attornery_in_the_present=='Yes' else ''),
+        "custom_field_19574": client_attorney_first_name if (who_are_you=='Petitioner/Plantiff' and client_attornery_in_the_past=='Yes' and client_attornery_in_the_present=='Yes') else (ex_spouse_attorney_first_name if ex_spouse_attornery_in_the_past=='Yes' and ex_spouse_attornery_in_the_present=='Yes' else ''),
+        
+        "social_security":Petitioner_social_security_number if who_are_you=='Petitioner/Plantiff' else Respondent_social_security_number,
+        "birthdate": str(Petitioner_birth_date) if who_are_you=='Petitioner/Plantiff' else str(Respondent_birth_date),
+        "zipcode":Petitioner.address.zip if who_are_you=='Petitioner/Plantiff' else Respondent.address.zip,
+        "state":Petitioner.address.state if who_are_you=='Petitioner/Plantiff' else Respondent.address.state,
+        "city":Petitioner.address.city if who_are_you=='Petitioner/Plantiff' else Respondent.address.city,
+        "street2": Petitioner.address.address2 if who_are_you=='Petitioner/Plantiff' else Respondent.address.address2,
+        "street": Petitioner.address.address if who_are_you=='Petitioner/Plantiff' else Respondent.address.address,
+        "phone": Petitioner_phone if who_are_you=='Petitioner/Plantiff' else Respondent_phone,
+        "email":Petitioner_email if who_are_you=='Petitioner/Plantiff' else Respondent_email,
+        "last_name":Petitioner.name.last if who_are_you=='Petitioner/Plantiff' else Respondent.name.last,
+        "first_name":Petitioner.name.first if who_are_you=='Petitioner/Plantiff' else Respondent.name.first,
+        
+    }
+---
+code: |
+  if who_are_you=='Petitioner/Plantiff':
+    user_name = Petitioner.name.first + " " + Petitioner.name.last
+  else:
+    user_name = Respondent.name.first + " " + Respondent.name.last
+---
+mandatory: True
+code: |
+  qdro_intake_data = add_to_qdro_intake(jsond,origin_of_interviewee, user_name)
+---
+
+event: final
+question: |
+  Thanks for your response!  ${ submit_form_to_api(input_fields) } ${ qdro_intake_data }

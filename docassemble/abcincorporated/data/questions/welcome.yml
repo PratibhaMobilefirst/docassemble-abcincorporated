@@ -21,7 +21,7 @@ code: |
 initial: True
 code: |
   if not user_logged_in():
-    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3AsignIn_signUp.yml')  
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml')  
 
 ---
 mandatory: True
@@ -51,7 +51,7 @@ continue button field: user_saw_intro
 initial: True
 code: |
   if user_saw_intro == True:
-    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3Adashboard.yml')
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml')
 ---
 need: agrees_to_tos
 question: |

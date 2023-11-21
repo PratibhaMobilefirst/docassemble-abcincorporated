@@ -25,7 +25,7 @@ features:
 initial: True
 code: |
   if user_logged_in():
-    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3Awelcome.yml')
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:welcome.yml')
     
   else:
     command('leave', url='https://doc.lexyalgo.com/user/sign-in')

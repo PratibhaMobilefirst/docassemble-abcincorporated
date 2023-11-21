@@ -1,0 +1,1942 @@
+metadata: 
+  title: |
+    Joinder Generator
+  short title: |
+    Thanks
+  show login: False
+  allow registration: False
+  exit url: "http://lexyalgo.com/"
+  exit link: exit
+  exit label: |
+    Exit
+---
+metadata:
+  temporary session: True
+  hidden: True
+---
+features:
+  popover trigger: click
+  css: buttons.css  
+---
+modules: 
+  - .read_data 
+---
+initial: True
+code: |
+  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml', 'label': 'Dashboard'},{'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:edit_profile.yml', 'label': 'Edit Profile'}]
+  register_dataj = display_register_data_j()
+  retiremnet_plans = plans()
+  courts_data = courts()
+  user_data11 = display_copy(origin_of_interviewee)
+  which_button=display_type_of_interview(origin_of_interviewee)
+  file=file_name(origin_of_interviewee)
+  dash_results = dash()
+  #if len(type_of_interview)>0 and type_of_interview[0]['type_of_interview'] =="reuse":
+    #abc = type_of_interview[0]['type_of_interview']=="reuse"
+  if len(user_data11) > 0:
+    if "f_name" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['f_name'] = ''
+    if "l_name" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['l_name'] = ''
+    if "email_id" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['email_id'] = ''
+    if "court_name" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['court_name'] = ''
+    if "add_other_court" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['add_other_court'] = ''
+    if "other_court" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['other_court'] = ''
+    if "other_court_district" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['other_court_district'] = ''
+    if "other_court_add" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['other_court_add'] = ''
+    if "other_court_mailing_add" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['other_court_mailing_add'] = ''
+    if "other_court_city" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['other_court_city'] = ''
+    if "other_court_zip" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['other_court_zip'] = ''
+    if "case_number" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['case_number'] = ''
+    if "final_judgment" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['final_judgment'] = ''
+    if "judgment_date" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['judgment_date'] = ''
+    if "judgment_deal" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['judgment_deal'] = ''
+    if "petition_dom" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['petition_dom'] = ''
+    if "petition_dos" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['petition_dos'] = ''
+    if "is_same_date" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['is_same_date'] = ''
+    if "response_dom" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['response_dom'] = ''
+    if "response_dos" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['response_dos'] = ''
+    if file[0] == 'docassemble.playground3QDRO:qdro.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
+      default_petitioner_address = {
+        'petitioner.name.first': '',
+        'petitioner.name.middle': '',
+        'petitioner.name.last': '',
+        'petitioner_represented_attorney': '',
+      
+        'petitioner.address.address': user_data11[0]['participant_address_info']['participant.address.address'] if user_data11[0]['who_is_participant'] == "Petitioner-Plaintiff" else user_data11[0]['alternate_payee_address_info']['alternate_payee.address.address'],
+      
+        'petitioner.address.unit': user_data11[0]['participant_address_info']['participant.address.unit'] if user_data11[0]['who_is_participant'] == "Petitioner-Plaintiff" else user_data11[0]['alternate_payee_address_info']['alternate_payee.address.unit'],
+      
+        'petitioner.address.city': user_data11[0]['participant_address_info']['participant.address.city'] if user_data11[0]['who_is_participant'] == "Petitioner-Plaintiff" else user_data11[0]['alternate_payee_address_info']['alternate_payee.address.city'],
+      
+        'petitioner.address.state': user_data11[0]['participant_address_info']['participant.address.state'] if user_data11[0]['who_is_participant'] == "Petitioner-Plaintiff" else user_data11[0]['alternate_payee_address_info']['alternate_payee.address.state'],
+      
+        'petitioner.address.zip': user_data11[0]['participant_address_info']['participant.address.zip'] if user_data11[0]['who_is_participant'] == "Petitioner-Plaintiff" else user_data11[0]['alternate_payee_address_info']['alternate_payee.address.zip'],
+      
+        'petitioner_email': user_data11[0]['participant.email'] if user_data11[0]['who_is_participant'] == "Petitioner-Plaintiff" else user_data11[0]['alternate_payee.email'],
+      
+        'petitioner_phone': decryptStr(user_data11[0]['participant.phone']) if user_data11[0]['who_is_participant'] == "Petitioner-Plaintiff" else decryptStr(user_data11[0]['alternate_payee.phone']),
+      
+        'petitioner_fax': '',
+        'respondent.name.first': '',
+        'respondent.name.middle': '',
+        'respondent.name.last': '',
+        'respondent_represented_attorney':'',
+      
+        'respondent.address.address': user_data11[0]['participant_address_info']['participant.address.address'] if user_data11[0]['who_is_participant'] == "Respondent-Defendant" else user_data11[0]['alternate_payee_address_info']['alternate_payee.address.address'],
+      
+        'respondent.address.unit': user_data11[0]['participant_address_info']['participant.address.unit'] if user_data11[0]['who_is_participant'] == "Respondent-Defendant" else user_data11[0]['alternate_payee_address_info']['alternate_payee.address.unit'],
+      
+        'respondent.address.city': user_data11[0]['participant_address_info']['participant.address.city'] if user_data11[0]['who_is_participant'] == "Respondent-Defendant" else user_data11[0]['alternate_payee_address_info']['alternate_payee.address.city'],
+      
+        'respondent.address.state': user_data11[0]['participant_address_info']['participant.address.state'] if user_data11[0]['who_is_participant'] == "Respondent-Defendant" else user_data11[0]['alternate_payee_address_info']['alternate_payee.address.state'],
+      
+        'respondent.address.zip': user_data11[0]['participant_address_info']['participant.address.zip'] if user_data11[0]['who_is_participant'] == "Respondent-Defendant" else user_data11[0]['alternate_payee_address_info']['alternate_payee.address.zip'],
+      
+        'respondent_email': user_data11[0]['participant.email'] if user_data11[0]['who_is_participant'] == "Respondent-Defendant" else user_data11[0]['alternate_payee.email'],
+      
+        'respondent_phone': decryptStr(user_data11[0]['participant.phone']) if user_data11[0]['who_is_participant'] == "Respondent-Defendant" else decryptStr(user_data11[0]['alternate_payee.phone']),
+      
+        'respondent_fax':'',
+        }
+      if "petitioner_field" in user_data11[0]:
+        for key in default_petitioner_address:
+          if key not in user_data11[0]['petitioner_field']:
+             user_data11[0]['petitioner_field'][key] = default_petitioner_address[key]
+      else:
+        user_data11[0]['petitioner_field'] = default_petitioner_address
+      
+      if "respondent_field" in user_data11[0]:
+        for key in default_petitioner_address:
+          if key not in user_data11[0]['respondent_field']:
+             user_data11[0]['respondent_field'][key] = default_petitioner_address[key]
+      else:
+        user_data11[0]['respondent_field'] = default_petitioner_address
+    
+    if "petitioner_field" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['petitioner_field'] = {
+        'petitioner.name.first': '',
+        'petitioner.name.middle': '',
+        'petitioner.name.last': '',
+        'petitioner_represented_attorney':'',
+        'petitioner.address.address':'',
+        'petitioner.address.unit':'',
+        'petitioner.address.city':'',
+        'petitioner.address.state':'',
+        'petitioner.address.zip':'',
+        'petitioner_email':'',
+        'petitioner_phone':'',
+        'petitioner_fax':'',
+      }
+    if "petitioner_attorney_name" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['petitioner_attorney_name'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['petitioner_attorney_name'] = ''
+    if "petitioner_attorney_bar" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['petitioner_attorney_bar'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['petitioner_attorney_bar'] = ''
+    if "petitioner_attorney_firm" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['petitioner_attorney_firm'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['petitioner_attorney_firm'] = ''
+    if "petitioner_attorney.address.address" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['petitioner_attorney.address.address'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['petitioner_attorney.address.address'] = ''
+    if "petitioner_attorney.address.unit" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['petitioner_attorney.address.unit'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['petitioner_attorney.address.unit'] = ''
+    if "petitioner_attorney.address.city" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['petitioner_attorney.address.city'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['petitioner_attorney.address.city'] = ''     
+    if "petitioner_attorney.address.state" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['petitioner_attorney.address.state'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['petitioner_attorney.address.state'] = ''
+    if "petitioner_attorney.address.zip" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['petitioner_attorney.address.zip'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['petitioner_attorney.address.zip'] = ''
+    if "petitioner_attorney_phone" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['petitioner_attorney_phone'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['petitioner_attorney_phone'] = ''
+    if "petitioner_attorney_fax" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['petitioner_attorney_fax'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['petitioner_attorney_fax'] = ''
+    if "petitioner_attorney_email" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['petitioner_attorney_email'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['petitioner_attorney_email'] = ''
+    if "respondent_field" in user_data11[0]:
+       user_data1 = user_data11
+    else:
+      user_data1[0]['respondent_field'] = {
+        'respondent.name.first': '',
+        'respondent.name.middle': '',
+        'respondent.name.last': '',
+        'respondent_represented_attorney':'',
+        'respondent.address.address':'',
+        'respondent.address.unit':'',
+        'respondent.address.city':'',
+        'respondent.address.state':'',
+        'respondent.address.zip':'',
+        'respondent_email':'',
+        'respondent_phone':'',
+        'respondent_fax':'',
+      }
+    if "respondent_attorney_name" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['respondent_attorney_name'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['respondent_attorney_name'] = ''
+    if "respondent_attorney_bar" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['respondent_attorney_bar'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['respondent_attorney_bar'] = ''
+    if "respondent_attorney_firm" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['respondent_attorney_firm'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['respondent_attorney_firm'] = ''
+    if "respondent_attorney.address.address" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['respondent_attorney.address.address'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['respondent_attorney.address.address'] = ''
+    if "respondent_attorney.address.unit" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['respondent_attorney.address.unit'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['respondent_attorney.address.unit'] = ''
+    if "respondent_attorney.address.city" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['respondent_attorney.address.city'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['respondent_attorney.address.city'] = ''
+    if "respondent_attorney.address.state" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['respondent_attorney.address.state'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['respondent_attorney.address.state'] = ''
+    if "respondent_attorney.address.zip" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['respondent_attorney.address.zip'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['respondent_attorney.address.zip'] = ''
+    if "respondent_attorney_phone" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['respondent_attorney_phone'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['respondent_attorney_phone'] = ''
+    if "respondent_attorney_fax" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['respondent_attorney_fax'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['respondent_attorney_fax'] = ''
+    if "respondent_attorney_email" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['respondent_attorney_email'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['respondent_attorney_email'] = ''
+    if "who_is_filing" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['who_is_filing'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['who_is_filing'] = ''
+    if "other_filing_field" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['other_filing_field'] = {
+        'other_filing':'',
+        'other_firm':'',
+        'other_bar_number':'',
+        'other.address.address':'',
+        'other.address.unit':'',
+        'other.address.city':'',
+        'other.address.state':'',
+        'other.address.zip':'',
+        'other_phone':'',
+        'other_fax':'',
+        'other_email':''
+        }
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['other_filing_field'] = {
+        'other_filing':'',
+        'other_firm':'',
+        'other_bar_number':'',
+        'other.address.address':'',
+        'other.address.unit':'',
+        'other.address.city':'',
+        'other.address.state':'',
+        'other.address.zip':'',
+        'other_phone':'',
+        'other_fax':'',
+        'other_email':'',
+    }
+    if "plan_name" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['plan_name'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['plan_name'] = ''
+    if "add_other_plan" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['add_other_plan'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['add_other_plan'] = ''
+    if "other_plan" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['other_plan'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['other_plan'] = ''
+    if "whose_plan" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['whose_plan'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['whose_plan'] = ''
+    if "plan_participant_local_union" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['plan_participant_local_union'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['plan_participant_local_union'] = ''
+    if "plan_participant_employee_id" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['plan_participant_employee_id'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['plan_participant_employee_id'] = ''
+    if "employer_name" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['employer_name'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['employer_name'] = ''
+  else:
+    user_data1 = [{
+    'f_name': '',
+    'l_name': '',
+    'email_id': '',
+    'court_name': '',
+    'add_other_court': '',
+    'other_court': '',
+    'other_court_district': '',
+    'other_court_add': '',
+    'other_court_mailing_add': '',
+    'other_court_city': '',
+    'other_court_zip': '',
+    'case_number': '',
+    'final_judgment': '',
+    'judgment_date': '',
+    'judgment_deal': '',
+    'petition_dom': '',
+    'petition_dos': '',
+    'is_same_date': '',
+    'response_dom': '',
+    'response_dos': '',
+    
+    'petitioner_field':{
+        'petitioner.name.first': '',
+        'petitioner.name.middle': '',
+        'petitioner.name.last': '',
+        'petitioner_represented_attorney':'',
+        'petitioner.address.address':'',
+        'petitioner.address.unit':'',
+        'petitioner.address.city':'',
+        'petitioner.address.state':'',
+        'petitioner.address.zip':'',
+        'petitioner_email':'',
+        'petitioner_phone':'',
+        'petitioner_fax':'',
+      },
+    
+    'petitioner_attorney_name':'',
+    'petitioner_attorney_bar':'',
+    'petitioner_attorney_firm':'',
+    'petitioner_attorney.address.address':'',
+    'petitioner_attorney.address.unit':'',
+    'petitioner_attorney.address.city':'',
+    'petitioner_attorney.address.state':'',
+    'petitioner_attorney.address.zip':'',
+    'petitioner_attorney_phone':'',
+    'petitioner_attorney_fax':'',
+    'petitioner_attorney_email':'',
+    
+    'respondent_field':{
+        'respondent.name.first': '',
+        'respondent.name.middle': '',
+        'respondent.name.last': '',
+        'respondent_represented_attorney':'',
+        'respondent.address.address':'',
+        'respondent.address.unit':'',
+        'respondent.address.city':'',
+        'respondent.address.state':'',
+        'respondent.address.zip':'',
+        'respondent_email':'',
+        'respondent_phone':'',
+        'respondent_fax':'',
+      },
+    
+    'respondent_attorney_name':'',
+    'respondent_attorney_bar':'',
+    'respondent_attorney_firm':'',
+    'respondent_attorney.address.address':'',
+    'respondent_attorney.address.unit':'',
+    'respondent_attorney.address.city':'',
+    'respondent_attorney.address.state':'',
+    'respondent_attorney.address.zip':'',
+    'respondent_attorney_phone':'',
+    'respondent_attorney_fax':'',
+    'respondent_attorney_email':'',
+    
+    'who_is_filing':'',
+    
+    'other_filing_field':{
+        'other_filing':'',
+        'other_firm':'',
+        'other_bar_number':'',
+        'other.address.address':'',
+        'other.address.unit':'',
+        'other.address.city':'',
+        'other.address.state':'',
+        'other.address.zip':'',
+        'other_phone':'',
+        'other_fax':'',
+        'other_email':'',
+    },
+    
+    'plan_name': '',
+    'add_other_plan': '',
+    'other_plan': '',
+    'whose_plan': '',
+    'plan_participant_local_union': '',
+    'plan_participant_employee_id': '',
+    'employer_name': ''
+    
+    }]
+  
+---
+code: |
+  if 'id' in url_args:
+    origin_of_interviewee = url_args['id']
+  else:
+    origin_of_interviewee = 'unknown'
+---
+id: interview order
+mandatory: True
+code: |
+  joinder
+  email_id
+  if add_other_court:
+    court_name = ''
+    other_court
+  else:
+    court_name
+  court_add = court_address(court_name)
+  if final_judgment:
+    judgment_date
+    judgment_deal
+  else:
+    judgment_date = ''
+    judgment_deal = '' 
+  petition_dom
+  if is_same_date:
+    response_dom
+    response_dos
+  else:
+    response_dom = ''
+    response_dos = '' 
+  petitioner_name
+  if petitioner_represented_attorney:
+    petitioner_attorney_name = ''
+  else:
+    petitioner_attorney_name
+  respondent_name
+  if respondent_represented_attorney:
+    respondent_attorney_name = ''
+  else:
+    respondent_attorney_name
+  who_is_filing
+  if who_is_filing=='Other':
+    other_filing_field
+    jsond = {
+      'f_name': f_name,
+      'l_name': l_name,
+      'email_id': email_id,
+      'court_name': court_name,
+      'add_other_court': add_other_court,
+      'other_court': other_court if add_other_court else '',
+      'other_court_district': other_court_district if add_other_court else '',
+      'other_court_add': other_court_add if add_other_court else '',
+      'other_court_mailing_add': other_court_mailing_add if add_other_court else '',
+      'other_court_city': other_court_city if add_other_court else '',
+      'other_court_zip': other_court_zip if add_other_court else '',
+      'case_number': case_number,
+      'final_judgment': final_judgment,
+      'judgment_date': str(judgment_date),
+      'judgment_deal':str(judgment_deal),
+      'petition_dom': str(petition_dom),
+      'petition_dos': str(petition_dos),
+      'is_same_date': is_same_date,
+      'response_dom': str(response_dom) if is_same_date else '',
+      'response_dos': str(response_dos) if is_same_date else '',
+
+      'petitioner_field':{
+        'petitioner.name.first': petitioner.name.first,
+        'petitioner.name.middle': petitioner.name.middle,
+        'petitioner.name.last': petitioner.name.last,
+        'petitioner_represented_attorney':petitioner_represented_attorney,
+        'petitioner.address.address':petitioner.address.address if petitioner_represented_attorney else '',
+        'petitioner.address.unit':petitioner.address.unit if petitioner_represented_attorney else '',
+        'petitioner.address.city':petitioner.address.city if petitioner_represented_attorney else '',
+        'petitioner.address.state':petitioner.address.state if petitioner_represented_attorney else '',
+        'petitioner.address.zip':petitioner.address.zip if petitioner_represented_attorney else '',
+        'petitioner_email':petitioner_email if petitioner_represented_attorney else '',
+        'petitioner_phone':petitioner_phone if petitioner_represented_attorney else '',
+        'petitioner_fax':petitioner_fax if petitioner_represented_attorney else '',
+      },
+
+      'petitioner_attorney_name':petitioner_attorney_name if not petitioner_represented_attorney else '',
+      'petitioner_attorney_bar':petitioner_attorney_bar if not petitioner_represented_attorney else '',
+      'petitioner_attorney_firm':petitioner_attorney_firm if not petitioner_represented_attorney else '',
+      'petitioner_attorney.address.address':petitioner_attorney.address.address if not petitioner_represented_attorney else '',
+      'petitioner_attorney.address.unit':petitioner_attorney.address.unit if not petitioner_represented_attorney else '',
+      'petitioner_attorney.address.city':petitioner_attorney.address.city if not petitioner_represented_attorney else '',
+      'petitioner_attorney.address.state':petitioner_attorney.address.state if not petitioner_represented_attorney else '',
+      'petitioner_attorney.address.zip':petitioner_attorney.address.zip if not petitioner_represented_attorney else '',
+      'petitioner_attorney_phone':petitioner_attorney_phone if not petitioner_represented_attorney else '',
+      'petitioner_attorney_fax':petitioner_attorney_fax if not petitioner_represented_attorney else '',
+      'petitioner_attorney_email':petitioner_attorney_email if not petitioner_represented_attorney else '',
+
+      'respondent_field':{
+            'respondent.name.first': respondent.name.first,
+            'respondent.name.middle': respondent.name.middle,
+            'respondent.name.last': respondent.name.last,
+            'respondent_represented_attorney':respondent_represented_attorney,
+            'respondent.address.address':respondent.address.address if respondent_represented_attorney else '',
+            'respondent.address.unit':respondent.address.unit if respondent_represented_attorney else '',
+            'respondent.address.city':respondent.address.city if respondent_represented_attorney else '',
+            'respondent.address.state':respondent.address.state if respondent_represented_attorney else '',
+            'respondent.address.zip':respondent.address.zip if respondent_represented_attorney else '',
+            'respondent_email':respondent_email if respondent_represented_attorney else '',
+            'respondent_phone':respondent_phone if respondent_represented_attorney else '',
+            'respondent_fax':respondent_fax if respondent_represented_attorney else '',
+        },
+
+      'respondent_attorney_name':respondent_attorney_name if not respondent_represented_attorney else '',
+      'respondent_attorney_bar':respondent_attorney_bar if not respondent_represented_attorney else '',
+      'respondent_attorney_firm':respondent_attorney_firm if not respondent_represented_attorney else '',
+      'respondent_attorney.address.address':respondent_attorney.address.address if not respondent_represented_attorney else '',
+      'respondent_attorney.address.unit':respondent_attorney.address.unit if not respondent_represented_attorney else '',
+      'respondent_attorney.address.city':respondent_attorney.address.city if not respondent_represented_attorney else '',
+      'respondent_attorney.address.state':respondent_attorney.address.state if not respondent_represented_attorney else '',
+      'respondent_attorney.address.zip':respondent_attorney.address.zip if not respondent_represented_attorney else '',
+      'respondent_attorney_phone':respondent_attorney_phone if not respondent_represented_attorney else '',
+      'respondent_attorney_fax':respondent_attorney_fax if not respondent_represented_attorney else '',
+      'respondent_attorney_email':respondent_attorney_email if not respondent_represented_attorney else '',
+
+      'who_is_filing':who_is_filing,
+
+        'other_filing_field':{
+            'other_filing':other_filing if who_is_filing == 'Other' else '',
+            'other_firm':other_firm if who_is_filing == 'Other' else '',
+            'other_bar_number':other_bar_number if who_is_filing == 'Other' else '',
+            'other.address.address':other.address.address if who_is_filing == 'Other' else '',
+            'other.address.unit':other.address.unit if who_is_filing == 'Other' else '',
+            'other.address.city':other.address.city if who_is_filing == 'Other' else '',
+            'other.address.state':other.address.state if who_is_filing == 'Other' else '',
+            'other.address.zip':other.address.zip if who_is_filing == 'Other' else '',
+            'other_phone':other_phone if who_is_filing == 'Other' else '',
+            'other_fax':other_fax if who_is_filing == 'Other' else '',
+            'other_email':other_email if who_is_filing == 'Other' else '',
+        },
+    
+    'add_other_plan': add_other_plan,
+    'plan_name': plan_name if not add_other_plan else '',
+    'other_plan': other_plan if add_other_plan else '',
+    'whose_plan': whose_plan,
+    'plan_participant_local_union': plan_participant_local_union,
+    'plan_participant_employee_id': plan_participant_employee_id,
+    'employer_name': employer_name,
+     }
+  
+  else:
+    other_filing_field=''
+    jsond = {
+      'f_name': f_name,
+      'l_name': l_name,
+      'email_id': email_id,
+      'court_name': court_name,
+      'add_other_court': add_other_court,
+      'other_court': other_court if add_other_court else '',
+      'other_court_district': other_court_district if add_other_court else '',
+      'other_court_add': other_court_add if add_other_court else '',
+      'other_court_mailing_add': other_court_mailing_add if add_other_court else '',
+      'other_court_city': other_court_city if add_other_court else '',
+      'other_court_zip': other_court_zip if add_other_court else '',
+      'case_number': case_number,
+      'final_judgment': final_judgment,
+      'judgment_date': str(judgment_date),
+      'judgment_deal':str(judgment_deal),
+      'petition_dom': str(petition_dom),
+      'petition_dos': str(petition_dos),
+      'is_same_date': is_same_date,
+      'response_dom': str(response_dom) if is_same_date else '',
+      'response_dos': str(response_dos) if is_same_date else '',
+
+      'petitioner_field':{
+        'petitioner.name.first': petitioner.name.first,
+        'petitioner.name.middle': petitioner.name.middle,
+        'petitioner.name.last': petitioner.name.last,
+        'petitioner_represented_attorney':petitioner_represented_attorney,
+        'petitioner.address.address':petitioner.address.address if petitioner_represented_attorney else '',
+        'petitioner.address.unit':petitioner.address.unit if petitioner_represented_attorney else '',
+        'petitioner.address.city':petitioner.address.city if petitioner_represented_attorney else '',
+        'petitioner.address.state':petitioner.address.state if petitioner_represented_attorney else '',
+        'petitioner.address.zip':petitioner.address.zip if petitioner_represented_attorney else '',
+        'petitioner_email':petitioner_email if petitioner_represented_attorney else '',
+        'petitioner_phone':petitioner_phone if petitioner_represented_attorney else '',
+        'petitioner_fax':petitioner_fax if petitioner_represented_attorney else '',
+      },
+
+      'petitioner_attorney_name':petitioner_attorney_name if not petitioner_represented_attorney else '',
+      'petitioner_attorney_bar':petitioner_attorney_bar if not petitioner_represented_attorney else '',
+      'petitioner_attorney_firm':petitioner_attorney_firm if not petitioner_represented_attorney else '',
+      'petitioner_attorney.address.address':petitioner_attorney.address.address if not petitioner_represented_attorney else '',
+      'petitioner_attorney.address.unit':petitioner_attorney.address.unit if not petitioner_represented_attorney else '',
+      'petitioner_attorney.address.city':petitioner_attorney.address.city if not petitioner_represented_attorney else '',
+      'petitioner_attorney.address.state':petitioner_attorney.address.state if not petitioner_represented_attorney else '',
+      'petitioner_attorney.address.zip':petitioner_attorney.address.zip if not petitioner_represented_attorney else '',
+      'petitioner_attorney_phone':petitioner_attorney_phone if not petitioner_represented_attorney else '',
+      'petitioner_attorney_fax':petitioner_attorney_fax if not petitioner_represented_attorney else '',
+      'petitioner_attorney_email':petitioner_attorney_email if not petitioner_represented_attorney else '',
+
+      'respondent_field':{
+            'respondent.name.first': respondent.name.first,
+            'respondent.name.middle': respondent.name.middle,
+            'respondent.name.last': respondent.name.last,
+            'respondent_represented_attorney':respondent_represented_attorney,
+            'respondent.address.address':respondent.address.address if respondent_represented_attorney else '',
+            'respondent.address.unit':respondent.address.unit if respondent_represented_attorney else '',
+            'respondent.address.city':respondent.address.city if respondent_represented_attorney else '',
+            'respondent.address.state':respondent.address.state if respondent_represented_attorney else '',
+            'respondent.address.zip':respondent.address.zip if respondent_represented_attorney else '',
+            'respondent_email':respondent_email if respondent_represented_attorney else '',
+            'respondent_phone':respondent_phone if respondent_represented_attorney else '',
+            'respondent_fax':respondent_fax if respondent_represented_attorney else '',
+        },
+      
+      'respondent_attorney_name':respondent_attorney_name if not respondent_represented_attorney else '',
+      'respondent_attorney_bar':respondent_attorney_bar if not respondent_represented_attorney else '',
+      'respondent_attorney_firm':respondent_attorney_firm if not respondent_represented_attorney else '',
+      'respondent_attorney.address.address':respondent_attorney.address.address if not respondent_represented_attorney else '',
+      'respondent_attorney.address.unit':respondent_attorney.address.unit if not respondent_represented_attorney else '',
+      'respondent_attorney.address.city':respondent_attorney.address.city if not respondent_represented_attorney else '',
+      'respondent_attorney.address.state':respondent_attorney.address.state if not respondent_represented_attorney else '',
+      'respondent_attorney.address.zip':respondent_attorney.address.zip if not respondent_represented_attorney else '',
+      'respondent_attorney_phone':respondent_attorney_phone if not respondent_represented_attorney else '',
+      'respondent_attorney_fax':respondent_attorney_fax if not respondent_represented_attorney else '',
+      'respondent_attorney_email':respondent_attorney_email if not respondent_represented_attorney else '',
+
+      'who_is_filing':who_is_filing,
+        
+        'other_filing_field':{
+            'other_filing':other_filing if who_is_filing == 'Other' else '',
+            'other_firm':other_firm if who_is_filing == 'Other' else '',
+            'other_bar_number':other_bar_number if who_is_filing == 'Other' else '',
+            'other.address.address':other.address.address if who_is_filing == 'Other' else '',
+            'other.address.unit':other.address.unit if who_is_filing == 'Other' else '',
+            'other.address.city':other.address.city if who_is_filing == 'Other' else '',
+            'other.address.state':other.address.state if who_is_filing == 'Other' else '',
+            'other.address.zip':other.address.zip if who_is_filing == 'Other' else '',
+            'other_phone':other_phone if who_is_filing == 'Other' else '',
+            'other_fax':other_fax if who_is_filing == 'Other' else '',
+            'other_email':other_email if who_is_filing == 'Other' else '',
+        },
+    
+    'add_other_plan': add_other_plan,
+    'plan_name': plan_name if not add_other_plan else '',
+    'other_plan': other_plan if add_other_plan else '',
+    'whose_plan': whose_plan,
+    'plan_participant_local_union': plan_participant_local_union,
+    'plan_participant_employee_id': plan_participant_employee_id,
+    'employer_name': employer_name,
+     }
+  if add_other_plan:
+    plan_name = ''
+    other_plan
+  else:
+    plan_name
+  something = ''
+  No = False
+  Yes = True
+  petitioner_details=''
+  petitioner_attornery_details=''
+  respondent_details=''
+  respondent_attorney_details=''
+---
+
+objects:
+  - petitioner: Individual
+  - respondent: Individual
+  - respondent_attorney: Individual
+  - petitioner_attorney: Individual
+  - temp: Individual
+  - other: Individual
+---
+question: |
+  Let’s start with you.
+subquestion: |
+  We need your information to follow up with you for feedback on our JOINDER machine and to provide our contact information in case you run into any issues with the retirement plan.
+fields:
+  - First Name: f_name
+    default: |
+      ${ register_dataj[0]['first_name'] }
+  - Last Name: l_name
+    default: |
+      ${ register_dataj[0]['last_name'] }
+  - E-mail: email_id
+    default: |
+      ${ register_dataj[0]['email'] }
+    datatype: email  
+---
+field: joinder
+question: |
+  Welcome to the LexyAlgo Joinder Generator. This app will generate a joinder that can be served on retirement plans as part of a California divorce.
+subquestion: |
+  The forms included are:
+  
+  * FL 117: Notice and Acknowledgement of Receipt
+  * FL 335: Proof of Service by Mail
+  * FL 370: Pleading on Joinder - Employee Benefit Plan
+  * FL 372: Request for Joinder of Employee Benefit Plan and Order
+  * FL 374: Notice of Appearance and Response of Employee Benefit Plan (Blank - For the Retirement Plan's Use Only)
+  * FL 375: Summons (Joinder) 
+  
+  THESE FORMS ARE *CALIFORNIA-SPECIFIC.*
+---
+
+question: |
+  In which court was this case filed?
+subquestion: |
+  If you are unsure, check your paperwork and look at the top of the first page. It will identify a court, such as LOS ANGLES: SOUTHEAST (Whittier).
+fields: 
+  - Court Name: court_name
+    code: |
+      courts_data
+    default: |
+      ${ user_data1[0]['court_name'] }
+    hide if: add_other_court
+  - Other Court?: add_other_court
+    required: False
+    default: |
+      ${ user_data1[0]['add_other_court'] }
+    datatype: yesnoradio
+  - Other Court Name: other_court
+    default: |
+      ${ user_data1[0]['other_court'] } 
+    show if: add_other_court
+  - Other Court County: other_court_district
+    default: |
+      ${ user_data1[0]['other_court_district'] }
+    show if: add_other_court
+  - Other Court Street Address: other_court_add
+    default: |
+      ${ user_data1[0]['other_court_add'] }
+    show if: add_other_court
+  - Other Court Mailing Address: other_court_mailing_add
+    default: |
+      ${ user_data1[0]['other_court_mailing_add'] }
+    show if: add_other_court
+    required: False
+  - Other Court City: other_court_city
+    default: |
+      ${ user_data1[0]['other_court_city'] }
+    show if: add_other_court
+  - Other Court Zip Code: other_court_zip
+    default: |
+      ${ user_data1[0]['other_court_zip'] }
+    show if: add_other_court
+  - Case Number: case_number
+    default: |
+      ${ user_data1[0]['case_number'] }
+---
+mandatory: True
+code: |
+  if add_other_court:
+    add_court = other_court
+  else:
+    add_court = court_name
+
+---
+question: |
+  We'll need some more information about the case to get started.
+fields: 
+  - Has a final judgment been reached in the case?: final_judgment
+    datatype: yesnoradio
+    default: |
+      ${ user_data1[0]['final_judgment'] }
+  - Date of Judgment: judgment_date
+    datatype: date
+    show if: final_judgment
+    default: |
+      ${ user_data1[0]['judgment_date'] }
+  - Did the judgment deal with the retirement plan that you are joining here?: judgment_deal
+    datatype: yesnoradio
+    show if: final_judgment
+    default: |
+      ${ user_data1[0]['judgment_deal'] }
+    
+---
+question: |
+  For this question, we'll need a copy of the petition for divorce and the response, if any, that was filed. We are looking for the date of marriage and date of separation on each form.
+fields: 
+  - Petition states that the date of marriage was: petition_dom
+    default: |
+      ${ user_data1[0]['petition_dom'] }
+    datatype: date
+  - Petition states that the date of separation was: petition_dos
+    default: |
+      ${ user_data1[0]['petition_dos'] }
+    datatype: date
+  - If a response WAS filed, did that response provide the same dates for either the date of marriage or separation?: is_same_date
+    default: |
+      ${ user_data1[0]['is_same_date'] }
+    datatype: noyesradio
+  - Response states that the date of marriage was: response_dom
+    default: |
+      ${ user_data1[0]['response_dom'] }
+    datatype: date
+    show if: is_same_date
+  - Response states that the date of separation was: response_dos
+    default: |
+      ${ user_data1[0]['response_dos'] }
+    datatype: date
+    show if: is_same_date
+    
+---
+mandatory: True
+code: |
+  if petitioner_represented_attorney:
+    petitioner_attorney_field=''
+    petitioner.address
+    petitioner_email
+    petitioner_phone
+    petitioner_fax
+    petitioner_checked=Yes
+    petitioner_details= petitioner_name + "\n" + petitioner.address.address+" " + petitioner.address.city+" " +petitioner.address.zip +"\n" + petitioner_phone+" "+petitioner_email
+    petitioner_attorney_checked=No
+    petitioner_attorney_details=''
+  else:
+    petitioner_attorney_field
+    petitioner.address = ''
+    petitioner_email = ''
+    petitioner_phone = ''
+    petitioner_fax = ''
+    petitioner_checked=No
+    petitioner_details=''
+    petitioner_attorney_checked=Yes
+    petitioner_attorney_details=petitioner_attorney_name+" "+petitioner_attorney_firm+" "+StateBarNo+" "+"\n"+petitioner_attorney.address.address+" "+petitioner_attorney.address.city+"\n"+petitioner_attorney_phone+" "+petitioner_attorney_email
+---
+field: petitioner_field
+question: |
+  Tell us about the petitioner in the case.
+subquestion: |
+  If you are unsure who is the petitioner in this divorce, look at your paperwork - most court filings have the petitioner and respondent names at the top.
+fields:
+  - Petitioner First Name: petitioner.name.first
+    default: |
+      ${ user_data1[0]['petitioner_field']['petitioner.name.first'] }
+  - Petitioner Middle Name: petitioner.name.middle
+    default: |
+      ${ user_data1[0]['petitioner_field']['petitioner.name.middle'] }
+    required: False
+  - Petitioner Last Name: petitioner.name.last
+    default: |
+      ${ user_data1[0]['petitioner_field']['petitioner.name.last'] }
+  - Is the Petitioner represented by an Attorney?: petitioner_represented_attorney
+    default: |
+      ${ user_data1[0]['petitioner_field']['petitioner_represented_attorney'] }
+    datatype: noyesradio
+  - Petitioner Street address: petitioner.address.address
+    default: |
+      ${ user_data1[0]['petitioner_field']['petitioner.address.address'] }
+    address autocomplete: True
+    show if: petitioner_represented_attorney
+  - Petitioner Unit: petitioner.address.unit
+    default: |
+      ${ user_data1[0]['petitioner_field']['petitioner.address.unit'] }
+    required: False
+    show if: petitioner_represented_attorney
+  - Petitioner City: petitioner.address.city
+    default: |
+      ${ user_data1[0]['petitioner_field']['petitioner.address.city'] }
+    show if: petitioner_represented_attorney
+  - Petitioner State: petitioner.address.state
+    default: |
+      ${ user_data1[0]['petitioner_field']['petitioner.address.state'] }
+    show if: petitioner_represented_attorney
+  - Petitioner Zip: petitioner.address.zip
+    default: |
+      ${ user_data1[0]['petitioner_field']['petitioner.address.zip'] }
+    show if: petitioner_represented_attorney
+  - Petitioner Email: petitioner_email
+    default: |
+      ${ user_data1[0]['petitioner_field']['petitioner_email'] }
+    show if: petitioner_represented_attorney
+    datatype: email
+  - Petitoner Phone : petitioner_phone
+    default: |
+      ${ user_data1[0]['petitioner_field']['petitioner_phone'] }
+    show if: petitioner_represented_attorney
+  - Petitioner Fax : petitioner_fax
+    default: |
+      ${ user_data1[0]['petitioner_field']['petitioner_fax'] }
+    required: False
+    show if: petitioner_represented_attorney
+validation code: |
+  if petitioner_represented_attorney and not phone_number_is_valid(phone_number_formatted(petitioner_phone)):
+    validation_error('Phone number is not valid')
+---
+mandatory: True
+code: |
+  petitioner_name = petitioner.name.first + ' ' + petitioner.name.middle + ' ' + petitioner.name.last 
+---
+field: petitioner_attorney_field
+question: |
+  Let's get the contact information for the petitioner's attorney.
+fields:
+  - Petitioner’s Attorney's Name: petitioner_attorney_name
+    default: |
+      ${ user_data1[0]['petitioner_attorney_name'] }
+  - Petitioner’s Attorney Bar Number: petitioner_attorney_bar
+    default: |
+      ${ user_data1[0]['petitioner_attorney_bar'] }
+  - Petitioner’s Attorney Firm Name: petitioner_attorney_firm
+    default: |
+      ${ user_data1[0]['petitioner_attorney_firm'] }
+  - Petitioner’s Attorney Street address: petitioner_attorney.address.address
+    default: |
+      ${ user_data1[0]['petitioner_attorney.address.address'] }
+    address autocomplete: True
+  - Petitioner’s Attorney Unit: petitioner_attorney.address.unit
+    default: |
+      ${ user_data1[0]['petitioner_attorney.address.unit'] }
+    required: False
+  - Petitioner’s Attorney City: petitioner_attorney.address.city
+    default: |
+      ${ user_data1[0]['petitioner_attorney.address.city'] }
+  - Petitioner’s Attorney State: petitioner_attorney.address.state
+    default: |
+      ${ user_data1[0]['petitioner_attorney.address.state'] }
+  - Petitioner’s Attorney Zip: petitioner_attorney.address.zip
+    default: |
+      ${ user_data1[0]['petitioner_attorney.address.zip'] }
+  - Petitioner’s Attorney’s Phone: petitioner_attorney_phone
+    default: |
+      ${ user_data1[0]['petitioner_attorney_phone'] }
+  - Petitioner’s Attorney’s Fax: petitioner_attorney_fax
+    default: |
+      ${ user_data1[0]['petitioner_attorney_fax'] }
+    required: False
+  - Petitioner’s Attorney’s Email: petitioner_attorney_email
+    default: |
+      ${ user_data1[0]['petitioner_attorney_email'] }
+    datatype: email
+validation code: |
+  if not petitioner_represented_attorney and not phone_number_is_valid(phone_number_formatted(petitioner_attorney_phone)):
+        validation_error('Phone number is not valid')
+---
+mandatory: True
+code: |
+  if respondent_represented_attorney:
+    respondent_attorney_field=''
+    respondent.address
+    respondent_email
+    respondent_phone
+    respondent_fax
+    respondent_checked=Yes
+    respondent_details=respondent_name+"\n"+respondent.address.address+" "+respondent.address.city+"\n"+respondent_phone+" "+respondent_email
+    respondent_attorney_checked=No 
+    respondent_attorney_details=''
+    
+  else:
+    respondent_attorney_field
+    respondent.address = ''
+    respondent_email = ''
+    respondent_phone = ''
+    respondent_fax = ''
+    respondent_checked=No
+    respondent_attorney_checked=Yes
+    respondent_details=''
+    respondent_attorney_details=respondent_attorney_name+" "+respondent_attorney_firm+" "+StateBarNo+"\n"+respondent_attorney.address.address+" "+respondent_attorney.address.city+" "+respondent_attorney.address.zip+"\n"+respondent_attorney_phone+" "+respondent_attorney_email
+    
+    
+---
+question: |
+  Now tell us about the respondent in the case.
+subquestion: |
+  If you are unsure who is the respondent, look at your paperwork - most court filings have the petitioner and respondent names at the top.
+fields:
+  - Respondent First Name: respondent.name.first
+    default: |
+      ${ user_data1[0]['respondent_field']['respondent.name.first'] }
+  - Respondent Middle Name: respondent.name.middle
+    default: |
+      ${ user_data1[0]['respondent_field']['respondent.name.middle'] }
+    required: False
+  - Respondent Last Name: respondent.name.last
+    default: |
+      ${ user_data1[0]['respondent_field']['respondent.name.last'] }
+  - Is the Respondent represented by an Attorney?: respondent_represented_attorney
+    default: |
+      ${ user_data1[0]['respondent_field']['respondent_represented_attorney'] }
+    datatype: noyesradio
+  - Respondent Street Address: respondent.address.address
+    default: |
+      ${ user_data1[0]['respondent_field']['respondent.address.address'] }
+    address autocomplete: True
+    show if: respondent_represented_attorney
+  - Respondent Unit: respondent.address.unit
+    default: |
+      ${ user_data1[0]['respondent_field']['respondent.address.unit'] }
+    required: False
+    show if: respondent_represented_attorney
+  - Respondent City: respondent.address.city
+    default: |
+      ${ user_data1[0]['respondent_field']['respondent.address.city'] }
+    show if: respondent_represented_attorney
+  - Respondent State: respondent.address.state
+    default: |
+      ${ user_data1[0]['respondent_field']['respondent.address.state'] }
+    show if: respondent_represented_attorney
+  - Respondent Zip: respondent.address.zip
+    default: |
+      ${ user_data1[0]['respondent_field']['respondent.address.zip'] }
+    show if: respondent_represented_attorney
+  - Respondent Email: respondent_email
+    default: |
+      ${ user_data1[0]['respondent_field']['respondent_email'] }
+    show if: respondent_represented_attorney
+    datatype: email
+  - Respondent Phone: respondent_phone
+    default: |
+      ${ user_data1[0]['respondent_field']['respondent_phone'] }
+    show if: respondent_represented_attorney
+  - Respondent Fax: respondent_fax
+    default: |
+      ${ user_data1[0]['respondent_field']['respondent_fax'] }
+    required: False
+    show if: respondent_represented_attorney
+validation code: |
+  if respondent_represented_attorney and not phone_number_is_valid(phone_number_formatted(respondent_phone)):
+    validation_error('Phone number is not valid')
+---
+mandatory: True
+code: |
+  respondent_name = respondent.name.first + ' ' + respondent.name.middle + ' ' + respondent.name.last 
+---
+field: respondent_attorney_field
+question: |
+  Let's get the contact information for the respondent's attorney.
+fields:
+  - Respondent’s Attorney's name: respondent_attorney_name
+    default: |
+      ${ user_data1[0]['respondent_attorney_name'] }
+  - Respondent’s Attorney Bar Number: respondent_attorney_bar
+    default: |
+      ${ user_data1[0]['respondent_attorney_bar'] }
+  - Respondent’s Attorney Firm Name: respondent_attorney_firm
+    default: |
+      ${ user_data1[0]['respondent_attorney_firm'] }
+  - Respondent’s Attorney Street Address: respondent_attorney.address.address
+    default: |
+      ${ user_data1[0]['respondent_attorney.address.address'] }
+    address autocomplete: True
+  - Respondent’s Attorney Unit: respondent_attorney.address.unit
+    default: |
+      ${ user_data1[0]['respondent_attorney.address.unit'] }
+    required: False
+  - Respondent’s Attorney City: respondent_attorney.address.city
+    default: |
+      ${ user_data1[0]['respondent_attorney.address.city'] }
+  - Respondent’s Attorney State: respondent_attorney.address.state
+    default: |
+      ${ user_data1[0]['respondent_attorney.address.state'] }
+  - Respondent’s Attorney Zip: respondent_attorney.address.zip
+    default: |
+      ${ user_data1[0]['respondent_attorney.address.zip'] }
+  - Respondent’s Attorney’s Phone: respondent_attorney_phone
+    default: |
+      ${ user_data1[0]['respondent_attorney_phone'] }
+  - Respondent’s Attorney’s Fax: respondent_attorney_fax
+    default: |
+      ${ user_data1[0]['respondent_attorney_fax'] }
+    required: False
+  - Respondent’s Attorney’s Email: respondent_attorney_email
+    default: |
+      ${ user_data1[0]['respondent_attorney_email'] }
+    datatype: email
+validation code: |
+  if not respondent_represented_attorney and not phone_number_is_valid(phone_number_formatted(respondent_attorney_phone)):
+        validation_error('Phone number is not valid')
+---
+mandatroy: True
+code: |
+  if who_is_filing =='Petitioner ('+  str(petitioner_name) + ')' :
+    if petitioner_represented_attorney:
+      temp_name=petitioner_name
+      temp_firm=''
+      temp_address =petitioner.address.address
+      temp_city = petitioner.address.city
+      temp_state = petitioner.address.state
+      temp_zip = petitioner.address.zip
+      temp_email= petitioner_email
+      temp_phone=petitioner_phone
+      temp_fax=petitioner_fax
+    else:
+      temp_name=petitioner_name
+      temp_firm=''
+      temp_address =''
+      temp_city = ''
+      temp_state = ''
+      temp_zip = ''
+      temp_email= ''
+      temp_phone=''
+      temp_fax= ''
+      
+  elif who_is_filing=='Respondent ('+  str(respondent_name) + ')':
+    if respondent_represented_attorney:
+      temp_name=respondent_name
+      temp_firm = ''
+      temp_address = respondent.address.address
+      temp_city = respondent.address.city
+      temp_state = respondent.address.state
+      temp_zip = respondent.address.zip
+      temp_email=respondent_email
+      temp_phone=respondent_phone
+      temp_fax=respondent_fax
+    else:
+      temp_name=respondent_name
+      temp_firm = ''
+      temp_address = ''
+      temp_city = ''
+      temp_state = ''
+      temp_zip = ''
+      temp_email= ''
+      temp_phone= ''
+      temp_fax= ''
+  elif who_is_filing == 'Attorney for Petitioner('+  str(petitioner_attorney_name) + ')' or who_is_filing=='Attorney for Petitioner':
+    if petitioner_represented_attorney:
+      temp_name=''
+      temp_firm = ''
+      temp_address = ''
+      temp_city = ''
+      temp_state = ''
+      temp_zip = ''
+      temp_email= ''
+      temp_phone= ''
+      temp_fax= ''
+    else:
+      temp_name = petitioner_attorney_name
+      temp_firm = petitioner_attorney_firm
+      temp_address = petitioner_attorney.address.address
+      temp_city = petitioner_attorney.address.city
+      temp_state = petitioner_attorney.address.state
+      temp_zip = petitioner_attorney.address.zip
+      temp_email = petitioner_attorney_email
+      temp_phone = petitioner_attorney_phone
+      temp_fax = petitioner_attorney_fax
+  elif who_is_filing == 'Attorney for Respondent('+  str(respondent_attorney_name) +')' or who_is_filing=='Attorney for Respondent':
+    if respondent_represented_attorney:
+      temp_name=''
+      temp_firm = ''
+      temp_address = ''
+      temp_city = ''
+      temp_state = ''
+      temp_zip = ''
+      temp_email= ''
+      temp_phone= ''
+      temp_fax= ''
+    else:
+      temp_name = respondent_attorney_name
+      temp_firm = respondent_attorney_firm
+      temp_address = respondent_attorney.address.address
+      temp_city = respondent_attorney.address.city
+      temp_state = respondent_attorney.address.state
+      temp_zip = respondent_attorney.address.zip
+      temp_email=respondent_attorney_email
+      temp_phone=respondent_attorney_phone
+      temp_fax=respondent_attorney_fax
+  elif who_is_filing=='Other':
+    temp_name = other_filing
+    temp_firm=other_firm
+    temp_address =other.address.address
+    temp_city = other.address.city
+    temp_state = other.address.state
+    temp_zip = other.address.zip
+    temp_email=other_email
+    temp_phone=other_phone
+    temp_fax=other_fax
+  else:
+    temp_name=''
+    temp_firm=''
+    temp_address = ''
+    temp_city = ''
+    temp_state = ''
+    temp_zip = ''
+    temp_email=''
+    temp_phone=''
+    temp_fax=''
+---
+
+mandatroy: True
+code: |
+  if who_is_filing=='Attorney for Petitioner('+  petitioner_attorney_name + ')' and not  petitioner_represented_attorney:
+    StateBarNo = petitioner_attorney_bar
+    attorney_for = petitioner_name
+  elif who_is_filing=='Attorney for Respondent('+  respondent_attorney_name +')' and not respondent_represented_attorney:
+    attorney_for = respondent_name
+    StateBarNo = respondent_attorney_bar
+  elif who_is_filing == 'Other':
+    StateBarNo = other_bar_number
+    attorney_for = ''
+  else:
+    attorney_for = 'In Pro Per'
+    StateBarNo = ''
+---
+mandatroy: True
+code: |
+  if who_is_filing=='Attorney for Petitioner('+  petitioner_attorney_name + ')' or 'Attorney for Petitioner'  or who_is_filing=='Petitioner ('+  petitioner_name + ')' :
+    person_acknowledging_receipt=respondent_name
+    person_sending_receipt=petitioner_name
+  else:
+    person_acknowledging_receipt=petitioner_name
+    person_sending_receipt=respondent_name
+---
+mandatory: True
+code: |
+  date_of_mailing = today()
+  document_details='Notice and Acknowledgement of Receipt, Proof of Service by Mail,Pleading on Joinder - Employee Benefit Plan, Request for Joinder of Employee Benefit Plan and Order, Notice of Appearance and Response of Employee Benefit Plan, Summons (Joinder)'
+  if petitioner_represented_attorney and respondent_represented_attorney:
+    res=''
+    pet=''
+  elif respondent_represented_attorney and not petitioner_represented_attorney:
+    res=''
+    pet='('+petitioner_attorney_name+')'
+  elif not respondent_represented_attorney and petitioner_represented_attorney:
+    res='('+respondent_attorney_name+')'
+    pet=''
+  else:
+    res='('+respondent_attorney_name+')'
+    pet='('+petitioner_attorney_name+')'
+---
+mandatory: True
+code: |
+  peti='Petitioner ('+str( petitioner_name )+')'
+  resp='Respondent ('+str( respondent_name )+')'
+  attorney_pet='Attorney for Petitioner'+str(pet)
+  attorney_res='Attorney for Respondent'+str(res)
+  others = 'Other'
+  if petitioner_represented_attorney and respondent_represented_attorney:
+    choices= [peti,resp,others]
+  elif respondent_represented_attorney and not petitioner_represented_attorney:
+    choices= [peti,resp,attorney_pet,others]
+  elif not respondent_represented_attorney and petitioner_represented_attorney:
+    choices= [peti,resp,attorney_res,others]
+  else:
+    choices= [peti,resp,attorney_pet,attorney_res,others]
+---
+question: |
+  Who will be filing this document?
+subquestion: |
+  Tip: If you are the one preparing this, you are likely the person filing it. But if you are unsure, ask an attorney!
+fields:
+  - Who is filing?: who_is_filing
+    default: |
+      ${ user_data1[0]['who_is_filing'] }
+    code: |
+      choices
+      
+---
+field: other_filing_field
+question: |
+  Let's get the contact information for other.
+fields:
+  
+  - Other's Name: other_filing
+    default: |
+      ${ user_data1[0]['other_filing_field']['other_filing'] }
+  - Other's Firm Name : other_firm
+    default: |
+      ${ user_data1[0]['other_filing_field']['other_firm'] }
+    required: False
+  - Other's Bar Number: other_bar_number
+    default: |
+      ${ user_data1[0]['other_filing_field']['other_bar_number'] }
+    required: False
+  - Others’s Street address: other.address.address
+    default: |
+      ${ user_data1[0]['other_filing_field']['other.address.address'] }
+    address autocomplete: True
+  - Others’s Unit: other.address.unit
+    default: |
+      ${ user_data1[0]['other_filing_field']['other.address.unit'] }
+    required: False
+  - Others’s City: other.address.city
+    default: |
+      ${ user_data1[0]['other_filing_field']['other.address.city'] }
+  - Others’s State: other.address.state
+    default: |
+      ${ user_data1[0]['other_filing_field']['other.address.state'] }
+  - Others’s Zip: other.address.zip
+    default: |
+      ${ user_data1[0]['other_filing_field']['other.address.zip'] }
+  - Others’s phone: other_phone
+    default: |
+      ${ user_data1[0]['other_filing_field']['other_phone'] }
+  - Others’s Fax: other_fax
+    default: |
+      ${ user_data1[0]['other_filing_field']['other_fax'] }
+    required: False
+  - Others’s  email: other_email
+    default: |
+      ${ user_data1[0]['other_filing_field']['other_email'] }
+    datatype: email
+validation code: |
+  if who_is_filing == 'Other' and not phone_number_is_valid(phone_number_formatted(other_phone)):
+        validation_error('Phone number is not valid')
+---
+question: |
+  Now let's pick the plan.
+subquestion: |
+  You'll need to create one joinder per plan, even if both parties work for the same employer or one person has multiple plans, such as a pension and a 401k, 403b, Thrift Savings, etc.
+fields: 
+  - Pick a plan: plan_name
+    default: |
+      ${ user_data1[0]['plan_name'] }
+    code: |
+      retiremnet_plans
+    hide if: add_other_plan
+  - Other Plan?: add_other_plan
+    default: |
+      ${ user_data1[0]['add_other_plan'] }
+    required: False
+    datatype: yesnoradio
+  - Other: other_plan
+    default: |
+      ${ user_data1[0]['other_plan'] }
+    show if: add_other_plan
+post: |
+    If you don't see your plan here, send us an email: [willie@lexyalgo.com](qdros). Not all plans require a joinder, but if they do, we would like to add them to the list!
+---
+mandatory: True
+code: |
+  if add_other_plan:
+    add_plan = other_plan
+  else:
+    add_plan = plan_name
+---
+
+question: |
+  And finally, tell us who the plan participant (employee) is:
+fields: 
+  - Who's plan is it?: whose_plan
+    default: |
+      ${ user_data1[0]['whose_plan'] }
+    choices:
+      - Petitioner (${ petitioner_name })
+      - Respondent (${ respondent_name })
+  - Plan Participant Local Union Name (if applicable): plan_participant_local_union
+    default: |
+      ${ user_data1[0]['plan_participant_local_union'] }
+    required: False
+  - Plan Participant Employee ID (if applicable): plan_participant_employee_id
+    default: |
+      ${ user_data1[0]['plan_participant_employee_id'] } 
+    required: False
+  - Employer name: employer_name
+    default: |
+      ${ user_data1[0]['employer_name'] }
+
+---
+mandatory: True
+code: |
+  if court_name == '':
+    court_district = other_court_district
+    court_add1 = other_court_add
+    court_add2 = other_court_city+"  "+other_court_zip
+  else:
+    court_district = court_add[0]['count_court_district']
+    court_add1 = court_add[0]['court_address_line1']
+    court_add2 = court_add[0]['court_address_line2']
+---
+mandatory: True
+code: |
+  if plan_name == '':
+    plan = other_plan
+    plan_add = ''
+  else:
+    plan_det=claimant(plan_name)
+    plan = plan_det[0]
+    plan_add = plan_det[1][0]['mplan_address_line1'] +' '+ plan_det[1][0]['mplan_address_line2'] 
+---
+code: |
+  if len(which_button) > 0 and which_button[0][2] == "reuse":
+    button_of_interview = which_button[0][2]
+    joinder_data = add_to_joinder(jsond,origin_of_interviewee,button_of_interview)
+  else:
+    button_of_interview = ''
+    joinder_data = add_to_joinder(jsond,origin_of_interviewee,button_of_interview)
+  #delete_interview_type=delete_data_from_interview_type(origin_of_interviewee)
+  a = ''
+---
+mandatory: True
+question: |
+  Here are your documents! ${ a } 
+attachment code: |
+  [fl117, fl335, fl372, fl370, fl374, fl375, pos050]
+---
+attachment:
+  - name: FL117
+    filename: fl117
+    variable name: fl117
+    pdf template file: fl117.pdf
+    field code:
+      - "StateBarNo": StateBarNo
+      - "Name": temp_name
+      - "FirmName": temp_firm
+      - "StreetAddress1": temp_address 
+      - "City": temp_city
+      - "State": temp_state
+      - "ZipCode": temp_zip
+      - "TelephoneNo": temp_phone
+      - "FaxNo": temp_fax
+      - "EMailAddress": temp_email
+      - "AttorneyForName": attorney_for
+      - "SuperiorCourtOfCaliforniaCountyOf": court_district
+      - "StreetAddress2": court_add1
+      - "MailingAddress": something
+      - "CityAndZipCode": court_add2
+      - "BranchName": add_court
+      - "Petitioner": petitioner_name
+      - "Respondent": respondent_name
+      - "CaseNumber": case_number
+      - "ToNameOfIndividualBeingServed": plan
+      - "DateOfMailingSpecify": date_of_mailing
+      - "2DateOfMailing": person_sending_receipt
+      - "`42": No
+      - "`41": No
+      - "FamilyLawPetitionMarriageDomesticPartnershipFormFl100SummonsFormFl110AndBlankResponseMarriageDomesticPartnershipFormFl120": No
+      - "`43": No
+      - "`47": No  
+      - "`48": No
+      - "UniformParentagePetitionToDetermineParentalRelationshipFormFl200SummonsFormFl210AndBlankResponseToPetitionToDetermineParentalRelationshipFormfl220": No
+      - "`49": No
+      - "`54": No
+      - "`53": No
+      - "CustodyAndSupportPetitionForCustodyAndSupportOfMinorChildrenFormFl260SummonsFormfl210AndBlankResponseToPetitionForCustodyAndSupportOfMinorChildrenFormFl270": No
+      - "`55": No
+      - "1": Yes
+      - "CompletedAndBlankDeclarationUnderUniform5": No
+      - "CompletedAndBlankFinancialStatementSimplifiedFormFl155": No
+      - "`73": No
+      - "`60": No
+      - "CompletedAndBlankPropertyDeclarationFormFl160": No
+      - "`76": No
+      - "CompletedAndBlankDeclarationOfDisclosure": No
+      - "`64": No
+      - "`79": No
+      - "RequestForOrderFormFl300AndBlankResponsiveDeclarationToRequestForOrderFormFl320": No
+      - "CompletedAndBlankScheduleOfAssetsAndDebtsFormFl142": No
+      - "`80": No
+      - "`67": No
+      - "OtherSpecify1": Yes
+      - "CompletedAndBlankIncomeAndExpense": No
+      - "`70": No
+      - "OtherSpecify2": document_details
+      - "RecipientSignedThisAcknowledgmentOnSpecifyDate": something
+      - "5RecipientSignedThisAcknowledgmentOn": something
+      - "`99": No
+      - "`4": No
+      - "`1": No
+      - "`2": No
+      - "`3": No
+---
+
+attachment:
+  - name: FL335
+    filename: fl335
+    variable name: fl335
+    pdf template file: fl335.pdf
+    field code:
+      - "AttorneyOrPartyWithoutAttorneyNameStateBarNumberAndAddress": temp_name+"        "+(StateBarNo)+"\n"+temp_firm+"\n"+temp_address+"\n"+temp_city+"  "+temp_state+"  "+temp_zip
+      - "TelephoneNo": temp_phone
+      - "FaxNoOptional": temp_fax
+      - "EMailAddressOptional": temp_email
+      - "AttorneyForName": attorney_for
+      - "SuperiorCourtOfCaliforniaCountyOf": court_district
+      - "StreetAddress": court_add1
+      - "MailingAddress": something
+      - "CityAndZipCode": court_add2
+      - "BranchName": add_court
+      - "PetitionerPlaintiff": petitioner_name
+      - "RespondentDefendant": respondent_name
+      - "CaseNumber": case_number
+      - "OtherParentParty": plan
+      - "IfApplicableProvideHearingDate": something
+      - "HearingTime": something
+      - "Dept": something
+      - "MyResidenceOrBusinessAddressIs": something
+      - "IServedACopyOfTheFollowingDocumentsSpecify": document_details
+      - "DepositingTheSealedEnvelopeWithTheUnitedStatesPostalServiceWithThePostageFullyPrepaid": Yes
+      - "PlacingTheEnvelopeForCollectionAndMailingOnTheDateAndAtThePlaceShownInItem4FollowingOurOrdinary": No
+      - "NameOfPersonServed": plan
+      - "Address": plan_add
+      - "DateMailed": something
+      - "PlaceOfMailingCityAndState": something
+      - "IServedARequestToModifyAChildCustodyVisitationOrChildSupportJudgmentOrPermanentOrderWhichIncludedAnAddressVerificationDeclarationDeclarationRegardingAddressVerificationPostjudgmentRequestToModifyAChildCustodyVisitationOrChildSupportOrderFormFl334MayBeUsedForThisPurpose": No
+      - "Date": something
+      - "TypeOrPrintName": something
+      - "`60": No
+      - "`1": No
+      - "`2": No
+      - "`3": No
+      - "`4": No
+
+---
+attachment:
+  - name: FL372
+    filename: fl372
+    variable name: fl372
+    pdf template file: fl372.pdf
+    field code:
+      - "AttorneyOrPartyWithoutAttorney1": temp_name+"        "+StateBarNo
+      - "AttorneyOrPartyWithoutAttorney2": temp_firm
+      - "AttorneyOrPartyWithoutAttorney3": temp_address
+      - "ForCourtUseOnly": something
+      - "AttorneyOrPartyWithoutAttorney4": temp_city+"  "+temp_state+"  "+temp_zip
+      - "TelephoneNo": temp_phone
+      - "FaxNoOptional": temp_fax
+      - "EMailAddressOptional": temp_email
+      - "NoticeHeaderMulti2": something
+      - "AttorneyForName": attorney_for
+      - "SuperiorCourtOfCaliforniaCountyOf": court_district
+      - "StreetAddress": court_add1
+      - "MailingAddress": something
+      - "CityAndZipCode": court_add2
+      - "BranchName": add_court
+      - "Petitioner1": petitioner_name
+      - "Respondent1": respondent_name
+      - "Claimant": plan
+      - "CaseNumber": case_number
+      - "1PleaseJoinAsAPartyClaimantToThisProceeding": plan
+      - "Dated": something
+      - "AttorneyFor": attorney_for
+      - "Petitioner2": petitioner_name
+      - "Respondent2": respondent_name
+      - "TypeOrPrintName": something
+      - "`40": No
+      - "`41": No
+      - "`42": No
+      - "Fl372RevJanuary12003": something
+---
+attachment:
+  - name: FL370
+    filename: fl370
+    variable name: fl370
+    pdf template file: fl370.pdf
+    field code:
+      - "AttorneyOrPartyWithoutAttorneyNameStateBarNumberAndAddress1": temp_name+"        "+StateBarNo
+      - "AttorneyOrPartyWithoutAttorneyNameStateBarNumberAndAddress2": temp_firm
+      - "AttorneyOrPartyWithoutAttorneyNameStateBarNumberAndAddress3": temp_address+"  "+temp_city+"  "+temp_state+"  "+temp_zip
+      - "ForCourtUseOnly2": something
+      - "TelephoneNo": temp_phone
+      - "FaxNoOptional": temp_fax
+      - "EMailAddressOptional": temp_email
+      - "AttorneyForName": attorney_for
+      - "SuperiorCourtOfCaliforniaCountyOf": court_district
+      - "ForCourtUseOnly1": something
+      - "StreetAddress": court_add1
+      - "MailingAddress": something
+      - "CityAndZipCode": court_add2
+      - "BranchName": add_court
+      - "Petitioner1": petitioner_name
+      - "Respondent1": respondent_name
+      - "Claimant1": plan
+      - "Claimant2": something
+      - "CaseNumber1": case_number
+      - "Name": petitioner_name
+      - "EmployerName": employer_name
+      - "NameOfLaborUnionRepresentingEmployee1": Yes
+      - "NameOfLaborUnionRepresentingEmployee2": plan_name
+      - "EmployeeIdentificationNumber1": Yes
+      - "EmployeeIdentificationNumber2": plan_participant_employee_id
+      - "OtherSpecify": something
+      - "EOther": something
+      - "AttorneyNameAddressAndTelephoneNumber1": petitioner_attorney_checked
+      - "AttorneyNameAddressAndTelephoneNumber2": petitioner_attorney_details
+      - "AddressAndTelephoneNumberIfUnrepresentedByAnAttorney1": petitioner_checked
+      - "AddressAndTelephoneNumberIfUnrepresentedByAnAttorney2": petitioner_details
+      - "AttorneyNameAddressAndTelephoneNumber3": respondent_attorney_checked 
+      - "AttorneyNameAddressAndTelephoneNumber4": respondent_attorney_details
+      - "AddressAndTelephoneNumberIfUnrepresentedByAnAttorney3": respondent_details
+      - "Petitioner2": petitioner_name
+      - "CaseNumber2": case_number
+      - "Respondent2": respondent_name
+      - "PetitionForDissolution": Yes
+      - "DateOfMarriage1": petition_dom
+      - "DateOfSeparation1": petition_dos
+      - "ResponseStates": is_same_date
+      - "DateOfMarriage2": response_dom
+      - "DateOfSeparation2": response_dos
+      - "HasNotBeenEntered": No
+      - "WasEnteredOnDate1": Yes
+      - "WasEnteredOnDate2": judgment_date
+      - "AndDisposesOfEachSpousesInterestInTheEmployeeBenefitPlan2": Yes
+      - "AndDoesNotDisposeOfEachSpousesInterestInTheEmployeeBenefitPlan": No
+      - "AnOrderDeterminingTheNatureAndExtentOfBothEmployeeAndNonemployeeSpousesInterestInEmployeesBenefitsUnderThePlan": Yes
+      - "AnOrderRestrainingClaimantFromMakingBenefitPaymentsToEmployeeSpousePendingTheDeterminationAndDispositionOfNonemployeeSpousesInterestIfAnyInEmployeesBenefitsUnderThePlan": Yes
+      - "AnOrderDirectingClaimantToNotifyNonemployeeSpouseWhenBenefitsUnderThePlanFirstBecomePayableToEmployee": Yes
+      - "AnOrderDirectingClaimantToMakePaymentToNonemployeeSpouseOfSaidSpousesInterestInEmployeesBenefits": Yes
+      - "Other1": No
+      - "Other2": something
+      - "SuchOtherOrdersAsMayBeAppropriateDated": something
+      - "AttorneyFor": No
+      - "Petitioner3": No
+      - "Respondent3": No
+      - "TypeOrPrintName": something
+      - "`108": No
+      - "`109": No
+      - "`110": No
+      - "Fl370RevJanuary12003": something
+---
+
+attachment:
+  - name: FL374
+    filename: fl374
+    variable name: fl374
+    pdf template file: fl374.pdf
+    field code:
+      - "AttorneyOrPartyWithoutAttorneyNameStateBarNumberAndAddress": something
+      - "TelephoneNoOptional": something
+      - "FaxNoOptional": something
+      - "EMailAddressOptional": something
+      - "AttorneyForName": something
+      - "SuperiorCourtOfCaliforniaCountyOf": court_district
+      - "StreetAddress": court_add1
+      - "MailingAddress": something
+      - "CityAndZipCode": court_add2
+      - "BranchName": add_court
+      - "MarriageOfPetitioner": petitioner_name
+      - "Respondent": respondent_name
+      - "Claimant": plan
+      - "AndResponseOfEmployeeBenefitPlan": No
+      - "CaseNumber": case_number
+      - "AnAppearanceInThisProceedingIsEnteredByClaimantEmployeeBenefitPlanName": plan
+      - "AttorneyForClaimantNameAddressAndTelephoneNumber1": No
+      - "AttorneyForClaimantNameAddressAndTelephoneNumber2": something
+      - "OtherNameTitleAddressAndTelephoneNumber1": No
+      - "OtherNameTitleAddressAndTelephoneNumber2": something
+      - "ClaimantRespondsToThePleadingOnJoinderAndStatesThatTheAllegationsOfThePleadingsAre": No
+      - "Correct": No
+      - "IncorrectAsSetForthIn": No
+      - "Attachment3bOr": No
+      - "AsFollowsSpecify1": No
+      - "AsFollowsSpecify2": something
+      - "Dated": something
+      - "TypeOrPrintName": something
+      - "`36": No
+      - "`33": No
+      - "`34": No
+      - "`35": No
+---
+attachment:
+  - name: FL375
+    filename: fl375
+    variable name: fl375
+    pdf template file: fl375.pdf
+    field code:
+      - "AttorneyOrPartyWithoutAttorneyNameStateBarNumberAndAddress1": temp_name+"        "+StateBarNo
+      - "AttorneyOrPartyWithoutAttorneyNameStateBarNumberAndAddress2": temp_firm
+      - "ForCourtUseOnly2": something
+      - "AttorneyOrPartyWithoutAttorneyNameStateBarNumberAndAddress3": temp_address+"  "+temp_city+"  "+temp_state+"  "+temp_zip
+      - "TelephoneNoOptional": temp_phone
+      - "FaxNoOptional": temp_fax
+      - "EMailAddressOptional": temp_email
+      - "AttorneyForName": attorney_for
+      - "SuperiorCourtOfCaliforniaCountyOf": court_district
+      - "ForCourtUseOnly1": something
+      - "StreetAddress": court_add1
+      - "MailingAddress": something
+      - "CityAndZipCode": court_add2
+      - "BranchName": add_court
+      - "MarriageOf": something
+      - "Petitioner1": petitioner_name
+      - "Respondent1": respondent_name
+      - "Claimant1": plan
+      - "Claimant2": something
+      - "CaseNumber": case_number
+      - "ToThe": No
+      - "Petitioner2": No
+      - "Respondent2": No
+      - "ClaimantAPleadingHasBeenFiledUnderAnOrderJoiningNameOfClaimant1": No
+      - "ClaimantAPleadingHasBeenFiledUnderAnOrderJoiningNameOfClaimant2": something
+      - "APleadingHasBeenFiledUnderAnOrderJoining": something
+      - "ToTheClaimantEmployeeBenefitPlanAPleadingOnJoinderHasBeenFiledUnderTheClerksOrderJoiningNameOfEmployeeBenefitPlan1": Yes
+      - "ToTheClaimantEmployeeBenefitPlanAPleadingOnJoinderHasBeenFiledUnderTheClerksOrderJoiningNameOfEmployeeBenefitPlan2": plan
+      - "AsAnIndividual1": No
+      - "AsOrOnBehalfOfThePersonSuedUnderTheFictitiousNameOf1": No
+      - "AsOrOnBehalfOfThePersonSuedUnderTheFictitiousNameOf2": something
+      - "OnBehalfOf2": something
+      - "OnBehalfOf1": Yes
+      - "Under": something
+      - "Ccp41610Corporation1": No
+      - "Ccp41660Minor1": No
+      - "Ccp41620DefunctCorporation1": No
+      - "Ccp41670Incompetent1": No
+      - "Ccp41640AssociationOrPartnership": No
+      - "Ccp41690Individual1": No
+      - "Other1": No
+      - "Fc2062Employee": Yes
+      - "Other2": something
+      - "Date": something
+      - "ByPersonalDeliveryOnDate1": No
+      - "ByPersonalDeliveryOnDate2": something
+      - "RequestForJoinderOfEmployeeBenefitPlanAndOrderPleadingOnJoinderemployeeBenefitPlanBlankNoticeOfAppearanceAndResponseOfEmployeeBenefitPlan": Yes
+      - "NoticeOfMotionAndDeclarationForJoinder4": No
+      - "OrderReJoinder": No
+      - "PleadingOnJoinderSpecifyTitle1": No
+      - "PleadingOnJoinderSpecifyTitle2": something
+      - "Other4": something
+      - "Other3": No
+      - "OnNameOfPartyOrClaimant": something
+      - "PartyOrClaimant": Yes
+      - "OtherNameAndTitleOrRelationshipToPersonServed": No
+      - "Other5": something
+      - "ByDeliveryAt": No
+      - "Home": No
+      - "Business3Address1": No
+      - "1DateOf": something
+      - "TimeOf": something
+      - "Business3Address2": something
+      - "2": something
+      - "ByMailing1DateOf2": something
+      - "ByMailing1DateOf1": Yes
+      - "2PlaceOf": something
+      - "MannerOfServiceCheckProperBox": something
+      - "PersonalServiceByPersonallyDeliveringCopiesCcp41510": No
+      - "SubstitutedServiceOnCorporationUnincorporatedAssociationIncludingPartnershipOrPublicEntityBy": No
+      - "SubstitutedServiceOnNaturalPersonMinorIncompetentOrCandidateByLeavingCopiesAtTheDwellingHouse": No
+      - "MailAndAcknowledgmentServiceByMailingByFirstClassMailOrAirmailCopiesToThePersonServedTogetherWith": Yes
+      - "CertifiedOrRegisteredMailServiceByMailingToAddressOutsideCaliforniaByRegisteredOrCertifiedAirmailWithReturnReceiptRequestedCopiesToThePersonServedCcp41540AttachSignedReturnReceiptOrOtherEvidenceOfActualDeliveryToThePersonServed": No
+      - "OtherSpecifyCodeSection1": No
+      - "OtherSpecifyCodeSection2": something
+      - "AdditionalPageIsAttached": No
+      - "AsAnIndividual2": No
+      - "AsThePersonSuedUnderTheFictitiousNameOf2": something
+      - "AsThePersonSuedUnderTheFictitiousNameOf1": No
+      - "OnBehalfOf4": something
+      - "OnBehalfOf3": Yes
+      - "Ccp41660Minor2": No
+      - "Ccp41610Corporation2": No
+      - "Ccp41620DefunctCorporation2": No
+      - "Ccp41670Incompetent2": No
+      - "Ccp41640AssociationOr": No
+      - "Ccp41690Individual2": No
+      - "Fc2062EmployeeBenefitPlan": Yes
+      - "ByPersonalDeliveryOnDate3": something
+      - "FeeForService": something
+      - "NotARegisteredCaliforniaProcessServer": No
+      - "RegisteredCaliforniaProcessServer": No
+      - "ExemptFromRegistrationUnderBusProf": No
+      - "ApplicableCountyOfRegistrationAndNumber1": something
+      - "ApplicableCountyOfRegistrationAndNumber2": something
+      - "CaliforniaSheriffMarshalOrConstable": No
+      - "ApplicableCountyOfRegistrationAndNumber3": something
+      - "ApplicableCountyOfRegistrationAndNumber4": something
+      - "OnDate": something
+      - "ThisCertificateIsExecutedOnDate": something
+      - "AtPlace1": something
+      - "AtPlace2": something
+      - "`181": No
+      - "`182": No
+      - "`183": No
+      - "Page2Of2": something
+---
+attachment:
+  - name: POS050
+    filename: pos050
+    variable name: pos050
+    pdf template file: pos050.pdf
+    field code:
+      - "StateBarNo": StateBarNo
+      - "Name": temp_name
+      - "FirmName": temp_firm
+      - "StreetAddress1": temp_address 
+      - "City": temp_city
+      - "State": temp_state
+      - "ZipCode": temp_zip
+      - "TelephoneNo": temp_phone
+      - "FaxNo": temp_fax
+      - "EMailAddress": temp_email
+      - "AttorneyForName": attorney_for
+      - "SuperiorCourtOfCaliforniaCountyOf": court_district
+      - "StreetAddress2": court_add1
+      - "MailingAddress": something
+      - "CityAndZipCode": court_add2
+      - "BranchName": add_court
+      - "CaseNumber": case_number
+      - "PlaintiffPetitioner": petitioner_name
+      - "DefendantRespondent": respondent_name
+      - "JudicialOfficer": something
+      - "Department": something
+      - "MyResidenceOrBusinessAddressIsSpecify": something
+      - "MyElectronicServiceAddressIsSpecify": something
+      - "IElectronicallyServedTheFollowingDocumentsExactTitles": something
+      - "TheDocumentsServedAreListedInAnAttachmentFormPos050DEfs050DMayBeUsedForThisPurpose": No
+      - "NameOfPersonServed": something
+      - "OnBehalfOfNameOrNamesOfPartiesRepresentedIfPersonServedIsAnAttorney": something
+      - "ElectronicServiceAddressOfPersonServed": something
+      - "OnDate": something
+      - "TheDocumentsListedInItem2WereServedElectronicallyOnThePersonsAndInTheMannerDescribedInAnAttachmentFormPos050PEfs050PMayBeUsedForThisPurpose": No
+      - "Date": something
+      - "TypeOrPrintNameOfDeclarant": something
+      - "`43": No
+      - "`40": No
+      - "`41": No
+      - "`42": No

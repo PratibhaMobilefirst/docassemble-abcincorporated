@@ -1,8 +1,18 @@
+metadata: 
+  title: |
+    Profile
+  short title: |
+    Thanks
+  show login: False
+  allow registration: False
+  exit url: "http://lexyalgo.com/"
+  exit link: exit
+  exit label: |
+    Exit
+---
 metadata:
-  title: Profile
-  documentation: "https://docassemble.org/docs/objects.html#DAGlobal"
-  example start: 1
-  example end: 7
+  temporary session: True
+  hidden: True
 ---
 modules:
   - .read_data
@@ -23,7 +33,7 @@ code: |
 initial: True
 code: |
   if not user_logged_in():
-    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3AsignIn_signUp.yml')  
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml')  
 ---
 initial: True 
 code: |
@@ -34,7 +44,7 @@ code: |
 ---
 mandatory: True
 code: |
-  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3Adashboard.yml', 'label': 'Dashboard'} ]
+  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml', 'label': 'Dashboard'},{'url': url_of('change_password'), 'label': 'Change password'} ]
   register_data = display_register_data(origin_of_interviewee)
   data_from_registration = reg()
   multi_user = True

@@ -1,0 +1,47 @@
+metadata: 
+  title: |
+    Reuse
+  short title: |
+    Thanks
+  show login: False
+  allow registration: False
+  exit url: "http://lexyalgo.com/"
+  exit link: exit
+  exit label: |
+    Exit
+---
+metadata:
+  temporary session: True
+  hidden: True
+---
+features:
+  javascript: my-functions.js
+  css: buttons.css
+---
+modules:
+  - .read_data
+  
+---
+objects:
+  - company_logo: DAStaticFile.using(filename='logo.png')
+---
+mandatory: True
+code: |
+  set_parts(logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
+---
+initial: True
+code: |
+  which_doc
+  reuse_from_diff_interview(which_doc,'reuse')
+---
+mandatory: True
+question: |
+  Which document do you want to generate? 
+fields:
+  - Select one: which_doc
+    datatype: radio
+    choices:
+      - QDRO
+      - Joinder   
+
+---

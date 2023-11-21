@@ -5,7 +5,7 @@ metadata:
     Thanks
   show login: False
   allow registration: False
-  exit url: "https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3Adashboard.yml#page1"
+  exit url: "https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml"
   exit link: exit
   exit label: |
     My Interviews
@@ -122,6 +122,7 @@ validation code: |
     validation_error("The email address provided has already been registered.", field="email")  
 
 ---
+
 mandatory: True
 field: registration_confirm
 question: |

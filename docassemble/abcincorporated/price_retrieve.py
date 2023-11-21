@@ -6,3 +6,7 @@ stripe.api_key = get_config('stripe secret key')
 def retrieve_product_price():
     product = stripe.Price.retrieve("price_1MW2ZeBOgpkiH8jqbVSi8t9W")
     return product.unit_amount / 100  
+  
+def retrieve_email_product_price():
+    product = stripe.Price.retrieve("price_1Nj0UwBOgpkiH8jqkubGMrdT")
+    return product.unit_amount / 100 

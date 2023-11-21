@@ -16,6 +16,7 @@ metadata:
   hidden: True
 ---
 features:
+  javascript: my-functions.js
   css: buttons.css
 ---
 modules:
@@ -32,7 +33,7 @@ code: |
 initial: True
 code: |
   if not user_logged_in():
-    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3AsignIn_signUp.yml') 
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml') 
 ---
 
 mandatory: True
@@ -40,10 +41,11 @@ code: |
   current_page = 0
   next_id_of_page = [None]
   de = []
+  file=[]
 ---
 reconsider: True
 code: |
-  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3Aedit_profile.yml', 'label': 'Edit Profile'},{'url': url_of('change_password'), 'label': 'Change password'} ]
+  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:edit_profile.yml', 'label': 'Edit Profile'},{'url': url_of('change_password'), 'label': 'Change password'} ]
   dashData = dash()
   current_info = user_info()
   list_of_interviews1 = len(dashData)
@@ -55,7 +57,6 @@ code: |
   for info in items:
     if not info['metadata'].get('hidden', False):
       list_of_interviews.append(info)
-
     del info
   if len(list_of_interviews) > 0:
     list_of_interviews += [dict()]
@@ -68,8 +69,11 @@ code: |
 table css class: table table-striped
 mandatory: True
 question: |
-  Resume an interview
-  ${ action_button_html(url_of('https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO%3Aqdro.yml&new_session=1'), label="Create new QDRO", color="danger", size="md", new_window=True) }
+  Resume an interview <select id="dropdown">
+      <option value="">Create New Document</option>
+      <option value="https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:qdro.yml&new_session=1">QDRO</option>
+      <option value="https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:joinder_generator.yml&new_session=1">Joinder</option>
+  </select>
 subquestion: |
   % if len(dashData) > 0:
   Click on edit button to edit an interview.
@@ -84,23 +88,52 @@ subquestion: |
   % if current_page + 1 < len(next_id_of_page):
   ${ action_button_html(url_action('change_page', direction=1), label="Next", icon='chevron-right', size='md', color='secondary') }
   % endif
+script: |
+  <script>
+     var dropdown = document.getElementById("dropdown");
+
+      // Redirect to the selected option's link when an option is selected
+      dropdown.addEventListener("change", function () {
+        dropdown.style.borderColor = "#fff";
+        var selectedOption = dropdown.options[dropdown.selectedIndex];
+        if (selectedOption.value !== "") {
+          window.open(selectedOption.value, "_blank");
+        }
+      });
+      
+      var daquestionElement = document.getElementById('daquestion');
+
+    // Remove all existing classes from the element
+    daquestionElement.className = '';
+
+    // Add the desired class to the element
+    daquestionElement.classList.add('tab-pane', 'fade', 'show', 'active', 'col-lg-12');
+  </script>
 ---
 table: int_table
 rows: dashData
 hidden rows: list_of_interviews
 columns:
-  - Id: |
-      row_item['id']
   - Case Name: |
       '<b  class="title">' + str(row_item['data']['petitioner_field']['petitioner.name.first'] + ' ' + row_item['data']['petitioner_field']['petitioner.name.middle'] + ' ' + row_item['data']['petitioner_field']['petitioner.name.last'] + ' vs. ' + row_item['data']['respondent_field']['respondent.name.first']+ ' ' + row_item['data']['respondent_field']['respondent.name.middle'] + ' ' + row_item['data']['respondent_field']['respondent.name.last']) + '</b>'
+  - Filename: |
+      'QDRO' if (row_item['filename']== 'docassemble.playground3QDRO:qdro.yml' or row_item['filename']== 'docassemble.playground3QDRO:qdro.yml') else 'Joinder'
   - Plan Name: |
       row_item['data']['other_plan'] if row_item['data']['add_other_plan'] else row_item['data']['plan_name']
   - Creation Date: |
       row_item['modified_date'].date()
   - Edit: |
-      '<a target= "_blank" class="btn btn-sm btn-warning btn-darevisit" href="' + interview_url(i=row_item['filename']) + '&id=' + str(row_item['id']) + '&new_session=1">Edit</a>'
+      action_button_html(url_action('edit_ev',id=row_item['id']),  label="Edit", color='warning', new_window = True)
+  - Reuse: |
+      action_button_html(url_action('reuse_ev',id=row_item['id']),  label="Reuse", color='warning', new_window = True)
   - Delete: |
       action_button_html(url_action('delete_ev',id=row_item['id']), label="Delete", color='warning')
+---
+code: |
+  if 'id' in url_args:
+    origin_of_interviewee = url_args['id']
+  else:
+    origin_of_interviewee = 'unknown'
 ---
 event: change_page
 code: |
@@ -110,6 +143,19 @@ event: delete_ev
 code: |
   de = delete_data(str(action_argument('id')))
   log(de, "success")
+---
+mandatory: True
+event: reuse_ev
+code: |
+  file = file_name(action_argument('id'))
+  type_of_interview = 'reuse'
+  de = add_interview_type(action_argument('id'), file, type_of_interview)
+  command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:which_doc.yml&new_session=1')
+---
+event: edit_ev
+code: |
+  file=file_name(action_argument('id'))
+  de=edit_interview_type(action_argument('id'),file)
 ---
 event: delete
 code: |
