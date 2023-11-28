@@ -1,0 +1,50 @@
+metadata: 
+  title: |
+    Reuse_intake
+  short title: |
+    Thanks
+  show login: False
+  allow registration: False
+  exit url: "http://lexyalgo.com/"
+  exit link: logout
+  exit label: |
+    Exit
+---
+metadata:
+  temporary session: True
+  hidden: True
+---
+features:
+  javascript: my-functions.js
+  css: buttons.css
+---
+modules:
+  - .read_data
+  
+---
+objects:
+  - company_logo: DAStaticFile.using(filename='logo.png')
+---
+mandatory: True
+code: |
+  set_parts(logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
+---
+id: interview order
+mandatory: True
+code: |
+  intake_button = "Reuse QDRO Intake"
+  qdro_intake_new_user_names=qdro_intake_new_users()
+  qdro_intake_new_id= qdro_intake_user_id(which_user)
+  which_user
+  qdro_intake_user_information(qdro_intake_new_id[0],which_user)
+  use_intake_button(qdro_intake_new_id[0],intake_button)
+  command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:select_interview.yml&new_session=1')
+---
+mandatory: True
+question: |
+  Which user's data you want to use?
+fields:
+  - Select one: which_user
+    code: |
+      qdro_intake_new_user_names 
+---

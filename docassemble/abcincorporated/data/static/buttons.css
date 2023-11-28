@@ -58,6 +58,11 @@ float: right;
 background-color: #ffffff
 }
 
+button[value="True"][name="Y2hlY2sy"] {
+float: right;
+background-color: #ffffff
+}
+
 button[value="False"][name="Y2hlY2sx"] {
 padding: 0.375rem 1.8rem ;
 }
@@ -117,4 +122,3 @@ display: none;
     color: #212529;
     background-color: #E80D4E;;
 }
-

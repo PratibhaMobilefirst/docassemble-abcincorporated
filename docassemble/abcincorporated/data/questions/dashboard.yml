@@ -6,22 +6,21 @@ metadata:
   show login: False
   allow registration: False
   exit url: "http://lexyalgo.com/"
-  exit link: exit
+  exit link: logout
   exit label: |
     Exit
-
 ---
 metadata:
   temporary session: True
   hidden: True
 ---
 features:
+  go full screen: True
   javascript: my-functions.js
   css: buttons.css
 ---
 modules:
   - .read_data
-  
 ---
 objects:
   - company_logo: DAStaticFile.using(filename='logo.png')
@@ -42,6 +41,7 @@ code: |
   next_id_of_page = [None]
   de = []
   file=[]
+  
 ---
 reconsider: True
 code: |
@@ -73,8 +73,12 @@ question: |
       <option value="">Create New Document</option>
       <option value="https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:qdro.yml&new_session=1">QDRO</option>
       <option value="https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:joinder_generator.yml&new_session=1">Joinder</option>
+      <option value="https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:adverse.yml&new_session=1">Notice of Adverse Interest</option>
   </select>
 subquestion: |
+  % if user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com":
+  ${ action_button_html(url_action('reuse_intake_form'), label="Reuse QDRO Intake", color="primary", size="md", new_window=True) }
+  % endif
   % if len(dashData) > 0:
   Click on edit button to edit an interview.
   ${ int_table }
@@ -101,23 +105,26 @@ script: |
         }
       });
       
-      var daquestionElement = document.getElementById('daquestion');
+    var daquestionElement = document.getElementById('daquestion');
 
     // Remove all existing classes from the element
     daquestionElement.className = '';
 
     // Add the desired class to the element
     daquestionElement.classList.add('tab-pane', 'fade', 'show', 'active', 'col-lg-12');
+
   </script>
 ---
 table: int_table
 rows: dashData
 hidden rows: list_of_interviews
 columns:
+  - Id: |
+      row_item['id']
   - Case Name: |
       '<b  class="title">' + str(row_item['data']['petitioner_field']['petitioner.name.first'] + ' ' + row_item['data']['petitioner_field']['petitioner.name.middle'] + ' ' + row_item['data']['petitioner_field']['petitioner.name.last'] + ' vs. ' + row_item['data']['respondent_field']['respondent.name.first']+ ' ' + row_item['data']['respondent_field']['respondent.name.middle'] + ' ' + row_item['data']['respondent_field']['respondent.name.last']) + '</b>'
   - Filename: |
-      'QDRO' if (row_item['filename']== 'docassemble.playground3QDRO:qdro.yml' or row_item['filename']== 'docassemble.playground3QDRO:qdro.yml') else 'Joinder'
+      'QDRO' if (row_item['filename']== 'docassemble.playground3QDRO:qdro.yml' or row_item['filename']== 'docassemble.playground3:qdro.yml') else 'Joinder' if (row_item['filename'] == 'docassemble.playground3QDRO:joinder_generator.yml'  or row_item['filename']== 'docassemble.playground3:joinder_generator.yml') else 'Notice of Adverse Interest' if (row_item['filename'] == 'docassemble.playground3QDRO:adverse.yml'  or row_item['filename']== 'docassemble.playground3:adverse.yml') else 'something_else'
   - Plan Name: |
       row_item['data']['other_plan'] if row_item['data']['add_other_plan'] else row_item['data']['plan_name']
   - Creation Date: |
@@ -143,6 +150,12 @@ event: delete_ev
 code: |
   de = delete_data(str(action_argument('id')))
   log(de, "success")
+---
+event: reuse_intake_form
+code: |
+  intake_button = 'Reuse QDRO Intake'
+  delete_previous_button_info()
+  command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:intake_users.yml&new_session=1')
 ---
 mandatory: True
 event: reuse_ev

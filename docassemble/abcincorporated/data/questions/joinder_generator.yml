@@ -6,7 +6,7 @@ metadata:
   show login: False
   allow registration: False
   exit url: "http://lexyalgo.com/"
-  exit link: exit
+  exit link: logout
   exit label: |
     Exit
 ---
@@ -16,10 +16,18 @@ metadata:
 ---
 features:
   popover trigger: click
-  css: buttons.css  
+  css: buttons.css 
+  question back button: True
 ---
 modules: 
-  - .read_data 
+  - .read_data
+--- 
+objects:  
+  - company_logo: DAStaticFile.using(filename='logo.png')
+---
+mandatory: True
+code: |
+  set_parts(logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
 ---
 initial: True
 code: |
@@ -31,8 +39,13 @@ code: |
   which_button=display_type_of_interview(origin_of_interviewee)
   file=file_name(origin_of_interviewee)
   dash_results = dash()
+  qdro_intake_user_name = qdro_intake_user_name_details()
+  qdro_intake_data_details = reuse_intake_data(qdro_intake_user_name[0])
+  reuse_intake_button=reuse_button_info(qdro_intake_data_details[0]['id'])
   #if len(type_of_interview)>0 and type_of_interview[0]['type_of_interview'] =="reuse":
     #abc = type_of_interview[0]['type_of_interview']=="reuse"
+  if (user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0:
+    delete_button_info(qdro_intake_data_details[0]['id'])
   if len(user_data11) > 0:
     if "f_name" in user_data11[0]:
       user_data1 = user_data11
@@ -114,7 +127,7 @@ code: |
       user_data1 = user_data11
     else:
       user_data1[0]['response_dos'] = ''
-    if file[0] == 'docassemble.playground3QDRO:qdro.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
+    if ((file[0] == 'docassemble.playground3QDRO:qdro.yml' or file[0] == 'docassemble.playground3QDRO:adverse.yml') and len(which_button) > 0 and which_button[0][2] == "reuse"):
       default_petitioner_address = {
         'petitioner.name.first': '',
         'petitioner.name.middle': '',
@@ -817,6 +830,7 @@ objects:
   - petitioner_attorney: Individual
   - temp: Individual
   - other: Individual
+
 ---
 question: |
   Let’s start with you.
@@ -849,7 +863,19 @@ subquestion: |
   
   THESE FORMS ARE *CALIFORNIA-SPECIFIC.*
 ---
-
+code: |
+  if (user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0:
+    case_num = qdro_intake_data_details[0]['data']['case_number']
+  else: 
+    case_num = user_data1[0]['case_number']
+---
+mandatory: True
+code: |
+  if len(file) > 0 and (file[0] == 'docassemble.playground3QDRO:adverse.yml' or file[0] == 'docassemble.playground3QDRO:qdro.yml') and len(which_button) > 0 and which_button[0][2] == "reuse":
+    courtt = user_data1[0]['court']
+  else:
+    courtt = user_data1[0]['court_name']
+---
 question: |
   In which court was this case filed?
 subquestion: |
@@ -859,7 +885,7 @@ fields:
     code: |
       courts_data
     default: |
-      ${ user_data1[0]['court_name'] }
+      ${ courtt }
     hide if: add_other_court
   - Other Court?: add_other_court
     required: False
@@ -893,7 +919,7 @@ fields:
     show if: add_other_court
   - Case Number: case_number
     default: |
-      ${ user_data1[0]['case_number'] }
+      ${ case_num }
 ---
 mandatory: True
 code: |
@@ -922,12 +948,24 @@ fields:
       ${ user_data1[0]['judgment_deal'] }
     
 ---
+code: |
+  if (user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0:
+    if qdro_intake_data_details[0]['data']['who_are_you'] == "Petitioner/Plantiff":
+      petitioner_dom = qdro_intake_data_details[0]['data']['your_field']['Petitioner_birth_date']
+      respondent_dom = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_birth_date']
+    else:
+      petitioner_dom = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_birth_date']
+      respondent_dom = qdro_intake_data_details[0]['data']['your_field']['Respondent_birth_date']
+  else:
+    petitioner_dom = user_data1[0]['petition_dom']
+    respondent_dom = user_data1[0]['response_dom']
+---
 question: |
   For this question, we'll need a copy of the petition for divorce and the response, if any, that was filed. We are looking for the date of marriage and date of separation on each form.
 fields: 
   - Petition states that the date of marriage was: petition_dom
     default: |
-      ${ user_data1[0]['petition_dom'] }
+      ${ petitioner_dom }
     datatype: date
   - Petition states that the date of separation was: petition_dos
     default: |
@@ -939,7 +977,7 @@ fields:
     datatype: noyesradio
   - Response states that the date of marriage was: response_dom
     default: |
-      ${ user_data1[0]['response_dom'] }
+      ${ respondent_dom }
     datatype: date
     show if: is_same_date
   - Response states that the date of separation was: response_dos
@@ -972,6 +1010,68 @@ code: |
     petitioner_attorney_checked=Yes
     petitioner_attorney_details=petitioner_attorney_name+" "+petitioner_attorney_firm+" "+StateBarNo+" "+"\n"+petitioner_attorney.address.address+" "+petitioner_attorney.address.city+"\n"+petitioner_attorney_phone+" "+petitioner_attorney_email
 ---
+
+code: |
+  if ((user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0):
+    if qdro_intake_data_details[0]['data']['who_are_you'] == "Petitioner/Plantiff":
+      petitioner_fname = qdro_intake_data_details[0]['data']['your_field']['Petitioner.name.first']
+      petitioner_lname = qdro_intake_data_details[0]['data']['your_field']['Petitioner.name.last']
+      petitioner_add = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.address']
+      petitioner_unit = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.address2-']
+      petitioner_city = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.city']
+      petitioner_state = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.state']
+      petitioner_zip = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.zip']
+      party_email = qdro_intake_data_details[0]['data']['your_field']['Petitioner_email']
+      party_phone = qdro_intake_data_details[0]['data']['your_field']['Petitioner_phone']
+      respondent_fname = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.name.first']
+      respondent_lname = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.name.last']
+      respondent_add = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.address']
+      respondent_unit = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.address2-']
+      respondent_city = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.city']
+      respondent_state = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.state']
+      respondent_zip = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.zip']
+      respond_email = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_email']
+      respond_phone = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_phone']
+    else:
+      petitioner_fname = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.name.first']
+      petitioner_lname = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.name.last']
+      petitioner_add = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.address']
+      petitioner_unit = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.address2-']
+      petitioner_city = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.city']
+      petitioner_state = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.state']
+      petitioner_zip = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.zip']
+      party_email = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_email']
+      party_phone = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_phone']
+      respondent_fname = qdro_intake_data_details[0]['data']['your_field']['Respondent.name.first']
+      respondent_lname = qdro_intake_data_details[0]['data']['your_field']['Respondent.name.last']
+      respondent_add = qdro_intake_data_details[0]['data']['your_field']['Respondent.address.address']
+      respondent_unit = qdro_intake_data_details[0]['data']['your_field']['Respondent.address.address2-']
+      respondent_city = qdro_intake_data_details[0]['data']['your_field']['Respondent.address.city']
+      respondent_state = qdro_intake_data_details[0]['data']['your_field']['Respondent.address.state']
+      respondent_zip = qdro_intake_data_details[0]['data']['your_field']['Respondent.address.zip']
+      respond_email = qdro_intake_data_details[0]['data']['your_field']['Respondent_email']
+      respond_phone = qdro_intake_data_details[0]['data']['your_field']['Respondent_phone']
+  else:
+    petitioner_fname = user_data1[0]['petitioner_field']['petitioner.name.first']
+    petitioner_lname = user_data1[0]['petitioner_field']['petitioner.name.last']
+    respondent_fname = user_data1[0]['respondent_field']['respondent.name.first']
+    respondent_lname = user_data1[0]['respondent_field']['respondent.name.last']
+    petitioner_add = user_data1[0]['petitioner_field']['petitioner.address.address']
+    petitioner_unit = user_data1[0]['petitioner_field']['petitioner.address.unit']
+    petitioner_city = user_data1[0]['petitioner_field']['petitioner.address.city']
+    petitioner_state = user_data1[0]['petitioner_field']['petitioner.address.state']
+    petitioner_zip = user_data1[0]['petitioner_field']['petitioner.address.zip']
+    party_email = user_data1[0]['petitioner_field']['petitioner_email']
+    party_phone = user_data1[0]['petitioner_field']['petitioner_phone']
+    respondent_add = user_data1[0]['respondent_field']['respondent.address.address']
+    respondent_unit = user_data1[0]['respondent_field']['respondent.address.unit']
+    respondent_city = user_data1[0]['respondent_field']['respondent.address.city']
+    respondent_state = user_data1[0]['respondent_field']['respondent.address.state']
+    respondent_zip = user_data1[0]['respondent_field']['respondent.address.zip']
+    respond_email = user_data1[0]['respondent_field']['respondent_email']
+    respond_phone = user_data1[0]['respondent_field']['respondent_phone']
+
+---
 field: petitioner_field
 question: |
   Tell us about the petitioner in the case.
@@ -980,48 +1080,48 @@ subquestion: |
 fields:
   - Petitioner First Name: petitioner.name.first
     default: |
-      ${ user_data1[0]['petitioner_field']['petitioner.name.first'] }
+      ${ petitioner_fname }
   - Petitioner Middle Name: petitioner.name.middle
     default: |
       ${ user_data1[0]['petitioner_field']['petitioner.name.middle'] }
     required: False
   - Petitioner Last Name: petitioner.name.last
     default: |
-      ${ user_data1[0]['petitioner_field']['petitioner.name.last'] }
+      ${ petitioner_lname }
   - Is the Petitioner represented by an Attorney?: petitioner_represented_attorney
     default: |
       ${ user_data1[0]['petitioner_field']['petitioner_represented_attorney'] }
     datatype: noyesradio
   - Petitioner Street address: petitioner.address.address
     default: |
-      ${ user_data1[0]['petitioner_field']['petitioner.address.address'] }
+      ${ petitioner_add }
     address autocomplete: True
     show if: petitioner_represented_attorney
   - Petitioner Unit: petitioner.address.unit
     default: |
-      ${ user_data1[0]['petitioner_field']['petitioner.address.unit'] }
+      ${ petitioner_unit }
     required: False
     show if: petitioner_represented_attorney
   - Petitioner City: petitioner.address.city
     default: |
-      ${ user_data1[0]['petitioner_field']['petitioner.address.city'] }
+      ${ petitioner_city }
     show if: petitioner_represented_attorney
   - Petitioner State: petitioner.address.state
     default: |
-      ${ user_data1[0]['petitioner_field']['petitioner.address.state'] }
+      ${ petitioner_state }
     show if: petitioner_represented_attorney
   - Petitioner Zip: petitioner.address.zip
     default: |
-      ${ user_data1[0]['petitioner_field']['petitioner.address.zip'] }
+      ${ petitioner_zip }
     show if: petitioner_represented_attorney
   - Petitioner Email: petitioner_email
     default: |
-      ${ user_data1[0]['petitioner_field']['petitioner_email'] }
+      ${ party_email }
     show if: petitioner_represented_attorney
     datatype: email
   - Petitoner Phone : petitioner_phone
     default: |
-      ${ user_data1[0]['petitioner_field']['petitioner_phone'] }
+      ${ party_phone }
     show if: petitioner_represented_attorney
   - Petitioner Fax : petitioner_fax
     default: |
@@ -1036,13 +1136,39 @@ mandatory: True
 code: |
   petitioner_name = petitioner.name.first + ' ' + petitioner.name.middle + ' ' + petitioner.name.last 
 ---
+code: |
+  if (user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0:
+    C_attorney_name = qdro_intake_data_details[0]['data']['client_attorney_first_name'] +' '+ qdro_intake_data_details[0]['data']['client_attorney_last_name']
+    Ex_attorney_name = qdro_intake_data_details[0]['data']['ex_spouse_attorney_first_name'] +' '+ qdro_intake_data_details[0]['data']['ex_spouse_attorney_last_name']
+    if qdro_intake_data_details[0]['data']['who_are_you'] == "Petitioner/Plantiff":
+      p_attorney_name = C_attorney_name
+      p_attorney_phone = qdro_intake_data_details[0]['data']['client_attorney_phone']
+      p_attorney_email = qdro_intake_data_details[0]['data']['client_attorney_email']
+      r_attorney_name = Ex_attorney_name
+      r_attorney_phone = qdro_intake_data_details[0]['data']['ex_spouse_attorney_phone']
+      r_attorney_email = qdro_intake_data_details[0]['data']['ex_spouse_attorney_email']
+    else:
+      p_attorney_name = Ex_attorney_name
+      p_attorney_phone = qdro_intake_data_details[0]['data']['ex_spouse_attorney_phone']
+      p_attorney_email = qdro_intake_data_details[0]['data']['ex_spouse_attorney_email']
+      r_attorney_name = C_attorney_name
+      r_attorney_phone = qdro_intake_data_details[0]['data']['client_attorney_phone']
+      r_attorney_email = qdro_intake_data_details[0]['data']['client_attorney_email']
+  else:
+    p_attorney_name = user_data1[0]['petitioner_attorney_name']
+    p_attorney_phone = user_data1[0]['petitioner_attorney_phone']
+    p_attorney_email = user_data1[0]['petitioner_attorney_email']
+    r_attorney_name = user_data1[0]['respondent_attorney_name']
+    r_attorney_phone = user_data1[0]['respondent_attorney_phone']
+    r_attorney_email = user_data1[0]['respondent_attorney_email']
+---
 field: petitioner_attorney_field
 question: |
   Let's get the contact information for the petitioner's attorney.
 fields:
   - Petitioner’s Attorney's Name: petitioner_attorney_name
     default: |
-      ${ user_data1[0]['petitioner_attorney_name'] }
+      ${ p_attorney_name }
   - Petitioner’s Attorney Bar Number: petitioner_attorney_bar
     default: |
       ${ user_data1[0]['petitioner_attorney_bar'] }
@@ -1068,14 +1194,14 @@ fields:
       ${ user_data1[0]['petitioner_attorney.address.zip'] }
   - Petitioner’s Attorney’s Phone: petitioner_attorney_phone
     default: |
-      ${ user_data1[0]['petitioner_attorney_phone'] }
+      ${ p_attorney_phone }
   - Petitioner’s Attorney’s Fax: petitioner_attorney_fax
     default: |
       ${ user_data1[0]['petitioner_attorney_fax'] }
     required: False
   - Petitioner’s Attorney’s Email: petitioner_attorney_email
     default: |
-      ${ user_data1[0]['petitioner_attorney_email'] }
+      ${ p_attorney_email }
     datatype: email
 validation code: |
   if not petitioner_represented_attorney and not phone_number_is_valid(phone_number_formatted(petitioner_attorney_phone)):
@@ -1104,8 +1230,7 @@ code: |
     respondent_attorney_checked=Yes
     respondent_details=''
     respondent_attorney_details=respondent_attorney_name+" "+respondent_attorney_firm+" "+StateBarNo+"\n"+respondent_attorney.address.address+" "+respondent_attorney.address.city+" "+respondent_attorney.address.zip+"\n"+respondent_attorney_phone+" "+respondent_attorney_email
-    
-    
+       
 ---
 question: |
   Now tell us about the respondent in the case.
@@ -1114,48 +1239,48 @@ subquestion: |
 fields:
   - Respondent First Name: respondent.name.first
     default: |
-      ${ user_data1[0]['respondent_field']['respondent.name.first'] }
+      ${ respondent_fname }
   - Respondent Middle Name: respondent.name.middle
     default: |
       ${ user_data1[0]['respondent_field']['respondent.name.middle'] }
     required: False
   - Respondent Last Name: respondent.name.last
     default: |
-      ${ user_data1[0]['respondent_field']['respondent.name.last'] }
+      ${ respondent_lname }
   - Is the Respondent represented by an Attorney?: respondent_represented_attorney
     default: |
       ${ user_data1[0]['respondent_field']['respondent_represented_attorney'] }
     datatype: noyesradio
   - Respondent Street Address: respondent.address.address
     default: |
-      ${ user_data1[0]['respondent_field']['respondent.address.address'] }
+      ${ respondent_add }
     address autocomplete: True
     show if: respondent_represented_attorney
   - Respondent Unit: respondent.address.unit
     default: |
-      ${ user_data1[0]['respondent_field']['respondent.address.unit'] }
+      ${ respondent_unit }
     required: False
     show if: respondent_represented_attorney
   - Respondent City: respondent.address.city
     default: |
-      ${ user_data1[0]['respondent_field']['respondent.address.city'] }
+      ${ respondent_city }
     show if: respondent_represented_attorney
   - Respondent State: respondent.address.state
     default: |
-      ${ user_data1[0]['respondent_field']['respondent.address.state'] }
+      ${ respondent_state }
     show if: respondent_represented_attorney
   - Respondent Zip: respondent.address.zip
     default: |
-      ${ user_data1[0]['respondent_field']['respondent.address.zip'] }
+      ${ respondent_zip }
     show if: respondent_represented_attorney
   - Respondent Email: respondent_email
     default: |
-      ${ user_data1[0]['respondent_field']['respondent_email'] }
+      ${ respond_email }
     show if: respondent_represented_attorney
     datatype: email
   - Respondent Phone: respondent_phone
     default: |
-      ${ user_data1[0]['respondent_field']['respondent_phone'] }
+      ${ respond_phone }
     show if: respondent_represented_attorney
   - Respondent Fax: respondent_fax
     default: |
@@ -1176,7 +1301,7 @@ question: |
 fields:
   - Respondent’s Attorney's name: respondent_attorney_name
     default: |
-      ${ user_data1[0]['respondent_attorney_name'] }
+      ${ r_attorney_name }
   - Respondent’s Attorney Bar Number: respondent_attorney_bar
     default: |
       ${ user_data1[0]['respondent_attorney_bar'] }
@@ -1202,14 +1327,14 @@ fields:
       ${ user_data1[0]['respondent_attorney.address.zip'] }
   - Respondent’s Attorney’s Phone: respondent_attorney_phone
     default: |
-      ${ user_data1[0]['respondent_attorney_phone'] }
+      ${ r_attorney_phone }
   - Respondent’s Attorney’s Fax: respondent_attorney_fax
     default: |
       ${ user_data1[0]['respondent_attorney_fax'] }
     required: False
   - Respondent’s Attorney’s Email: respondent_attorney_email
     default: |
-      ${ user_data1[0]['respondent_attorney_email'] }
+      ${ r_attorney_email }
     datatype: email
 validation code: |
   if not respondent_represented_attorney and not phone_number_is_valid(phone_number_formatted(respondent_attorney_phone)):

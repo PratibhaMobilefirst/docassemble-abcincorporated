@@ -1,0 +1,1640 @@
+metadata: 
+  title: |
+    Notice of Adverse Interest
+  short title: |
+    Thanks
+  show login: False
+  allow registration: False
+  exit url: "http://lexyalgo.com/"
+  exit link: logout
+  exit label: |
+    Exit
+---
+metadata:
+  temporary session: True
+  hidden: True
+---
+modules:
+  - .dastripe
+  - .coupon_demo
+  - .webhook_new
+  - .price_retrieve
+  - .read_data
+  - .data_from_database
+  - .clicksend
+
+---
+features:
+  javascript: https://js.stripe.com/v3/
+  popover trigger: click
+  css: buttons.css
+  question back button: True  
+---
+objects:
+  - payment1: DAStripe.using(payor=email_id, currency='usd')
+  - filing_party: Individual
+  - petitioner: Individual
+  - respondent: Individual
+  - participant: Individual
+  - alternate_payee: Individual
+  - plan_admin: Individual
+  - plan_admin_foreign: Individual
+  - plan_sponsor: Individual
+  - plan_sponsor_foreign: Individual
+---
+initial: True
+code: |
+  if not user_logged_in():
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml')       
+---
+code: |
+  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml', 'label': 'Dashboard'},{'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:edit_profile.yml', 'label': 'Edit Profile'}]
+  data_from_registration = register_data()
+  register_dataq = display_register_data(origin_of_interviewee)
+  register_dataj = display_register_data_j()
+  courts_data = courts()
+  user_data11 = display_copy(origin_of_interviewee)
+  which_button=display_type_of_interview(origin_of_interviewee)
+  file=file_name(origin_of_interviewee)
+  qdro_intake_user_name = qdro_intake_user_name_details()
+  qdro_intake_data_details = reuse_intake_data(qdro_intake_user_name[0])
+  reuse_intake_button=reuse_button_info(qdro_intake_data_details[0]['id'])
+  pay_d = display_payment(origin_of_interviewee)
+  if (user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0:
+    delete_button_info(qdro_intake_data_details[0]['id'])
+  if len(user_data11) > 0:
+    if len(pay_d) > 0:
+      if pay_d[0]['is_paid'] == 'true':
+        check = ''
+    if "f_name" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['f_name'] = ''
+    if "l_name" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['l_name'] = ''
+    if "email_id" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['email_id'] = ''
+    if "pick_plan" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['pick_plan'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['pick_plan'] = ''
+    if "Pension" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['Pension'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['Pension'] = ''
+    if "Payment_type" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['Payment_type'] = ''
+    if "document" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['document'] = ''
+    if "role" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['role'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['role'] = ''
+    if "role1" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['role1'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['role1'] = ''
+    if "filing_party_name_info" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['filing_party_name_info'] = {
+        'filing_party.name.first': '',
+        'filing_party.name.middle': '',
+        'filing_party.name.last': '',
+        'filing_party.email': '',
+        'filing_party.phone': '',
+        'bar_number':''
+        }
+        
+    if "filing_party_address_info" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['filing_party_address_info'] = {
+          'filing_party.address.address': '',
+          'filing_party.address.unit': '',
+          'filing_party.address.city': '',
+          'filing_party.address.state': '',
+          'filing_party.address.zip': ''
+      }
+    if "county" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['county'] = ''
+    if "court_name" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['court_name'] = ''
+    if "case_number" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['case_number'] = ''
+    if "judicial_district" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['judicial_district'] = ''
+    if "division_number" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['division_number'] = ''
+    if "petitioner_field" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['petitioner_field'] = {
+        'petitioner.name.first': '',
+        'petitioner.name.middle': '',
+        'petitioner.name.last': ''
+      }
+    if "respondent_field" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['respondent_field'] = {
+        'respondent.name.first': '',
+        'respondent.name.middle': '',
+        'respondent.name.last': ''
+      }
+    if "plan_name" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['plan_name'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['plan_name'] = ''
+    if "who_is_participant" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['who_is_participant'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['who_is_participant'] = ''
+    if "participant.dob" in user_data11[0]:
+      user_data1[0]['participant.dob'] = decryptStr(user_data11[0]['participant.dob'])
+    else:
+      user_data1[0]['participant.dob'] = ''
+    if "participant.ssn" in user_data11[0]:
+      user_data1[0]['participant.ssn'] = decryptStr(user_data11[0]['participant.ssn'])
+    else:
+      user_data1[0]['participant.ssn'] = ''
+    if "participant.phone" in user_data11[0]:
+      user_data1[0]['participant.phone'] = decryptStr(user_data11[0]['participant.phone'])
+    else:
+      user_data1[0]['participant.phone'] = ''
+    if "participant.email" in user_data11[0]:
+      user_data1[0]['participant.email'] = user_data11[0]['participant.email']
+    else:
+      user_data1[0]['participant.email'] = ''
+    if "participant_address_info" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['participant_address_info'] = {
+        'participant.address.address': '',
+        'participant.address.unit': '',
+        'participant.address.city': '',
+        'participant.address.state':'',
+        'participant.address.zip':''
+      }
+    if "alternate_payee.dob" in user_data11[0]:
+      user_data1[0]['alternate_payee.dob'] = decryptStr(user_data11[0]['alternate_payee.dob'])
+    else:
+      user_data1[0]['alternate_payee.dob'] = ''
+    if "alternate_payee.ssn" in user_data11[0]:
+      user_data1[0]['alternate_payee.ssn'] = decryptStr(user_data11[0]['alternate_payee.ssn'])
+    else:
+      user_data1[0]['alternate_payee.ssn'] = ''
+    if "alternate_payee.phone" in user_data11[0]:
+      user_data1[0]['alternate_payee.phone'] = decryptStr(user_data11[0]['alternate_payee.phone'])
+    else:
+      user_data1[0]['alternate_payee.phone'] = ''
+    if "alternate_payee.email" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['alternate_payee.email'] = ''
+    if "alternate_payee_address_info" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['alternate_payee_address_info'] = {
+        'alternate_payee.address.address': '',
+        'alternate_payee.address.unit': '',
+        'alternate_payee.address.city': '',
+        'alternate_payee.address.state':'',
+        'alternate_payee.address.zip':''
+      }
+    if "other" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['other'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['other'] = ''
+    if "Pension1" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['Pension1'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['Pension1'] = ''
+    if "add_other_plan" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['add_other_plan'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['add_other_plan'] = ''
+    if "other_plan" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['other_plan'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['other_plan'] = ''
+
+  else:
+    user_data1 = [{
+    'f_name': register_dataq[0]['first_name'],
+    'l_name': register_dataq[0]['last_name'],
+    'email_id': register_dataq[0]['email'],
+    'pick_plan':'',
+    'Pension':'',
+    'document':'',
+    'role':'',
+    'role1':'',
+    'filing_party_name_info':{
+          'filing_party.name.first': register_dataq[0]['first_name'],
+          'filing_party.name.middle': data_from_registration[0]['user.name.middle'],
+          'filing_party.name.last': register_dataq[0]['last_name'],
+          'filing_party.email': register_dataq[0]['email'],
+          'filing_party.phone': data_from_registration[0]['phone_number'],
+          'bar_number': data_from_registration[0]['bar_number']
+      },
+    'filing_party_address_info':{
+          'filing_party.address.address': data_from_registration[0]['user.address.address'],
+          'filing_party.address.unit': data_from_registration[0]['user.address.unit'],
+          'filing_party.address.city': data_from_registration[0]['user.address.city'],
+          'filing_party.address.state': data_from_registration[0]['user.address.state'],
+          'filing_party.address.zip': data_from_registration[0]['user.address.zip_code'],
+      },
+    'county':'',
+    'court_name':'',
+    'case_number':'',
+    'judicial_district':'',
+    'division_number':'',
+    'petitioner_field':{
+        'petitioner.name.first': '',
+        'petitioner.name.middle': '',
+        'petitioner.name.last': ''
+      },
+    'respondent_field':{
+        'respondent.name.first': '',
+        'respondent.name.middle': '',
+        'respondent.name.last': ''
+      },
+    'plan_name':'',
+    'who_is_participant':'',
+    'participant.dob':'',
+    'participant.ssn':'',
+    'participant.phone':'',
+    'participant.email':'',
+    'participant_address_info':{
+      'participant.address.address': '',
+      'participant.address.unit': '',
+      'participant.address.city': '',
+      'participant.address.state':'',
+      'participant.address.zip':''
+    },
+    'alternate_payee.dob':'',
+    'alternate_payee.ssn':'',
+    'alternate_payee.phone':'',
+    'alternate_payee.email':'',
+    'alternate_payee_address_info':{
+      'alternate_payee.address.address': '',
+      'alternate_payee.address.unit': '',
+      'alternate_payee.address.city': '',
+      'alternate_payee.address.state':'',
+      'alternate_payee.address.zip':''
+    },
+    'awarding':'',
+    'percentage':'',
+    'assignment_date':'',
+    'dollar':'',
+    'date_of_marriage':'',
+    'Payment_type': '',
+    'Pension1':'',
+    'add_other_plan':'',
+    'other_plan':'',
+    'other':''
+    }]
+    
+  jsond = {
+      'f_name':f_name,
+      'l_name':l_name,
+      'email_id':email_id,
+      'pick_plan':pick_plan,
+      'document':document,
+      'role':role,
+      'role1':role1,
+      'filing_party_name_info':filingJson,
+      'filing_party_address_info':filingAddressJson,
+      'county':county,
+      'court':court_name,
+      'case_number':case_number,
+      'judicial_district':judicial_district,
+      'division_number':division_number,
+      'petitioner_field':{
+        'petitioner.name.first': petitioner.name.first,
+        'petitioner.name.middle': petitioner.name.middle,
+        'petitioner.name.last': petitioner.name.last
+      },
+      'respondent_field':{
+        'respondent.name.first': respondent.name.first,
+        'respondent.name.middle': respondent.name.middle,
+        'respondent.name.last': respondent.name.last
+      },
+      'plan_name':plan_name,
+      'who_is_participant':who_is_participant,
+      'participant.dob':encryptStr(str(participant.dob)),
+      'participant.ssn':encryptStr(participant.ssn),
+      'participant.phone':encryptStr(participant.phone),
+      'participant.email':participant.email,
+      'participant_address_info':{
+        'participant.address.address': participant.address.address,
+        'participant.address.unit': participant.address.unit,
+        'participant.address.city': participant.address.city,
+        'participant.address.state':participant.address.state,
+        'participant.address.zip':participant.address.zip
+      },
+      'alternate_payee.dob':encryptStr(str(alternate_payee.dob)),
+      'alternate_payee.ssn':encryptStr(alternate_payee.ssn),
+      'alternate_payee.phone':encryptStr(alternate_payee.phone),
+      'alternate_payee.email':alternate_payee.email,
+      'alternate_payee_address_info':{
+        'alternate_payee.address.address': alternate_payee.address.address,
+        'alternate_payee.address.unit': alternate_payee.address.unit,
+        'alternate_payee.address.city': alternate_payee.address.city,
+        'alternate_payee.address.state':alternate_payee.address.state,
+        'alternate_payee.address.zip':alternate_payee.address.zip
+      },
+      'other':other,
+      'add_other_plan': add_other_plan,
+      'other_plan': other_plan if add_other_plan else '',
+       }
+
+  if len(which_button) > 0 and which_button[0][2] == "reuse":
+    button_of_interview = which_button[0][2]
+    adverse_data = add_to_joinder(jsond,origin_of_interviewee,button_of_interview)
+  else:
+    button_of_interview = ''
+    adverse_data = add_to_joinder(jsond,origin_of_interviewee,button_of_interview)
+---
+code: |
+  if 'id' in url_args:
+    origin_of_interviewee = url_args['id']
+  else:
+    origin_of_interviewee = 'unknown'  
+
+---
+id: interview order
+mandatory: True
+code: |
+  email_id
+  plan_name
+  pick_plan
+  plan_sponsor_adress_details
+  if plan_sponsor_address != '' or plan_sponsor.address.on_one_line() != ', ':
+    plan_sponsor_name
+  plan_admin_adress_details
+  if plan_admin_address != '' or plan_admin.address.on_one_line() != ', ':
+    plan_admin_namee
+  document
+  role
+  filing_party_name_info
+  filing_party_address_info
+  county
+  court_name
+  case_number
+  if document == 'North Dakota':
+    judicial_district
+  else: 
+    judicial_district = ''
+  if document == 'Missouri':
+    division_number
+  else:
+    division_number = ''
+  petitioner_field
+  respondent_field
+  who_is_participant
+  participant_info
+  participant_address_info
+  alternate_payee_info
+  alternate_payee_address_info
+  CheckboX
+  if CheckboX:
+    check2
+    if check2:
+      coupon_page1
+      final_shown
+    else:
+      if not payment1.paid:
+        payment_screen
+      if payment1.paid:
+        final_shown
+  else:
+    final_shown
+---
+code: |
+  if 'id' in url_args:
+    origin_of_interviewee = url_args['id']
+  else:
+    origin_of_interviewee = 'unknown'
+    
+---
+question: |
+  Let’s start with you.
+subquestion: |
+  We need your information to follow up with you for feedback on our Notice of Adverse Interest machine and to provide you more information on dividing retirement assets in a divorce.
+fields:
+  - First Name: f_name
+    default: |
+      ${ register_dataj[0]['first_name'] }
+  - Last Name: l_name
+    default: |
+      ${ register_dataj[0]['last_name'] }
+  - E-mail: email_id
+    default: |
+      ${ register_dataj[0]['email'] }
+    datatype: email
+---
+event: plan_list
+code: |
+  set_save_status('ignore')
+  original = action_argument('wordstart')
+  wordstart = original.lower()
+  results = []
+  for key in plan:
+    if key == original:
+      json_response([[key]])
+    if key.lower().startswith(wordstart):
+      results.append([key])
+  json_response(results)
+---
+question: |
+  What type of plan will you be dividing today?  
+fields: 
+  - Pick One: pick_plan
+    default: |
+        ${ get_plan_type(plan_name) }
+    datatype: radio
+    choices:
+      - Deferred Compensation (Cash & Investment Account 401K)
+      - Pension Plan (Plans that guarantee monthly retirement income)
+---
+question: |
+  What is the retirement plan name? 
+subquestion: |
+  Please reference a retirement statement, if you have one, to ensure that the plan doesn’t reject your order for using the wrong name. Some companies can have dozens of plans.
+fields:
+  - Plan Name: plan_name
+    input type: ajax
+    action: plan_list
+    trigger at: 3
+    hide if: add_other_plan
+  - Other. (Type your plan sponsor name.): add_other_plan
+    datatype: yesno
+  - Others: other_plan
+    show if: add_other_plan
+  
+under: |
+  Note: Please enter at least three letters, numbers, or spaces to search.
+---
+code: |
+  add1 = address_of_admin_and_sponsor(plan_name)
+---
+field: plan_sponsor_adress_details
+question: |
+  Please provide the Plan Sponsor's address details.
+fields:
+  - Street address: plan_sponsor.address.address
+    default: |
+      ${ plan_sponsor_add1 }
+    address autocomplete: True
+  - Unit: plan_sponsor.address.unit
+    default: |
+      ${ plan_sponsor_add2 }
+    required: False
+  - City: plan_sponsor.address.city
+    default: |
+      ${ plan_sponsor_city }
+  - State: plan_sponsor.address.state
+    default: |
+      ${ plan_sponsor_state }
+  - Zip: plan_sponsor.address.zip
+    default: |
+      ${ plan_sponsor_zip }
+---
+question: |
+  Please enter plan sponsor name.
+fields:
+  - Plan Sponsor Name : plan_sponsor_name
+    default: |
+      ${plan_sponsor_nme}
+---
+code: |
+  plan = display_plan1()     
+---
+initial: True
+code: |
+  if add_other_plan == 'false':
+    other_plan = ''
+  else:
+    plan_name = ''
+
+---
+field: plan_admin_adress_details
+question: |
+  Please provide the Plan Admin's address.
+subquestion: |
+  If you do not have this information, hit continue to skip.
+fields:
+  - Street address: plan_admin.address.address
+    default: |
+      ${ plan_admin_add1 }
+    required: False
+    address autocomplete: True
+  - Unit: plan_admin.address.unit
+    default: |
+      ${ plan_admin_add2 }
+    required: False
+  - City: plan_admin.address.city
+    default: |
+      ${ plan_admin_city }
+    required: False
+  - State: plan_admin.address.state
+    default: |
+      ${ plan_admin_state }
+    required: False
+  - Zip: plan_admin.address.zip
+    default: |
+      ${ plan_admin_zip }
+    required: False
+---
+question: |
+  Please enter plan admin name.
+fields:
+  - Plan Admin Name : plan_admin_namee
+    default: |
+      ${plan_admin_nme}
+---
+code: |
+  if len(add1) > 0:
+    if add1[0]['plan_admin_name'] == None:
+      plan_admin_nme = ''
+    else:
+      plan_admin_nme = add1[0]['plan_admin_name']
+    if add1[0]['plan_admin_address1'] == None:
+      plan_admin_add1 = ''
+    else:
+      plan_admin_add1 = add1[0]['plan_admin_address1']
+    if add1[0]['plan_admin_address2'] == None:
+      plan_admin_add2 = ''
+    else:
+      plan_admin_add2 = add1[0]['plan_admin_address2']
+    if add1[0]['plan_admin_city'] == None:
+      plan_admin_city = ''
+    else:
+      plan_admin_city = add1[0]['plan_admin_city']
+    if add1[0]['plan_admin_state'] == None:
+      plan_admin_state = ''
+    else:
+      plan_admin_state = add1[0]['plan_admin_state']
+    if add1[0]['plan_admin_zip'] == None:
+      plan_admin_zip = ''
+    else:
+      plan_admin_zip = add1[0]['plan_admin_zip']
+    
+    if add1[0]['plan_sponsor_name'] == None:
+      plan_sponsor_nme = ''
+    else:
+      plan_sponsor_nme = add1[0]['plan_sponsor_name']
+    if add1[0]['plan_sponsor_address1'] == None:
+      plan_sponsor_add1 = ''
+    else:
+      plan_sponsor_add1 = add1[0]['plan_sponsor_address1']
+    if add1[0]['plan_sponsor_address2'] == None:
+      plan_sponsor_add2 = ''
+    else:
+      plan_sponsor_add2 = add1[0]['plan_sponsor_address2']
+    if add1[0]['plan_sponsor_city'] == None:
+      plan_sponsor_city = ''
+    else:
+      plan_sponsor_city = add1[0]['plan_sponsor_city']
+    if add1[0]['plan_sponsor_state'] == None:
+      plan_sponsor_state = ''
+    else:
+      plan_sponsor_state = add1[0]['plan_sponsor_state']
+    if add1[0]['plan_sponsor_zip'] == None:
+      plan_sponsor_zip = ''
+    else:
+      plan_sponsor_zip = add1[0]['plan_sponsor_zip']
+  else:
+    plan_sponsor_nme = ''
+    plan_admin_nme = ''
+    plan_admin_add1 = ''
+    plan_admin_add2 = ''
+    plan_admin_city = ''
+    plan_admin_state = ''
+    plan_admin_zip = ''
+    plan_sponsor_add1 = ''
+    plan_sponsor_add2 = ''
+    plan_sponsor_city = ''
+    plan_sponsor_state = ''
+    plan_sponsor_zip = ''
+---
+
+code: |
+  if (user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0:
+    state_abbreviations = {
+      "CA": "California",
+      "IA": "Iowa",
+      "KS": "Kansas",
+      "MO": "Missouri",
+      "ND": "North Dakota",
+      "NJ": "New Jersey",
+      "NY": "New York"
+      }
+    if qdro_intake_data_details[0]['data']['case_filed_state'] in state_abbreviations:
+      state = state_abbreviations[qdro_intake_data_details[0]['data']['case_filed_state']]
+  else:
+    if len(file) > 0 and file[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
+      state = 'California'
+    else:
+      state = user_data1[0]['document']
+---
+question: |
+  In which state was the divorce?
+fields: 
+  - Please select your state: document
+    default: |
+      ${ state }
+    choices:
+      - Alabama
+      - Alaska
+      - Arizona
+      - Arkansas
+      - California
+      - Colorado
+      - Connecticut
+      - District of Columbia
+      - Delaware
+      - Florida
+      - Georgia
+      - Hawaii
+      - Idaho
+      - Illinois
+      - Indiana
+      - Iowa
+      - Kansas
+      - Kentucky
+      - Louisiana
+      - Maine
+      - Maryland
+      - Massachusetts
+      - Michigan
+      - Minnesota
+      - Mississippi
+      - Missouri
+      - Montana
+      - Nebraska
+      - Nevada
+      - New Hampshire
+      - New Jersey
+      - New Mexico
+      - New York 
+      - North Carolina
+      - North Dakota
+      - Oregon
+      - Ohio
+      - Oklahoma
+      - Pennsylvania
+      - Rhode Island
+      - South Carolina
+      - South Dakota
+      - Tennessee
+      - Texas
+      - Utah
+      - Vermont
+      - Virginia
+      - West Virginia
+      - Wisconsin
+      - Wyoming
+      - Washington
+---
+question: |
+  What is the your role in the case?
+subquestion: |
+  For example, are you the attorney for the plaintiff? Or a limited scope attorney for the respondent?
+fields:
+  - Role in the case: role
+    default: |
+      ${ user_data1[0]['role'] }
+    datatype: radio
+    choices:
+      - Petitioner/Plaintiff
+      - Respondent/Defendant
+      - Attorney
+  - Select role in the case: role1
+    default: |
+      ${ user_data1[0]['role1'] }
+    datatype: radio
+    choices:
+      - Attorney for Petitioner
+      - Attorney for Respondent
+      - Other
+    show if: 
+      variable: role
+      is: Attorney
+  - Fill your role here: other
+    default: |
+      ${ user_data1[0]['other'] }
+    show if :
+      variable: role1
+      is: Other
+---
+code: |
+  if role != 'Attorney':
+    role1 = ''
+  if role1 != 'Other':
+    other = '' 
+---
+
+code: |
+  if (user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0:
+    if qdro_intake_data_details[0]['data']['who_are_you'] == "Petitioner/Plantiff":
+      petitioner_fname = qdro_intake_data_details[0]['data']['your_field']['Petitioner.name.first']
+      petitioner_lname = qdro_intake_data_details[0]['data']['your_field']['Petitioner.name.last']
+      respondent_fname = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.name.first']
+      respondent_lname = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.name.last']
+    else:
+      petitioner_fname = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.name.first']
+      petitioner_lname = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.name.last']
+      respondent_fname = qdro_intake_data_details[0]['data']['your_field']['Respondent.name.first']
+      respondent_lname = qdro_intake_data_details[0]['data']['your_field']['Respondent.name.last']
+  else:
+    petitioner_fname = user_data1[0]['petitioner_field']['petitioner.name.first']
+    petitioner_lname = user_data1[0]['petitioner_field']['petitioner.name.last']
+    respondent_fname = user_data1[0]['respondent_field']['respondent.name.first']
+    respondent_lname = user_data1[0]['respondent_field']['respondent.name.last']
+---
+field: petitioner_field
+question: |
+  What is the Petitioner/Plaintiff's Name?
+fields:
+  - First Name: petitioner.name.first
+    default: |
+      ${ petitioner_fname }
+  - Middle Name: petitioner.name.middle
+    default: |
+      ${ user_data1[0]['petitioner_field']['petitioner.name.middle'] }
+    required: False
+  - Last Name: petitioner.name.last
+    default: |
+      ${ petitioner_lname }
+---
+field: respondent_field
+question: |
+  What is the Respondent/Defendant's name?
+fields:
+  - First Name: respondent.name.first
+    default: |
+      ${ respondent_fname }
+  - Middle Name: respondent.name.middle
+    default: |
+      ${ user_data1[0]['respondent_field']['respondent.name.middle'] }
+    required: False
+  - Last Name: respondent.name.last
+    default: |
+      ${ respondent_lname }
+
+---
+code: |
+  petitioner_info = petitioner.name
+  if role == 'Petitioner/Plaintiff' and (document == 'California' or document == 'Kansas'):
+    petitioner.name = filing_party.name
+  else: 
+    petitioner_info = ''
+---
+code: |
+  respondent_info = respondent.name
+  if role == 'Respondent/Defendant' and (document == 'California' or document == 'Kansas'):
+    respondent.name = filing_party.name
+  else: 
+    respondent_info = ''
+---
+mandatory: True
+code: |
+    if len(file) > 0 and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit"):
+      filing_first = user_info().first_name
+      filing_middle = data_from_registration[0]['user.name.middle']
+      filing_last = user_info().last_name
+      filing_email = user_info().email
+      filing_bar = data_from_registration[0]['bar_number']
+      filing_phone = data_from_registration[0]['phone_number']
+    else:
+      filing_first = user_data1[0]['filing_party_name_info']['filing_party.name.first']
+      filing_middle = user_data1[0]['filing_party_name_info']['filing_party.name.middle']
+      filing_last = user_data1[0]['filing_party_name_info']['filing_party.name.last']
+      filing_email = user_data1[0]['filing_party_name_info']['filing_party.email']
+      filing_bar = user_data1[0]['filing_party_name_info']['bar_number']
+      filing_phone = user_data1[0]['filing_party_name_info']['filing_party.phone']
+
+---
+field: filing_party_name_info
+question: |
+  Who will be sending this notice to the retirement plan?
+fields:
+  - First Name: filing_party.name.first
+    default: |
+      ${ filing_first }
+  - Middle Name: filing_party.name.middle
+    default: |
+      ${ filing_middle }
+    required: False
+  - Last Name: filing_party.name.last
+    default: |
+      ${ filing_last }
+  - Email: filing_party.email
+    default: |
+      ${ filing_email }
+    datatype: email
+  - Bar Number: bar_number
+    default: |
+      ${ filing_bar }
+    hide if:
+      code: |
+        role == 'Petitioner/Plaintiff' or role == 'Respondent/Defendant'
+  - Phone: filing_party.phone
+    default: |
+      ${ filing_phone }
+validation code: |
+  if not phone_number_is_valid(phone_number_formatted(filing_party.phone)):
+    validation_error('Phone number is not valid')
+---
+code: |
+  if role == "Petitioner/Plaintiff" and "Respondent/Defendant":
+    role_of_filer = "In Pro Per"
+---
+
+code: |
+  filingAddressJson = {
+          'filing_party.address.address': filing_party.address.address,
+          'filing_party.address.unit': filing_party.address.unit,
+          'filing_party.address.city': filing_party.address.city,
+          'filing_party.address.state': filing_party.address.state,
+          'filing_party.address.zip': filing_party.address.zip
+      }
+---
+code: |
+  if (role1 == 'Attorney for Petitioner' or role1 == 'Attorney for Respondent' or role1 == 'Other'):
+    filingJson = {
+      'filing_party.name.first': filing_party.name.first,
+      'filing_party.name.middle': filing_party.name.middle,
+      'filing_party.name.last': filing_party.name.last,
+      'filing_party.email': filing_party.email,
+      'bar_number':bar_number,
+      'filing_party.phone': filing_party.phone
+    }
+  else:
+    filingJson = {
+      'filing_party.name.first': filing_party.name.first,
+      'filing_party.name.middle': filing_party.name.middle,
+      'filing_party.name.last': filing_party.name.last,
+      'filing_party.email': filing_party.email,
+      'filing_party.phone': filing_party.phone,
+      'bar_number':'',
+    }
+---
+mandatory: True
+code: |
+    if len(file) > 0 and len(which_button) > 0 and which_button[0][2] == "reuse":
+      filing_add = data_from_registration[0]['user.address.address']
+      filing_unit = data_from_registration[0]['user.address.unit']
+      filing_city = data_from_registration[0]['user.address.city']
+      filing_state = data_from_registration[0]['user.address.state']
+      filing_zip = data_from_registration[0]['user.address.zip_code']
+    else:
+      filing_add = user_data1[0]['filing_party_address_info']['filing_party.address.address']
+      filing_unit = user_data1[0]['filing_party_address_info']['filing_party.address.unit']
+      filing_city = user_data1[0]['filing_party_address_info']['filing_party.address.city']
+      filing_state = user_data1[0]['filing_party_address_info']['filing_party.address.state']
+      filing_zip = user_data1[0]['filing_party_address_info']['filing_party.address.zip']
+---
+field: filing_party_address_info
+question: |
+  For the person sending notice to the retirement plan, please provide their address. 
+fields:
+  - Street address: filing_party.address.address
+    address autocomplete: True
+    default: |
+      ${ filing_add }
+  - Unit: filing_party.address.unit
+    default: |
+      ${ filing_unit }
+    required: False
+  - City: filing_party.address.city
+    default: |
+      ${ filing_city }
+  - State: filing_party.address.state
+    default: |
+      ${ filing_state }
+  - Zip: filing_party.address.zip
+    default: |
+      ${ filing_zip }
+---
+mandatory: True
+code: |
+  if len(file) > 0 and file[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
+    if user_data11[0]['add_other_court']:
+      courtt = user_data11[0]['other_court']
+      countyy = user_data11[0]['other_court_district']
+    else:
+      court_detail = user_data11[0]['court_name']
+      court_add = court_address(court_detail)
+      courtt = user_data11[0]['court_name']
+      countyy = court_add[0]['count_court_district']
+  elif len(file) > 0 and (file[0] == 'docassemble.playground3QDRO:QDRO.yml' or file[0] == 'docassemble.playground3QDRO:adverse.yml') and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit"):
+    courtt = user_data1[0]['court']
+    countyy = user_data1[0]['county']
+  else:
+    courtt = user_data1[0]['court_name']
+    countyy = user_data1[0]['county']
+---
+question: |
+  In which county did the divorce take place? 
+subquestion: |
+  The QDRO is almost always filed in the same county and courthouse as your divorce judgment.
+fields:
+  - County: county
+    default: |
+      ${ countyy }
+---
+
+question: |
+  Please provide the name of the court where your divorce was processed. 
+subquestion: |
+  For example: “Orange County - Lamoreaux Justice Center.”
+fields:
+  - Court: court_name
+    default: |
+      ${ courtt }
+---
+question: |
+  Division Number
+fields:
+  - Division number: division_number
+    default: |
+      ${ user_data1[0]['division_number'] }
+---
+question: |
+  What is the judicial district?
+fields:
+  - Judicial District: judicial_district
+    default: |
+      ${ user_data1[0]['judicial_district'] }
+---
+code: |
+  if (user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0:
+    case_num = qdro_intake_data_details[0]['data']['case_number']
+  else: 
+    case_num = user_data1[0]['case_number']
+---
+question: |
+  Case Number
+fields:
+  - Case Number: case_number
+    default: |  
+      ${ case_num }
+---
+
+code: |
+  if (user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0:
+    if qdro_intake_data_details[0]['data']['who_are_you'] == 'Petitioner/Plantiff':
+      which_party = 'Petitioner-Plaintiff'
+    else:
+      which_party = 'Respondent-Defendant'
+  else:
+    which_party = user_data1[0]['who_is_participant']
+---
+question: |
+  Please select the employee (participant) spouse who is associated with this retirement plan. 
+fields:
+  - Who is the participant: who_is_participant
+    default: |
+      ${ which_party }
+    datatype: radio
+    choices:
+      - Petitioner-Plaintiff
+      - Respondent-Defendant
+  - note: |
+      What's the participant name?
+    show if: 
+      variable: who_is_participant
+      is: Petitioner-Plaintiff
+  - First Name: participant.name.first
+    default: |
+      ${ petitioner.name.first }
+    show if:
+      variable: who_is_participant
+      is: Petitioner-Plaintiff
+  - Middle Name: participant.name.middle
+    default: |
+      ${ petitioner.name.middle }
+    required: False
+    show if:
+      variable: who_is_participant
+      is: Petitioner-Plaintiff
+  - Last Name: participant.name.last
+    default: |
+      ${ petitioner.name.last }
+    show if:
+      variable: who_is_participant
+      is: Petitioner-Plaintiff
+  - note: |
+      What's the participant name?   
+    show if: 
+      variable: who_is_participant
+      is: Defendant-Respondent
+  - First Name: participant.name.first
+    default: |
+      ${ respondent.name.first }
+    show if:
+      variable: who_is_participant
+      is: Respondent-Defendant
+  - Middle Name: participant.name.middle
+    default: |
+      ${ respondent.name.middle }
+    required: False
+    show if:
+      variable: who_is_participant
+      is: Respondent-Defendant
+  - Last Name: participant.name.last
+    default: |
+      ${ respondent.name.last }
+    show if:
+      variable: who_is_participant
+      is: Respondent-Defendant
+---
+initial: True
+code: |
+  if who_is_participant == 'Petitioner-Plaintiff':
+    participant.name.first = petitioner.name.first
+    participant.name.middle = petitioner.name.middle
+    participant.name.last = petitioner.name.last
+    
+    alternate_payee.name.first = respondent.name.first
+    alternate_payee.name.middle = respondent.name.middle
+    alternate_payee.name.last = respondent.name.last
+  else:
+    alternate_payee.name.first = petitioner.name.first
+    alternate_payee.name.middle = petitioner.name.middle
+    alternate_payee.name.last = petitioner.name.last
+    
+    participant.name.first = respondent.name.first
+    participant.name.middle = respondent.name.middle
+    participant.name.last = respondent.name.last
+    
+---
+code: |
+  if (user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0:
+    if who_is_participant == "Petitioner-Plaintiff":
+      if qdro_intake_data_details[0]['data']['who_are_you'] == "Petitioner/Plantiff":
+        party_dob = qdro_intake_data_details[0]['data']['your_field']['Petitioner_birth_date']
+        party_ssn = qdro_intake_data_details[0]['data']['your_field']['Petitioner_social_security_number']
+        party_phone = qdro_intake_data_details[0]['data']['your_field']['Petitioner_phone']
+        party_email = qdro_intake_data_details[0]['data']['your_field']['Petitioner_email'] 
+        alternate_party_dob = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_birth_date']
+        alternate_party_ssn = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_social_security_number']
+        alternate_party_phone =  qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_phone']
+        alternate_party_email = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_email']
+      else:
+        party_dob = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_birth_date']
+        party_ssn = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_social_security_number']
+        party_phone = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_phone']
+        party_email = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_email'] 
+        alternate_party_dob = qdro_intake_data_details[0]['data']['your_field']['Respondent_birth_date']
+        alternate_party_ssn = qdro_intake_data_details[0]['data']['your_field']['Respondent_social_security_number']
+        alternate_party_phone =  qdro_intake_data_details[0]['data']['your_field']['Respondent_phone']
+        alternate_party_email = qdro_intake_data_details[0]['data']['your_field']['Respondent_email'] 
+    else:
+      if qdro_intake_data_details[0]['data']['who_are_you'] == "Petitioner/Plantiff":
+        party_dob = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_birth_date']
+        party_ssn = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_social_security_number']
+        party_phone = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_phone']
+        party_email = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_email'] 
+        alternate_party_dob = qdro_intake_data_details[0]['data']['your_field']['Petitioner_birth_date']
+        alternate_party_ssn = qdro_intake_data_details[0]['data']['your_field']['Petitioner_social_security_number']
+        alternate_party_phone =  qdro_intake_data_details[0]['data']['your_field']['Petitioner_phone']
+        alternate_party_email = qdro_intake_data_details[0]['data']['your_field']['Petitioner_email']
+      else: 
+        party_dob = qdro_intake_data_details[0]['data']['your_field']['Respondent_birth_date']
+        party_ssn = qdro_intake_data_details[0]['data']['your_field']['Respondent_social_security_number']
+        party_phone = qdro_intake_data_details[0]['data']['your_field']['Respondent_phone']
+        party_email = qdro_intake_data_details[0]['data']['your_field']['Respondent_email'] 
+        alternate_party_dob = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_birth_date']
+        alternate_party_ssn = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_social_security_number']
+        alternate_party_phone =  qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_phone']
+        alternate_party_email = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_email']          
+  else: 
+    if len(file) > 0 and file[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
+      if who_is_participant == "Petitioner-Plaintiff":
+        party_phone =  user_data11[0]['petitioner_field']['petitioner_phone']
+        party_email=  user_data11[0]['petitioner_field']['petitioner_email']
+        alternate_party_phone =  user_data11[0]['respondent_field']['respondent_phone']
+        alternate_party_email = user_data11[0]['respondent_field']['respondent_email']
+        
+      if who_is_participant == "Respondent-Defendant":
+        party_phone =  user_data11[0]['respondent_field']['respondent_phone']
+        party_email =  user_data11[0]['respondent_field']['respondent_email']
+        alternate_party_phone = user_data11[0]['petitioner_field']['petitioner_phone']
+        alternate_party_email = user_data11[0]['petitioner_field']['petitioner_email']
+    else:
+      party_phone = user_data1[0]['participant.phone']
+      party_email = user_data1[0]['participant.email']
+      alternate_party_phone = user_data1[0]['alternate_payee.phone']
+      alternate_party_email = user_data1[0]['alternate_payee.email']
+    party_dob = user_data1[0]['participant.dob']
+    party_ssn = user_data1[0]['participant.ssn']
+    alternate_party_dob = user_data1[0]['alternate_payee.dob']
+    alternate_party_ssn = user_data1[0]['alternate_payee.ssn']
+---
+
+field: participant_info
+question: |
+  Please fill in the Participant's information.
+fields:
+  - Date Of Birth: participant.dob
+    default: |
+      ${ party_dob }
+    hint: MM/DD/YYYY
+    datatype: date
+  - Social Security Number: participant.ssn
+    default: |
+      ${ party_ssn }
+    datatype: ssn
+    hint: XXX-XX-XXXX
+  - Phone: participant.phone
+    hint: (XXX)-XXX-XXXX
+    default: |
+      ${ party_phone }
+  - E-Mail: participant.email
+    datatype: email
+    default: |
+      ${ party_email }
+validation code: |
+  if not phone_number_is_valid(phone_number_formatted(participant.phone)):
+    validation_error('Phone number is not valid')
+---
+code: |
+  if (user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0:
+    if who_is_participant == "Petitioner-Plaintiff":
+      if qdro_intake_data_details[0]['data']['who_are_you'] == "Petitioner/Plantiff":
+        party_add = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.address']
+        party_unit = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.address2-']
+        party_city = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.city'] 
+        party_state = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.state']
+        party_zip = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.zip']
+        alternate_party_add = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.address']
+        alternate_party_unit =  qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.address2-']
+        alternate_party_city = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.city']
+        alternate_party_state =  qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.state']
+        alternate_party_zip = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.zip']
+      else:
+        party_add = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.address']
+        party_unit = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.address2-']
+        party_city = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.city'] 
+        party_state = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.state']
+        party_zip = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.zip'] 
+        alternate_party_add = qdro_intake_data_details[0]['data']['your_field']['Respondent.address.address']
+        alternate_party_unit =  qdro_intake_data_details[0]['data']['your_field']['Respondent.address.address2-']
+        alternate_party_city = qdro_intake_data_details[0]['data']['your_field']['Respondent.address.city'] 
+        alternate_party_state =  qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.state']
+        alternate_party_zip = qdro_intake_data_details[0]['data']['your_field']['Respondent.address.zip'] 
+    else:
+      if qdro_intake_data_details[0]['data']['who_are_you'] == "Petitioner/Plantiff":
+        party_add = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.address']
+        party_unit = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.address2-']
+        party_city = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.city'] 
+        party_state = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.state']
+        party_zip = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.zip'] 
+        alternate_party_add = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.address']
+        alternate_party_unit =  qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.address2-']
+        alternate_party_city = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.city'] 
+        alternate_party_state =  qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.state']
+        alternate_party_zip = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.zip'] 
+      else: 
+        party_add = qdro_intake_data_details[0]['data']['your_field']['Respondent.address.address']
+        party_unit = qdro_intake_data_details[0]['data']['your_field']['Respondent.address.address2-']
+        party_city = qdro_intake_data_details[0]['data']['your_field']['Respondent.address.city'] 
+        party_state = qdro_intake_data_details[0]['data']['your_field']['Petitioner.address.state']
+        party_zip = qdro_intake_data_details[0]['data']['your_field']['Respondent.address.zip']
+        alternate_party_add = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.address']
+        alternate_party_unit =  qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.address2-']
+        alternate_party_city = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.city']
+        alternate_party_state =  qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.state']
+        alternate_party_zip = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.zip']       
+  else:
+    if len(file) > 0 and file[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
+      if who_is_participant == "Petitioner-Plaintiff":
+        party_add =  user_data11[0]['petitioner_field']['petitioner.address.address']
+        party_unit=  user_data11[0]['petitioner_field']['petitioner.address.unit']
+        party_city =  user_data11[0]['petitioner_field']['petitioner.address.city']
+        party_state=  user_data11[0]['petitioner_field']['petitioner.address.state']
+        party_zip =  user_data11[0]['petitioner_field']['petitioner.address.zip']
+        alternate_party_add =  user_data11[0]['respondent_field']['respondent.address.address']
+        alternate_party_unit = user_data11[0]['respondent_field']['respondent.address.unit']
+        alternate_party_city =  user_data11[0]['respondent_field']['respondent.address.city']
+        alternate_party_state = user_data11[0]['respondent_field']['respondent.address.state']
+        alternate_party_zip =  user_data11[0]['respondent_field']['respondent.address.zip']
+        
+      if who_is_participant == "Respondent-Defendant":
+        party_add =  user_data11[0]['respondent_field']['respondent.address.address']
+        party_unit = user_data11[0]['respondent_field']['respondent.address.unit']
+        party_city =  user_data11[0]['respondent_field']['respondent.address.city']
+        party_state = user_data11[0]['respondent_field']['respondent.address.state']
+        party_zip =  user_data11[0]['respondent_field']['respondent.address.zip']
+        alternate_party_add =  user_data11[0]['petitioner_field']['petitioner.address.address']
+        alternate_party_unit=  user_data11[0]['petitioner_field']['petitioner.address.unit']
+        alternate_party_city =  user_data11[0]['petitioner_field']['petitioner.address.city']
+        alternate_party_state=  user_data11[0]['petitioner_field']['petitioner.address.state']
+        alternate_party_zip =  user_data11[0]['petitioner_field']['petitioner.address.zip']
+    else:
+      party_add = user_data1[0]['participant_address_info']['participant.address.address']
+      party_unit = user_data1[0]['participant_address_info']['participant.address.unit']
+      party_city = user_data1[0]['participant_address_info']['participant.address.city']
+      party_state = user_data1[0]['participant_address_info']['participant.address.state']
+      party_zip = user_data1[0]['participant_address_info']['participant.address.zip']
+      alternate_party_add = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.address']
+      alternate_party_unit = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.unit']
+      alternate_party_city = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.city']
+      alternate_party_state = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.state']
+      alternate_party_zip = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.zip']
+
+---
+field: participant_address_info
+question: |
+  Please fill in the Participant's address.
+fields:
+  - Street address: participant.address.address
+    address autocomplete: True
+    default: |
+      ${ party_add }
+  - Unit: participant.address.unit
+    default: |
+      ${ party_unit }
+    required: False
+  - City: participant.address.city
+    default: |
+      ${ party_city }
+  - State: participant.address.state
+    default: |
+      ${ party_state }
+  - Zip: participant.address.zip
+    default: |
+      ${ party_zip }
+
+---
+field: alternate_payee_info
+question: |
+  Please fill in the Alternate Payee's information.
+fields:
+  - Date Of Birth: alternate_payee.dob
+    default: |
+      ${ alternate_party_dob }
+    datatype: date
+    hint: MM/DD/YYYY
+  - Social Security Number: alternate_payee.ssn
+    default: |
+      ${ alternate_party_ssn }
+    datatype: ssn
+    hint: XXX-XX-XXXX
+  - Phone: alternate_payee.phone
+    hint: (XXX)-XXX-XXXX
+    default: |
+      ${ alternate_party_phone }
+  - E-Mail: alternate_payee.email
+    datatype: email
+    default: |
+      ${ alternate_party_email }
+validation code: |
+  if not phone_number_is_valid(phone_number_formatted(alternate_payee.phone)):
+    validation_error('Phone number is not valid')
+---
+field: alternate_payee_address_info
+question: |
+  Please fill in the Alternate Payee's address.
+fields:
+  - Street address: alternate_payee.address.address
+    address autocomplete: True
+    default: |
+      ${ alternate_party_add }
+  - Unit: alternate_payee.address.unit
+    default: |
+      ${ alternate_party_unit }
+    required: False
+  - City: alternate_payee.address.city
+    default: |
+      ${ alternate_party_city }
+  - State: alternate_payee.address.state
+    default: |
+      ${ alternate_party_state }
+  - Zip: alternate_payee.address.zip
+    default: |
+      ${ alternate_party_zip }
+---
+initial: True
+code: |
+  participant_adddess = participant.address
+  if (role == 'Petitioner/Plaintiff' and who_is_participant == 'Petitioner-Plaintiff') or (role == 'Respondent/Defendant' and who_is_participant == 'Respondent-Defendant'):
+    participant.address = filing_party.address
+  else: 
+    participant_adddess = ''
+---
+initial: True
+code: |
+  alternate_payee_address = alternate_payee.address
+  if (role == 'Petitioner/Plaintiff' and who_is_participant == 'Respondent-Defendant') or (role == 'Respondent/Defendant' and who_is_participant == 'Petitioner-Plaintiff'):
+    alternate_payee.address = filing_party.address
+  else: 
+    alternate_payee_address = ''
+---
+initial: True
+code: |
+  if (role == 'Petitioner/Plaintiff' and who_is_participant == 'Petitioner-Plaintiff') or (role == 'Respondent/Defendant' and who_is_participant == 'Respondent-Defendant'):
+    participant_phone = filing_party.phone
+  else: 
+    participant_phone = ''
+---
+initial: True
+code: |
+  if (role == 'Petitioner/Plaintiff' and who_is_participant == 'Respondent-Defendant') or (role == 'Respondent/Defendant' and who_is_participant == 'Petitioner-Plaintiff'):
+    alternate_payee_phone = filing_party.phone
+  else: 
+    alternate_payee_phone = ''
+---
+initial: True
+code: |
+  if (role == 'Petitioner/Plaintiff' and who_is_participant == 'Petitioner-Plaintiff') or (role == 'Respondent/Defendant' and who_is_participant == 'Respondent-Defendant'):
+    participant_email = filing_party.email
+  else: 
+    participant_email = ''
+---
+initial: True
+code: |
+  if (role == 'Petitioner/Plaintiff' and who_is_participant == 'Respondent-Defendant') or (role == 'Respondent/Defendant' and who_is_participant == 'Petitioner-Plaintiff'):
+    alternate_payee_email = filing_party.email
+  else: 
+    alternate_payee_email = ''
+
+---
+code: |
+  plan_admin_contact_info = ''
+  plan_sponsor_contact_info = ''
+  date= today()
+  plan_add_details = ''
+  if add_other_plan:
+    plan_admin_address =  plan_admin.address.address+"\n"+ plan_admin.address.unit+"\n"+ plan_admin.address.city+" "+plan_admin.address.state+" "+plan_admin.address.zip
+    plan_sponsor_address = plan_sponsor.address.address+"\n"+ plan_sponsor.address.unit+"\n"+ plan_sponsor.address.city+" "+plan_sponsor.address.state+" "+plan_sponsor.address.zip
+  plan_sponsor_address=''
+  plan_admin_address=''
+  plan_admin_foreign_address = ''
+  plan_sponsor_foreign_adress = ''
+  if not add_other_plan:
+    plan_add_details = add1[0]
+    if add1[0]['plan_admin_foreign_address1'] is not None:
+      plan_admin_foreign_address2 = add1[0]['plan_admin_foreign_address1']
+    else:
+      plan_admin_foreign_address2 = ''
+    if add1[0]['plan_sponsor_address1'] is not None:
+      plan_sponsor_address += add1[0]['plan_sponsor_address1'] + "\n"
+    else:
+      plan_sponsor_address = plan_sponsor_address
+
+    if add1[0]['plan_sponsor_address2'] is not None:
+      plan_sponsor_address += add1[0]['plan_sponsor_address2'] + "\n"
+    else:
+      plan_sponsor_address = plan_sponsor_address
+
+    if add1[0]['plan_sponsor_city'] is not None:
+      plan_sponsor_address += add1[0]['plan_sponsor_city'] + " "
+    else:
+      plan_sponsor_address = plan_sponsor_address
+
+    if add1[0]['plan_sponsor_state'] is not None:
+      plan_sponsor_address += add1[0]['plan_sponsor_state'] + " "
+    else:
+      plan_sponsor_address = plan_sponsor_address
+
+    if add1[0]['plan_sponsor_zip'] is not None:
+      plan_sponsor_address += add1[0]['plan_sponsor_zip']
+    else:
+      plan_sponsor_address = plan_sponsor_address
+
+    if add1[0]['plan_sponsor_foreign_address1'] is not None:
+      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_address1'] + "\n"
+    else:
+      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
+    if add1[0]['plan_sponsor_foreign_address2'] is not None:
+      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_address2'] + "\n"
+    else:
+      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
+    if add1[0]['plan_sponsor_foreign_city'] is not None:
+      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_city'] + " "
+    else:
+      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
+    if add1[0]['plan_sponsor_foreign_state'] is not None:
+      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_state'] + " "
+    else:
+      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
+    if add1[0]['plan_sponsor_foreign_country'] is not None:
+      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_country'] + " "
+    else:
+      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
+    if add1[0]['plan_sponsor_foreign_zip'] is not None:
+      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_zip']
+    else:
+      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
+    if add1[0]['plan_admin_address1'] is not None:
+      plan_admin_address += add1[0]['plan_admin_address1'] + "\n"
+    else:
+      plan_admin_address = plan_admin_address
+    if add1[0]['plan_admin_address2'] is not None:
+      plan_admin_address += add1[0]['plan_admin_address2'] + "\n"
+    else:
+      plan_admin_address=plan_admin_address 
+    if add1[0]['plan_admin_city'] is not None:
+      plan_admin_address += add1[0]['plan_admin_city'] + " "
+    else:
+      plan_admin_address=plan_admin_address
+    if add1[0]['plan_admin_state'] is not None:
+      plan_admin_address += add1[0]['plan_admin_state'] + " "
+    else:
+      plan_admin_address=plan_admin_address
+    if add1[0]['plan_admin_zip'] is not None:
+      plan_admin_address += add1[0]['plan_admin_zip']
+    else:
+      plan_admin_address=plan_admin_address
+    if add1[0]['plan_admin_foreign_address1'] is not None:
+      plan_admin_foreign_address += add1[0]['plan_admin_foreign_address1'] + "\n"
+    if add1[0]['plan_admin_foreign_address2'] is not None:
+      plan_admin_foreign_address += add1[0]['plan_admin_foreign_address2'] + "\n"
+    if add1[0]['plan_admin_foreign_city'] is not None:
+      plan_admin_foreign_address += add1[0]['plan_admin_foreign_city'] + " "
+    if add1[0]['plan_admin_foreign_state'] is not None:
+      plan_admin_foreign_address += add1[0]['plan_admin_foreign_state'] + " "
+    if add1[0]['plan_admin_foreign_country'] is not None:
+      plan_admin_foreign_address += add1[0]['plan_admin_foreign_country'] + " "
+
+    if add1[0]['plan_admin_foreign_zip'] is not None:
+      plan_admin_foreign_address += add1[0]['plan_admin_foreign_zip']
+
+
+    if add1[0]['plan_admin_name'] is not None:
+      plan_admin_contact_info += add1[0]['plan_admin_name']+", "
+    else:
+      plan_admin_contact_info+=plan_name
+    if add1[0]['plan_admin_phone'] is not None:
+      plan_admin_contact_info += add1[0]['plan_admin_phone']+"\n"
+      plan_admin_contact_info += plan_admin_address
+    else:
+      if plan_admin_address != '':
+        plan_admin_contact_info += plan_admin_address
+      else:
+        plan_admin_contact_info += plan_admin_address
+  
+    if add1[0]['plan_sponsor_name'] is not None:
+      plan_sponsor_contact_info += add1[0]['plan_sponsor_name']+", "
+    else: 
+      plan_sponsor_contact_info+=plan_sponsor_contact_info
+    if add1[0]['plan_sponsor_phone'] is not None:
+      plan_sponsor_contact_info += add1[0]['plan_sponsor_phone']+"\n"
+      plan_sponsor_contact_info += plan_sponsor_address
+    else:
+      plan_sponsor_contact_info += plan_sponsor_address
+
+---
+code: |
+  if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', '):
+    paymeny_amount = 9.99*2
+  else:
+    paymeny_amount = 9.99
+---
+event: payment_screen
+question: |
+  You need to pay first.
+---
+
+question: |
+  To proceed, please make a payment for your documents.
+subquestion: |
+  In order to cover our development costs, we are initially charging $${payment1.amount} per QDRO. If you are unhappy with your QDRO, we have a 100% satisfaction guarantee - just reach out within three months, give us a chance to make the QDRO right, and we'll give a full refund if the QDRO can't be fixed.
+post: |
+  Can't afford the fee? Though we charge less than any other QDRO website out there, we've got your back. Please reach out to us via the contact form on [(http://lexyalgo.com/)](${ url_of('https://Lexyalgo.com/') }){:target="_blank"} and we'll provide a coupon code.  
+field: check2
+buttons:
+  - Pay: False
+  - Coupon: True 
+---
+event: payment1.demand
+question: |
+  Payment ${a}
+subquestion: |
+  ${ payment1.html }
+script: |
+  ${ payment1.javascript }
+
+---
+mandatory: True
+code: |
+  return_address = clicksend_post_return_adress(data_from_registration[0])
+  return_address_id = return_address['data']['return_address_id']
+  interview_id = retrieve_interview_id()
+  output_file = [the_document.path()]
+  urls=''
+  if CheckboX:
+    urls =  [item['data']['_url'] for item in file_url(output_file)]
+    a = ''
+---
+code: |
+  return_address = clicksend_post_return_adress(data_from_registration[0])
+  return_address_id = return_address['data']['return_address_id']
+---
+field: coupon_page1
+question: |
+  Enter coupon code? ${a} 
+fields:
+  - Coupon code: coupon_code1
+validation code: |
+  if check_coupon(coupon_code1, retrieve_interview_id()):
+    yml_veriables(retrieve_interview_id(),user_info().filename,url_args)
+    clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
+    if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
+      clicksend_send_post_letter(plan_admin_namee,plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
+---
+question:
+  Would you like us to mail your order to the retirement plan?
+fields:
+  - note: By checking the box, you’re giving us consent to send your documents to the plan administrator and sponsor, if we have their contact information. There’s a charge of $9.99 per document for postage and handling.
+  - Check here: CheckboX
+    datatype: yesno
+---
+code: |
+  payment1.amount= paymeny_amount
+---
+event: payment1.success
+code: |
+  payment1.process()
+  #log(interview_id, "info")
+  if update_payment_status(interview_id):
+    yml_veriables(retrieve_interview_id(),user_info().filename,url_args)
+    #clicksend_send_post_letter(urls)
+---
+event: final_shown
+question: |
+  Download document for **${ document }** ${adverse_data} ${ delete_button_info(qdro_intake_data_details[0]['id']) }
+attachment code: |  
+  [the_document]
+subquestion: |
+   ${ action_button_html(url_of('restart'), label="Restart", color="primary", size="md", new_window=True) }
+---
+if: document == "California" 
+attachment:
+  name: Document for ${ document } Notice of Adverse Interest Claim
+  variable name: the_document
+  docx template file: CALIFORNIA_Notice_of_Adverse_Interest_Claim_TEMPLATE.docx
+  valid formats:
+    - pdf
+---
+if: document != "California"
+attachment:
+  name: Document for ${ document } Notice of Adverse Interest Claim
+  variable name: the_document
+  docx template file: NOT_CALIFORNIA_Notice_of_Adverse_Interest_Claim_TEMPLATE_final_1_1.docx
+  valid formats:
+    - pdf
+---

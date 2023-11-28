@@ -1,9 +1,18 @@
+metadata: 
+  title: |
+    Welcome
+  short title: |
+    Thanks
+  show login: False
+  allow registration: False
+  exit url: 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml'
+  exit link: logout
+  exit label: |
+    Sign Out
+---
 metadata:
-  title: Welcome
-  documentation: "https://docassemble.org/docs/objects.html#DAGlobal"
-  example start: 1
-  example end: 7
-
+  temporary session: True
+  hidden: True
 ---
 features:
   css:

@@ -1,7 +1,7 @@
 from docassemble.base.util import variables_snapshot_connection,get_config, user_info, json
 import psycopg2
 
-__all__ = ['display_code','display_plan']
+__all__ = ['display_code','display_plan','check_plan']
 
 
 def display_code1():
@@ -36,3 +36,5 @@ def display_code(pick_plan):
     conn.close()
     return results
   
+def check_plan(plan_name):
+  return plan_name

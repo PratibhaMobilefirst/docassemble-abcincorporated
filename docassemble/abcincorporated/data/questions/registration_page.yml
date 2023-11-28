@@ -5,10 +5,10 @@ metadata:
     Thanks
   show login: False
   allow registration: False
-  exit url: "https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml"
-  exit link: exit
+  exit url: 'https://www.lexyalgo.com/'
+  exit link: logout
   exit label: |
-    My Interviews
+    Exit
   error action: on_error
 ---
 modules:

@@ -4,9 +4,9 @@ from cryptography.fernet import Fernet
 from docassemble.base.util import log
 from docassemble.base.util import *
 interview_id = ''  # Define the global variable
+which_user = ''
 
-
-__all__ = ['add','display','encryptStr','decryptStr','dash','display_copy','delete_data','display_payment','display_register_data','add_registered_data','register_data','reg','retrieve_interview_id','update_payment_status','update_profile','update_profile1','display_register_data_j','courts','plans','court_address','claimant','add_to_joinder','reuse_data','add_interview_type','display_type_of_interview','edit_interview_type','file_name','reuse_from_diff_interview','display_qdro_intake_data_copy','add_to_qdro_intake','address_of_admin_and_sponsor']    
+__all__ = ['add','display','encryptStr','decryptStr','dash','display_copy','delete_data','display_payment','display_register_data','add_registered_data','register_data','reg','retrieve_interview_id','update_payment_status','update_profile','update_profile1','display_register_data_j','courts','plans','court_address','claimant','add_to_joinder','reuse_data','add_interview_type','display_type_of_interview','edit_interview_type','file_name','reuse_from_diff_interview','display_qdro_intake_data_copy','add_to_qdro_intake','address_of_admin_and_sponsor','qdro_intake_new_users','reuse_intake_data','reuse_from_intake_interview','qdro_intake_user_id','qdro_intake_user_information','qdro_intake_user_name_details','username','use_intake_button','reuse_button_info', 'delete_button_info','delete_previous_button_info','display_plan1','get_plan_type']    
 
 def encryptStr(textToConvert):
   key = 'ZmDfcTF7_60GrrY167zsiPd67pEvs0aGOv2oasOM1Pg='
@@ -445,6 +445,8 @@ def edit_interview_type(mainid,file):
       interview_id = mainid
       if file[0]=='docassemble.playground3QDRO:joinder_generator.yml' or file[0]=='docassemble.playground3:joinder_generator.yml':
         command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:joinder_generator.yml&id='+str(mainid)+'&new_session=1')
+      elif file[0]=='docassemble.playground3QDRO:adverse.yml' or file[0]=='docassemble.playground3:adverse.yml':
+        command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:adverse.yml&id='+str(mainid)+'&new_session=1')
       else:
         command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:qdro.yml&id='+str(mainid)+'&new_session=1')
       return ''
@@ -456,8 +458,10 @@ def edit_interview_type(mainid,file):
       cur.execute(postgres_insert_query, record_to_insert)
       conn.commit()
       cur.close()
-      if file[0]=='docassemble.playground3QDRO:joinder_generator.yml' or file[0]=='docassemble.playground3:joinder_generator.yml':
+      if file[0]=='docassemble.playground3QDRO:joinder_generator.yml' or file[0]=='docassemble.playground3QDRO:joinder_generator.yml':
         command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:joinder_generator.yml&id='+str(mainid)+'&new_session=1')
+      elif file[0]=='docassemble.playground3QDRO:adverse.yml' or file[0]=='docassemble.playground3QDRO:adverse.yml':
+        command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:adverse.yml&id='+str(mainid)+'&new_session=1')
       else:
         command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:qdro.yml&id='+str(mainid)+'&new_session=1')
       return "" 
@@ -479,6 +483,8 @@ def reuse_from_diff_interview(which_doc, type_of_interview):
         command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:joinder_generator.yml&id=' + str(retrieve_interview_id()) + '&new_session=1')
     elif type_of_interview == 'reuse' and which_doc == 'QDRO':
         command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:qdro.yml&id=' + str(retrieve_interview_id()) + '&new_session=1')
+    elif type_of_interview == 'reuse' and which_doc == 'Notice of Adverse Interest':
+        command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:adverse.yml&id=' + str(retrieve_interview_id()) + '&new_session=1')
    
 def display_qdro_intake_data_copy(mainid):
     if mainid == 'unknown':
@@ -526,6 +532,63 @@ def add_to_qdro_intake(data, mainid, username):
     interview_id = primary_key_value
     return ''
 
+  
+def address_of_admin_and_sponsor(plan_name):
+    conn = variables_snapshot_connection()
+    cur = conn.cursor()
+
+    try:
+        if plan_name is None:
+            return ""
+        else:
+            query = "SELECT * FROM f5500_sf2021_all WHERE sf_plan_name = %s"
+            cur.execute(query, (plan_name,))
+            rows = cur.fetchall()
+
+            results = []
+            for row in rows:
+                result_row = {
+                    "date": row[6],
+                    "plan_sponsor_name": row[7],
+                    "plan_sponsor_address1":row[9],
+                    "plan_sponsor_address2":row[10],
+                    "plan_sponsor_city": row[11],
+                    "plan_sponsor_state": row[12],
+                    "plan_sponsor_zip": row[13],
+                    "plan_sponsor_phone": row[21],
+                    "plan_sponsor_foreign_address1":row[14],
+                    "plan_sponsor_foreign_address2":row[15],
+                    "plan_sponsor_foreign_city": row[16],
+                    "plan_sponsor_foreign_state": row[17],
+                    "plan_sponsor_foreign_country": row[18],
+                    "plan_sponsor_foreign_zip": row[19],
+                    "plan_admin_name": row[23],
+                    "plan_admin_address1": row[25],
+                    "plan_admin_address2": row[26],
+                    "plan_admin_city": row[27],
+                    "plan_admin_state": row[28],
+                    "plan_admin_zip": row[29],
+                    "plan_admin_phone": row[37],
+                    "plan_admin_foreign_address1": row[30],
+                    "plan_admin_foreign_address2": row[31],
+                    "plan_admin_foreign_city": row[32],
+                    "plan_admin_foreign_state": row[33],
+                    "plan_admin_foreign_country": row[34],
+                    "plan_admin_foreign_zip": row[35],
+                }
+                results.append(result_row)
+
+            return results
+    except Exception as e:
+        # Log or handle the exception appropriately
+        print(f"Error fetching data: {e}")
+        return []  # Return an empty list or handle the error case accordingly
+    finally:
+        cur.close()
+        conn.close()
+  
+  
+  
 def address_of_admin_and_sponsor(plan_name):
       conn = variables_snapshot_connection()
       cur = conn.cursor()
@@ -568,3 +631,191 @@ def address_of_admin_and_sponsor(plan_name):
           })
         conn.close()
         return results
+      
+def qdro_intake_new_users():
+      conn = variables_snapshot_connection()
+      cur = conn.cursor()
+      cur.execute("select username from qdro_intake_new")
+      results = [record[0] for record in cur.fetchall()]
+      conn.close()
+      return results
+    
+def reuse_intake_data(which_user):
+  conn = variables_snapshot_connection()
+  cur = conn.cursor()
+  cur.execute("SELECT * FROM qdro_intake_new WHERE username = %s", (which_user,))
+  rows = cur.fetchall()
+  results = []
+  for row in rows:
+    results.append({
+      "id": row[0],
+      "data": row[1],
+      "creation_date": row[2],
+      "modified_date": row[3],
+      "username": row[4]
+      })
+  conn.close()
+  return results
+
+def reuse_from_intake_interview(select_interview,which_user):
+    if select_interview == 'Joinder':
+        command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:joinder_generator.yml&username=' + str(which_user) + '&new_session=1')
+    elif select_interview == 'Notice of Adverse Interest':
+        command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:adverse.yml&username='+ str(which_user) + '&new_session=1')
+    elif select_interview == 'QDRO':
+        command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:qdro.yml&username=' + str(which_user) + '&new_session=1')
+    return which_user
+
+def username():
+  global which_user
+  return which_user
+
+def qdro_intake_user_id(which_user):
+  conn = variables_snapshot_connection()
+  cur = conn.cursor()
+  cur.execute("SELECT id FROM qdro_intake_new WHERE username = %s", (which_user,))
+  results = [record[0] for record in cur.fetchall()]
+  conn.close()
+  return results
+  
+def qdro_intake_user_information(qdro_intake_id, which_user):
+    conn = variables_snapshot_connection()
+    cur = conn.cursor()
+
+    # Check if the record already exists
+    cur.execute("SELECT COUNT(*) FROM qdro_intake_user_info WHERE qdro_intake_id = %s AND user_name = %s", (qdro_intake_id, which_user))
+    count = cur.fetchone()[0]
+
+    if count == 0:
+        # If the record doesn't exist, insert a new one
+        postgres_insert_query = """INSERT INTO qdro_intake_user_info (qdro_intake_id, user_name) VALUES (%s, %s)"""
+        record_to_insert = (qdro_intake_id, which_user)
+        cur.execute(postgres_insert_query, record_to_insert)
+    else:
+        # If the record exists, delete the existing record
+        postgres_delete_query = """DELETE FROM qdro_intake_user_info WHERE qdro_intake_id = %s AND user_name = %s"""
+        record_to_delete = (qdro_intake_id, which_user)
+        cur.execute(postgres_delete_query, record_to_delete)
+
+        # Then, insert the selected user's data at the end
+        postgres_insert_query = """INSERT INTO qdro_intake_user_info (qdro_intake_id, user_name) VALUES (%s, %s)"""
+        record_to_insert = (qdro_intake_id, which_user)
+        cur.execute(postgres_insert_query, record_to_insert)
+
+    conn.commit()
+    cur.close()
+    return ""
+  
+def qdro_intake_user_name_details():
+  conn = variables_snapshot_connection()
+  cur = conn.cursor()
+  cur.execute("SELECT user_name FROM qdro_intake_user_info ORDER BY id DESC LIMIT 1")
+  results = [record[0] for record in cur.fetchall()]
+  conn.close()
+  return results
+  
+def use_intake_button(qdro_intake_id,intake_button):
+  
+    conn = variables_snapshot_connection()
+    cur = conn.cursor()
+
+    # Then, insert the selected user's data at the end
+    postgres_insert_query = """INSERT INTO qdro_intake_reuse_button_info (qdro_intake_id, qdro_reuse_button) VALUES (%s, %s)"""
+    record_to_insert = (qdro_intake_id, intake_button)
+    cur.execute(postgres_insert_query, record_to_insert)
+
+    conn.commit()
+    cur.close()
+    return ""
+  
+def reuse_button_info(id):
+  conn = variables_snapshot_connection()
+  cur = conn.cursor()
+  cur.execute("SELECT * FROM qdro_intake_reuse_button_info where qdro_intake_id ="+ str(id))
+  results = [record[0] for record in cur.fetchall()]
+  conn.close()
+  return results
+  
+def delete_button_info(qdro_intake_id):
+    conn = variables_snapshot_connection()
+    cur = conn.cursor()
+
+    # Define the SQL query to delete the row based on qdro_intake_id
+    postgres_delete_query = """DELETE FROM qdro_intake_reuse_button_info"""
+    
+    # Execute the query
+    cur.execute(postgres_delete_query, (qdro_intake_id,))
+
+    # Commit the transaction and close the cursor and connection
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return " "
+  
+def delete_previous_button_info():
+    conn = variables_snapshot_connection()
+    cur = conn.cursor()
+
+    # Define the SQL query to delete the row with the maximum id
+    postgres_delete_query = """
+    DELETE FROM qdro_intake_reuse_button_info
+    WHERE id = (SELECT MAX(id) FROM qdro_intake_reuse_button_info)
+    """
+    
+    # Execute the query
+    cur.execute(postgres_delete_query)
+
+    # Commit the transaction and close the cursor and connection
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return " "
+
+
+def display_plan1():
+    conn = variables_snapshot_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT distinct sf_plan_name from f5500_sf2021_all where LENGTH(sf_plan_name) >= 3")
+    results = [record[0] for record in cur.fetchall()]
+    conn.close()
+    return results
+  
+def get_plan_type(plan_name):
+    try:
+        # Establish a database connection (you mentioned you already have this part)
+        conn = variables_snapshot_connection()
+        cur = conn.cursor()
+
+        # Define the SQL query with placeholders for the plan name and code
+        query = "SELECT sf_plan_name, sf_type_pension_bnft_code FROM f5500_sf2021_all WHERE sf_plan_name = %s"
+
+        # Define the parameters to replace placeholders in the query
+        parameters = (plan_name,)
+
+        # Execute the query with the parameters
+        cur.execute(query, parameters)
+
+        # Fetch the result
+        result = cur.fetchone()
+
+        # Close the cursor and the database connection
+        cur.close()
+        conn.close()
+
+        # Check if the result is not empty and return the specific text based on sf_type_pension_bnft_code
+        if result:
+            sf_type_pension_bnft_code = result[1]
+            if "2" in sf_type_pension_bnft_code and "1" in sf_type_pension_bnft_code:
+                return ''
+            if "2" in sf_type_pension_bnft_code:
+                return "Deferred Compensation (Cash & Investment Account 401K)"
+            elif "1" in sf_type_pension_bnft_code:
+                return "Pension Plan (Plans that guarantee monthly retirement income)"
+        return None  # Return None if no matching record is found
+
+    except Exception as e:
+        # Handle any exceptions that might occur during the database operation
+        print("Error:", str(e))
+        return None

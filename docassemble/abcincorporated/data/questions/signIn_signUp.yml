@@ -6,7 +6,7 @@ metadata:
   show login: False
   allow registration: False
   exit url: "https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:data/questions/registration_page.yml"
-  exit link: exit
+  exit link: logout
   exit label: |
     Sign Up
 ---
