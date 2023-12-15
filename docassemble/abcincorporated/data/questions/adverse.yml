@@ -22,6 +22,9 @@ modules:
   - .read_data
   - .data_from_database
   - .clicksend
+  - .delete_return_id
+  - .click_id
+  - .parameters
 
 ---
 features:
@@ -467,7 +470,7 @@ code: |
     
 ---
 question: |
-  Let’s start with you.
+  Let’s start with you. 
 subquestion: |
   We need your information to follow up with you for feedback on our Notice of Adverse Interest machine and to provide you more information on dividing retirement assets in a divorce.
 fields:
@@ -1553,8 +1556,12 @@ question: |
   To proceed, please make a payment for your documents.
 subquestion: |
   In order to cover our development costs, we are initially charging $${payment1.amount} per QDRO. If you are unhappy with your QDRO, we have a 100% satisfaction guarantee - just reach out within three months, give us a chance to make the QDRO right, and we'll give a full refund if the QDRO can't be fixed.
+  
+   % if CheckboX:
+    *Since you asked us to mail your documents to the plan admin and/or sponsor, an additional charge of $9.99 per mailing for postage and handling is included in your total.*
+   % endif
 post: |
-  Can't afford the fee? Though we charge less than any other QDRO website out there, we've got your back. Please reach out to us via the contact form on [(http://lexyalgo.com/)](${ url_of('https://Lexyalgo.com/') }){:target="_blank"} and we'll provide a coupon code.  
+  Can't afford the fee? Though we charge less than any other QDRO website out there, we've got your back. Please reach out to us via the contact form on [(http://lexyalgo.com/)](${ url_of('https://Lexyalgo.com/') }){:target="_blank"}. 
 field: check2
 buttons:
   - Pay: False
@@ -1571,18 +1578,12 @@ script: |
 ---
 mandatory: True
 code: |
-  return_address = clicksend_post_return_adress(data_from_registration[0])
-  return_address_id = return_address['data']['return_address_id']
   interview_id = retrieve_interview_id()
   output_file = [the_document.path()]
   urls=''
   if CheckboX:
     urls =  [item['data']['_url'] for item in file_url(output_file)]
     a = ''
----
-code: |
-  return_address = clicksend_post_return_adress(data_from_registration[0])
-  return_address_id = return_address['data']['return_address_id']
 ---
 field: coupon_page1
 question: |
@@ -1591,10 +1592,15 @@ fields:
   - Coupon code: coupon_code1
 validation code: |
   if check_coupon(coupon_code1, retrieve_interview_id()):
-    yml_veriables(retrieve_interview_id(),user_info().filename,url_args)
-    clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
-    if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
-      clicksend_send_post_letter(plan_admin_namee,plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
+    #yml_variables(retrieve_interview_id(),user_info().filename,url_args)
+    check_cookie_value(get_cookies())  
+    if CheckboX:
+      delete_return_id = delete_return_addresses()
+      return_address = clicksend_post_return_adress(data_from_registration[0])
+      return_address_id = return_address['data']['return_address_id']
+      clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
+      if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
+        clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
 ---
 question:
   Would you like us to mail your order to the retirement plan?
@@ -1611,8 +1617,15 @@ code: |
   payment1.process()
   #log(interview_id, "info")
   if update_payment_status(interview_id):
-    yml_veriables(retrieve_interview_id(),user_info().filename,url_args)
-    #clicksend_send_post_letter(urls)
+    check_cookie_value(get_cookies())
+    #yml_veriables(retrieve_interview_id(),user_info().filename,url_args)    
+    if CheckboX:
+      delete_return_id = delete_return_addresses()
+      return_address = clicksend_post_return_adress(data_from_registration[0])
+      return_address_id = return_address['data']['return_address_id']
+      clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
+      if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
+        clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
 ---
 event: final_shown
 question: |
@@ -1629,6 +1642,7 @@ attachment:
   docx template file: CALIFORNIA_Notice_of_Adverse_Interest_Claim_TEMPLATE.docx
   valid formats:
     - pdf
+    - docx
 ---
 if: document != "California"
 attachment:
@@ -1637,4 +1651,5 @@ attachment:
   docx template file: NOT_CALIFORNIA_Notice_of_Adverse_Interest_Claim_TEMPLATE_final_1_1.docx
   valid formats:
     - pdf
+    - docx
 ---

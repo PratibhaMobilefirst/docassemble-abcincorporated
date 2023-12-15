@@ -23,6 +23,9 @@ modules:
   - .read_data
   - .data_from_database
   - .clicksend
+  - .delete_return_id
+  - .click_id
+  - .parameters
 ---
 features:
   javascript: https://js.stripe.com/v3/
@@ -1072,7 +1075,7 @@ code: |
 
 ---
 question: |
-  Let’s start with you.
+  Let’s start with you. 
 subquestion: |
   We need your information to follow up with you for feedback on our QDRO machine and to provide our contact information in case you run into any issues with the retirement plan. 
 fields:
@@ -2211,7 +2214,7 @@ fields:
     datatype: date
 ---
 question: |
-  How should the plan be divided?
+  How should the plan be divided? 
 fields:
   - Please select how the plan should be divided [(Read More)](${ url_of('https://www.lexyalgo.com/how-should-your-deferred-compensation-401k-457b-or-other-cash-based-account-be-divided-in-a-qdro/') }){:target="_blank"}: awarding
     default: |
@@ -2310,36 +2313,34 @@ fields:
 mandatory: True
 code: |
   interview_id = retrieve_interview_id()
----
-code: |
-  return_address = clicksend_post_return_adress(data_from_registration[0])
-  return_address_id = return_address['data']['return_address_id']
+
 ---
 event: payment_screen
 question: |
   You need to pay first. ${ check } 
 ---
 code: |
+  Cookie_value = get_cookies()
   output_file = [final_document.path(),addendum_final.path()]
   urls=''
   if len(which_button) > 0 and which_button[0][2] == "reuse":
     if CheckboX:
       urls = [item['data']['_url'] for item in file_url(output_file)]
       if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', '):
-        payment_amount = (9.99*2)+49.99
+        payment_amount = (9.99*2)+99.00
       else:
-        payment_amount = 59.98
+        payment_amount = 108.99
     else:
-      payment_amount = 49.99
+      payment_amount = 99.00
   elif len(which_button) > 0 and which_button[0][2] == "edit" and len(pay_d) > 0 and pay_d[0]['is_paid'] == 'false':
     if CheckboX:
       urls =  [item['data']['_url'] for item in file_url(output_file)]
       if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', '):
-        payment_amount = (9.99*2)+49.99
+        payment_amount = (9.99*2)+99.00
       else:
-        payment_amount = 59.98
+        payment_amount = 108.99
     else:
-      payment_amount = 49.99
+      payment_amount = 99.00
   elif len(which_button) > 0 and which_button[0][2] == "edit" and len(pay_d) > 0 and pay_d[0]['is_paid'] == 'true':
     if CheckboX:
       urls =  [item['data']['_url'] for item in file_url(output_file)]
@@ -2351,19 +2352,23 @@ code: |
     if CheckboX:
       urls =  [item['data']['_url'] for item in file_url(output_file)]
       if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', '):
-        payment_amount = (9.99*2)+49.99
+        payment_amount = (9.99*2)+99.00
       else:
-        payment_amount = 59.98
+        payment_amount = 108.99
     else:
-      payment_amount = 49.99
+      payment_amount = 99.00
   payment.amount = payment_amount
 ---
 question: |
   To proceed, please make a payment for your documents.
 subquestion: |
   In order to cover our development costs, we are initially charging $${payment.amount} per QDRO. If you are unhappy with your QDRO, we have a 100% satisfaction guarantee - just reach out within three months, give us a chance to make the QDRO right, and we'll give a full refund if the QDRO can't be fixed.
+  
+   % if CheckboX:
+    *Since you asked us to mail your documents to the plan admin and/or sponsor, an additional charge of $9.99 per mailing for postage and handling is included in your total.*
+   % endif
 post: |
-  Can't afford the fee? Though we charge less than any other QDRO website out there, we've got your back. Please reach out to us via the contact form on [(http://lexyalgo.com/)](${ url_of('https://Lexyalgo.com/') }){:target="_blank"} and we'll provide a coupon code.
+  Can't afford the fee? Though we charge less than any other QDRO website out there, we've got your back. Please reach out to us via the contact form on [(http://lexyalgo.com/)](${ url_of('https://Lexyalgo.com/') }){:target="_blank"}.
 field: check1
 buttons:
   - Pay: False
@@ -2402,20 +2407,30 @@ validation code: |
     validation_error('Coupon code is not valid')
   else:
     check_coupon(coupon_code, retrieve_interview_id())
-    yml_veriables(retrieve_interview_id(),user_info().filename,url_args)
-    #clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
-    #if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
-      #clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
+    #yml_variables(retrieve_interview_id(),user_info().filename,url_args)
+    check_cookie_value(get_cookies())  
+    if CheckboX:
+      delete_return_id = delete_return_addresses()
+      return_address = clicksend_post_return_adress(data_from_registration[0])
+      return_address_id = return_address['data']['return_address_id']
+      clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
+      if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
+        clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
 ---
 event: payment.success
 code: |
   payment.process()
   #log(interview_id, "info")
   if update_payment_status(interview_id):
-    yml_veriables(retrieve_interview_id(),user_info().filename,url_args) 
-    clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
-    if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
-      clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
+    check_cookie_value(get_cookies())
+    #yml_veriables(retrieve_interview_id(),user_info().filename,url_args)    
+    if CheckboX:
+      delete_return_id = delete_return_addresses()
+      return_address = clicksend_post_return_adress(data_from_registration[0])
+      return_address_id = return_address['data']['return_address_id']
+      clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
+      if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
+        clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
 ---
 event: final_shown
 question: |
@@ -2427,7 +2442,7 @@ action buttons:
     action: restart_interview
     color: warning
   - label: Dashboard
-    action: 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml'
+    action: 'https://dadev.esq2u.com/interview?i=docassemble.playground3:dashboard.yml'
     color: link
     
 attachment code: |  
@@ -2435,7 +2450,7 @@ attachment code: |
 
 ---
 attachment:
-  name: Addendum file attached here
+  name: Personal Information Addendum File
   docx template file: ADDENDUM_TEMPLATE_v2.docx
   valid formats:
     - pdf
@@ -2445,7 +2460,7 @@ always include editable files: True
 ---
 if: pick_plan == "Deferred Compensation (Cash & Investment Account 401K)"
 attachment:
-  name: Document for ${ document } QDRO
+  name: ${ document } QDRO
   variable name: final_document
   docx template file: DEFERRED_COMPENSATION_NEW.docx
   valid formats:
@@ -2454,25 +2469,27 @@ attachment:
 always include editable files: True
 ---
 attachment:
-  name: Sample preapproval letter
+  name: Sample Pre-Approval Letter
+  variable name: sample_preapproval_letter
   docx template file: Sample_Pre-Approval_Cover_Letter_f.docx
   valid formats:
     - pdf
     - docx
-  variable name: sample_preapproval_letter
+always include editable files: True
 ---
 attachment:
-  name: Instructions document
+  name: Instructions
+  variable name: instructions_document
   docx template file: QDRO_Pre-Approval_And_Finalization_Instructions_1.docx
   valid formats:
     - pdf
     - docx
-  variable name: instructions_document
+always include editable files: True
 ---
 
 if: (document == "California" or document == "Arizona" or document == "District of Columbia" or document == "Nevada" or document == "New Mexico" or document == "Oregon" or document == "Washington" )and pick_plan == "Deferred Compensation (Cash & Investment Account 401K)"
 attachment:
-  name: Document for ${ document } QDRO
+  name: ${ document } QDRO
   variable name: final_document
   docx template file: california_template_1.docx
   valid formats:
@@ -2482,7 +2499,7 @@ always include editable files: True
 ---
 if: document == "North Dakota" and pick_plan == "Deferred Compensation (Cash & Investment Account 401K)"
 attachment:
-  name: Document for ${ document } QDRO
+  name: ${ document } QDRO
   variable name: final_document
   docx template file: North_Dakota_template.docx
   valid formats:
@@ -2492,7 +2509,7 @@ always include editable files: True
 ---
 if: pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)"
 attachment:
-  name: Document for ${ document } QDRO
+  name: ${ document } QDRO
   variable name: final_document
   docx template file: pension_combined_5_States.docx
   valid formats:
@@ -2502,7 +2519,7 @@ always include editable files: True
 ---
 if: (document == "California" or document == "Arizona" or document == "District of Columbia" or document == "Nevada" or document == "New Mexico" or document == "Oregon" or document == "Washington" )and pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)"
 attachment:
-  name: Document for ${ document } QDRO
+  name: ${ document } QDRO
   variable name: final_document
   docx template file: pension_california.docx
   valid formats:
@@ -2512,7 +2529,7 @@ always include editable files: True
 ---
 if: document == "North Dakota" and pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)"
 attachment:
-  name: Document for ${ document } QDRO
+  name: ${ document } QDRO
   variable name: final_document
   docx template file: pension_North_Dakota.docx
   valid formats:
@@ -2540,34 +2557,34 @@ action buttons:
     action: restart_interview
     color: warning
 attachment code: |
-  [instructions_document, sample_preapproval_letter, the_document, addendum]
+  [instructions_document_preview,sample_preapproval_letter_preview ,the_document, addendum]
 allow emailing: True
 
 ---
 attachment:
-  name: Addendum file attached here
+  name: Personal Information Addendum File
   docx template file: ADDENDUM_d.docx
   valid formats:
     - pdf
   variable name: addendum
 ---
 attachment:
-  name: Sample preapproval letter
+  name: Sample Pre-Approval Letter
   docx template file: draft_sample_pre_Approval.docx
   valid formats:
     - pdf
-  variable name: sample_preapproval_letter
+  variable name: sample_preapproval_letter_preview
 ---
 attachment:
-  name: Instructions document
+  name: Instructions
   docx template file: draft_QDRO_pre_Approval_cover_letter.docx
   valid formats:
     - pdf
-  variable name: instructions_document
+  variable name: instructions_document_preview
 ---
 if: pick_plan == "Deferred Compensation (Cash & Investment Account 401K)"
 attachment:
-  name: Document for ${ document } QDRO
+  name: ${ document } QDRO
   variable name: the_document
   docx template file: DF_combined_draft.docx
   valid formats:
@@ -2575,7 +2592,7 @@ attachment:
 ---
 if: (document == "California" or document == "Arizona" or document == "District of Columbia" or document == "Nevada" or document == "New Mexico" or document == "Oregon" or document == "Washington" )and pick_plan == "Deferred Compensation (Cash & Investment Account 401K)"
 attachment:
-  name: Document for ${ document } QDRO
+  name: ${ document } QDRO
   variable name: the_document
   docx template file: DF_Cal_draft.docx
   valid formats:
@@ -2583,7 +2600,7 @@ attachment:
 ---
 if: document == "North Dakota" and pick_plan == "Deferred Compensation (Cash & Investment Account 401K)"
 attachment:
-  name: Document for ${ document } QDRO
+  name: ${ document } QDRO
   variable name: the_document
   docx template file: DF_ND_draft.docx
   valid formats:
@@ -2591,7 +2608,7 @@ attachment:
 ---
 if: pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)"
 attachment:
-  name: Document for ${ document } QDRO
+  name: ${ document } QDRO
   variable name: the_document
   docx template file: P_combined_draft.docx
   valid formats:
@@ -2599,7 +2616,7 @@ attachment:
 ---
 if: (document == "California" or document == "Arizona" or document == "District of Columbia" or document == "Nevada" or document == "New Mexico" or document == "Oregon" or document == "Washington" )and pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)"
 attachment:
-  name: Document for ${ document } QDRO
+  name: ${ document } QDRO
   variable name: the_document
   docx template file: P_Cal_draft.docx
   valid formats:
@@ -2607,7 +2624,7 @@ attachment:
 ---
 if: document == "North Dakota" and pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)"
 attachment:
-  name: Document for ${ document } QDRO
+  name: ${ document } QDRO
   variable name: the_document
   docx template file: P_ND_draft.docx
   valid formats:

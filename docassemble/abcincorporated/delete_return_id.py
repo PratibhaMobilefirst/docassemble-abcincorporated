@@ -50,22 +50,25 @@ def delete_return_addresses():
             page_number += 1
 
             # Check if total_return_address_ids is 80
-            if total_return_address_ids >= 57:
-                print("Deleting the first 5 Return Address IDs:")
+            if total_return_address_ids > 69:
+                excess_count = total_return_address_ids - 69
+                print(f"Deleting the first {excess_count} Return Address IDs:")
+              
                 count = 0
                 for address_id, _ in address_id_count.items():
                     print(f"Deleting Return Address ID: {address_id}")
+                    
                     # Delete the return address by ID
                     api_response = api_instance.post_return_addresses_by_return_address_id_delete(address_id)
                     print(api_response)
-                    #api_instance.post_return_addresses_by_return_address_id_delete([address_id])
+                    
                     count += 1
-                    if count >= 5:
+                    if count >= excess_count:
                         break
 
                 # Break out of the loop since we've reached 64 addresses
                 break
-
+        return total_return_address_ids
         # Print count for each return_address_id after deletion
         #print("Return Address ID Counts after Deletion:")
         #for address_id, count in address_id_count.items():
