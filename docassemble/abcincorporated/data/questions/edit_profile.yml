@@ -50,15 +50,15 @@ code: |
   multi_user = True
   screen = {item: True for item in ['name', 'address', 'preferences']}
   user_data1 = [{
-    'profile.user.name.first': register_data[0]['first_name'],
-    'profile.user.name.middle': data_from_registration[0]['user.name.middle'],
-    'profile.user.name.last': register_data[0]['last_name'],
-    'profile.user.address.address': data_from_registration[0]['user.address.address'],
-    'profile.user.address.unit': data_from_registration[0]['user.address.unit'],
-    'profile.user.address.city': data_from_registration[0]['user.address.city'],
-    'profile.user.address.state': data_from_registration[0]['user.address.state'],
-    'profile.user.address.zip': data_from_registration[0]['user.address.zip_code'],
-    'profile.preferences.bar_number': data_from_registration[0]['bar_number']
+    'profile.user.name.first': register_data[0]['first_name'] if len(register_data) > 0 else '',
+    'profile.user.name.middle': data_from_registration[0]['user.name.middle'] if len(data_from_registration) > 0 else '',
+    'profile.user.name.last': register_data[0]['last_name'] if len(register_data) > 0 else '',
+    'profile.user.address.address': data_from_registration[0]['user.address.address'] if len(data_from_registration) > 0 else '',
+    'profile.user.address.unit': data_from_registration[0]['user.address.unit'] if len(data_from_registration) > 0 else '',
+    'profile.user.address.city': data_from_registration[0]['user.address.city'] if len(data_from_registration) > 0 else '',
+    'profile.user.address.state': data_from_registration[0]['user.address.state'] if len(data_from_registration) > 0 else '',
+    'profile.user.address.zip': data_from_registration[0]['user.address.zip_code'] if len(data_from_registration) > 0 else '',
+    'profile.preferences.bar_number': data_from_registration[0]['bar_number'] if len(data_from_registration) > 0 else '',
     }]
 ---
 initial: true
@@ -73,9 +73,9 @@ code: |
     'user.address.state':user_data1[0]['profile.user.address.state'],
     'user.address.zip_code':user_data1[0]['profile.user.address.zip'],
     'bar_number':user_data1[0]['profile.preferences.bar_number'],
-    'user_type':data_from_registration[0]['user_type'],
-    'phone_number':data_from_registration[0]['phone_number'],
-    'dob':data_from_registration[0]['dob'],
+    'user_type':data_from_registration[0]['user_type'] if len(data_from_registration) > 0 else '',
+    'phone_number':data_from_registration[0]['phone_number'] if len(data_from_registration) > 0 else '',
+    'dob':data_from_registration[0]['dob'] if len(data_from_registration) > 0 else '',
     }
   user_data = update_profile(jsond)
   user_data = update_profile1(jsond)

@@ -839,14 +839,14 @@ subquestion: |
 fields:
   - First Name: f_name
     default: |
-      ${ register_dataj[0]['first_name'] }
+      ${ user_info().first_name }
   - Last Name: l_name
     default: |
-      ${ register_dataj[0]['last_name'] }
+      ${ user_info().last_name }
   - E-mail: email_id
     default: |
-      ${ register_dataj[0]['email'] }
-    datatype: email  
+      ${ user_info().email }
+    datatype: email 
 ---
 field: joinder
 question: |

@@ -60,7 +60,7 @@ code: |
   register_dataq = display_register_data(origin_of_interviewee)
   register_dataq1 = display_register_data_j()
   which_button=display_type_of_interview(origin_of_interviewee)
-  file=file_name(origin_of_interviewee)
+  filee=file_name(origin_of_interviewee)
   qdro_intake_user_name = qdro_intake_user_name_details()
   qdro_intake_data_details = reuse_intake_data(qdro_intake_user_name[0])
   reuse_intake_button=reuse_button_info(qdro_intake_data_details[0]['id'])
@@ -303,28 +303,28 @@ code: |
 
   else:
     user_data1 = [{
-    'f_name': register_dataq[0]['first_name'],
-    'l_name': register_dataq[0]['last_name'],
-    'email_id': register_dataq[0]['email'],
+    'f_name': register_dataq[0]['first_name'] if len(register_dataq) > 0 else '',
+    'l_name': register_dataq[0]['last_name'] if len(register_dataq) > 0 else '',
+    'email_id': register_dataq[0]['email'] if len(register_dataq) > 0 else '',
     'pick_plan':'',
     'Pension':'',
     'document':'',
     'role':'',
     'role1':'',
     'filing_party_name_info':{
-          'filing_party.name.first': register_dataq[0]['first_name'],
-          'filing_party.name.middle': data_from_registration[0]['user.name.middle'],
-          'filing_party.name.last': register_dataq[0]['last_name'],
-          'filing_party.email': register_dataq[0]['email'],
-          'filing_party.phone': data_from_registration[0]['phone_number'],
-          'bar_number': data_from_registration[0]['bar_number']
+          'filing_party.name.first': register_dataq[0]['first_name'] if len(register_dataq) > 0 else '',
+          'filing_party.name.middle': data_from_registration[0]['user.name.middle'] if len(data_from_registration) > 0 else '',
+          'filing_party.name.last': register_dataq[0]['last_name'] if len(register_dataq) > 0 else '',
+          'filing_party.email': register_dataq[0]['email'] if len(register_dataq) > 0 else '',
+          'filing_party.phone': data_from_registration[0]['phone_number'] if len(data_from_registration) > 0 else '',
+          'bar_number': data_from_registration[0]['bar_number'] if len(data_from_registration) > 0 else ''
       },
     'filing_party_address_info':{
-          'filing_party.address.address': data_from_registration[0]['user.address.address'],
-          'filing_party.address.unit': data_from_registration[0]['user.address.unit'],
-          'filing_party.address.city': data_from_registration[0]['user.address.city'],
-          'filing_party.address.state': data_from_registration[0]['user.address.state'],
-          'filing_party.address.zip': data_from_registration[0]['user.address.zip_code'],
+          'filing_party.address.address': data_from_registration[0]['user.address.address'] if len(data_from_registration) > 0 else '',
+          'filing_party.address.unit': data_from_registration[0]['user.address.unit'] if len(data_from_registration) > 0 else '',
+          'filing_party.address.city': data_from_registration[0]['user.address.city'] if len(data_from_registration) > 0 else '',
+          'filing_party.address.state': data_from_registration[0]['user.address.state'] if len(data_from_registration) > 0 else '',
+          'filing_party.address.zip': data_from_registration[0]['user.address.zip_code'] if len(data_from_registration) > 0 else '',
       },
     'county':'',
     'court':'',
@@ -1081,13 +1081,13 @@ subquestion: |
 fields:
   - First Name: f_name
     default: |
-      ${ user_data1[0]['f_name'] }
+      ${ user_info().first_name }
   - Last Name: l_name
     default: |
-      ${ user_data1[0]['l_name'] }
+      ${ user_info().last_name }
   - E-mail: email_id
     default: |
-      ${ user_data1[0]['email_id'] }
+      ${ user_info().email }
     datatype: email  
 ---
 event: plan_list
@@ -1163,7 +1163,7 @@ code: |
     if qdro_intake_data_details[0]['data']['case_filed_state'] in state_abbreviations:
       state = state_abbreviations[qdro_intake_data_details[0]['data']['case_filed_state']]
   else:
-    if len(file) > 0 and file[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
+    if len(filee) > 0 and filee[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
       state = 'California'
     else:
       state = user_data1[0]['document']
@@ -1329,13 +1329,13 @@ code: |
 ---
 mandatory: True
 code: |
-    if len(file) > 0 and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit"):
+    if len(filee) > 0 and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit"):
       filing_first = user_info().first_name
-      filing_middle = data_from_registration[0]['user.name.middle']
+      filing_middle = data_from_registration[0]['user.name.middle'] if data_from_registration and 'user.name.middle' in data_from_registration[0] else ''
       filing_last = user_info().last_name
       filing_email = user_info().email
-      filing_bar = data_from_registration[0]['bar_number']
-      filing_phone = data_from_registration[0]['phone_number']
+      filing_bar = data_from_registration[0]['bar_number'] if data_from_registration and 'bar_number' in data_from_registration[0] else ''
+      filing_phone = data_from_registration[0]['phone_number'] if data_from_registration and 'phone_number' in data_from_registration[0] else ''
     else:
       filing_first = user_data1[0]['filing_party_name_info']['filing_party.name.first']
       filing_middle = user_data1[0]['filing_party_name_info']['filing_party.name.middle']
@@ -1431,12 +1431,12 @@ code: |
 ---
 mandatory: True
 code: |
-    if len(file) > 0 and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit"):
-      filing_add = data_from_registration[0]['user.address.address']
-      filing_unit = data_from_registration[0]['user.address.unit']
-      filing_city = data_from_registration[0]['user.address.city']
-      filing_state = data_from_registration[0]['user.address.state']
-      filing_zip = data_from_registration[0]['user.address.zip_code']
+    if len(filee) > 0 and len(which_button) > 0 and which_button[0][2] == "reuse":
+      filing_add = data_from_registration[0]['user.address.address'] if data_from_registration and 'user.address.address' in data_from_registration[0] else ''
+      filing_unit = data_from_registration[0]['user.address.unit'] if data_from_registration and 'user.address.unit' in data_from_registration[0] else ''
+      filing_city = data_from_registration[0]['user.address.city'] if data_from_registration and 'user.address.city' in data_from_registration[0] else ''
+      filing_state = data_from_registration[0]['user.address.state'] if data_from_registration and 'user.address.state' in data_from_registration[0] else ''
+      filing_zip = data_from_registration[0]['user.address.zip_code'] if data_from_registration and 'user.address.zip_code' in data_from_registration[0] else ''
     else:
       filing_add = user_data1[0]['filing_party_address_info']['filing_party.address.address']
       filing_unit = user_data1[0]['filing_party_address_info']['filing_party.address.unit']
@@ -1445,11 +1445,21 @@ code: |
       filing_zip = user_data1[0]['filing_party_address_info']['filing_party.address.zip']
 ---
 code: |
+  if len(register_dataq1) > 0 and len(data_from_registration) > 0:
     filing_party_namE = register_dataq1[0]['first_name'] + ' ' + data_from_registration[0]['user.name.middle'] + ' ' + register_dataq1[0]['last_name']
     filing_party_email= register_dataq1[0]['email']
     filing_party_phone= data_from_registration[0]['phone_number']
     filing_party_bar_number= data_from_registration[0]['bar_number']
-    filing_party_addresS = data_from_registration[0]['user.address.address'] +'\n'+ data_from_registration[0]['user.address.unit'] +'\n'+ data_from_registration[0]['user.address.city'] + ' '+ data_from_registration[0]['user.address.state'] + '' + data_from_registration[0]['user.address.zip_code']
+    if data_from_registration[0]['user.address.unit'] != '':
+      filing_party_addresS = data_from_registration[0]['user.address.address'] +'\n'+ data_from_registration[0]['user.address.unit'] +'\n'+ data_from_registration[0]['user.address.city'] + ' '+ data_from_registration[0]['user.address.state'] + '' + data_from_registration[0]['user.address.zip_code']
+    else :
+      filing_party_addresS = data_from_registration[0]['user.address.address'] +'\n'+ data_from_registration[0]['user.address.city'] + ' '+ data_from_registration[0]['user.address.state'] + '' + data_from_registration[0]['user.address.zip_code']
+  else:
+    filing_party_namE = user_info().first_name + ' ' + user_info().last_name
+    filing_party_email = user_info().email
+    filing_party_phone = ''
+    filing_party_bar_number = ''
+    filing_party_addresS = ''
 ---
 field: filing_party_address_info
 question: |
@@ -1475,7 +1485,7 @@ fields:
 ---
 mandatory: True
 code: |
-  if len(file) > 0 and file[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
+  if len(filee) > 0 and filee[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
     if user_data11[0]['add_other_court']:
       courtt = user_data11[0]['other_court']
       countyy = user_data11[0]['other_court_district']
@@ -1935,7 +1945,7 @@ code: |
         alternate_party_state =  qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.state']
         alternate_party_zip = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse.address.zip']       
   else:
-    if len(file) > 0 and file[0] == 'docassemble.playground3QDRO:qdro.yml' and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit") and who_is_participant == 'Petitioner-Plaintiff':
+    if len(filee) > 0 and filee[0] == 'docassemble.playground3QDRO:qdro.yml' and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit") and who_is_participant == 'Petitioner-Plaintiff':
         party_add =  user_data1[0]['participant_address_info']['participant.address.address']
         party_unit=  user_data1[0]['participant_address_info']['participant.address.unit']
         party_city =  user_data1[0]['participant_address_info']['participant.address.city']
@@ -1947,7 +1957,7 @@ code: |
         alternate_party_state = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.state']
         alternate_party_zip = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.zip']
         
-    elif len(file) > 0 and file[0] == 'docassemble.playground3QDRO:qdro.yml' and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit") and who_is_participant == "Respondent-Defendant":
+    elif len(filee) > 0 and filee[0] == 'docassemble.playground3QDRO:qdro.yml' and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit") and who_is_participant == "Respondent-Defendant":
         party_add = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.address']
         party_unit = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.unit']
         party_city = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.city']
@@ -1970,7 +1980,7 @@ code: |
         alternate_party_state = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.state']
         alternate_party_zip = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.zip']
     
-    if len(file) > 0 and file[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
+    if len(filee) > 0 and filee[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
       if who_is_participant == "Petitioner-Plaintiff":
         party_add =  user_data11[0]['petitioner_field']['petitioner.address.address']
         party_unit=  user_data11[0]['petitioner_field']['petitioner.address.unit']
@@ -2108,7 +2118,7 @@ code: |
         alternate_party_phone =  qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_phone']
         alternate_party_email = qdro_intake_data_details[0]['data']['ex_spouse_field']['ex_spouse_email']
   else:
-    if len(file) > 0 and file[0] == 'docassemble.playground3QDRO:qdro.yml' and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit") and who_is_participant == 'Petitioner-Plaintiff':
+    if len(filee) > 0 and filee[0] == 'docassemble.playground3QDRO:qdro.yml' and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit") and who_is_participant == 'Petitioner-Plaintiff':
       party_phone = user_data1[0]['participant.phone']
       party_email = user_data1[0]['participant.email']
       party_dob = user_data1[0]['participant.dob']
@@ -2117,7 +2127,7 @@ code: |
       alternate_party_email = user_data1[0]['alternate_payee.email']
       alternate_party_dob = user_data1[0]['alternate_payee.dob']
       alternate_party_ssn = user_data1[0]['alternate_payee.ssn']
-    elif len(file) > 0 and file[0] == 'docassemble.playground3QDRO:qdro.yml' and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit") and who_is_participant == 'Respondent-Defendant':
+    elif len(filee) > 0 and filee[0] == 'docassemble.playground3QDRO:qdro.yml' and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit") and who_is_participant == 'Respondent-Defendant':
       party_phone = user_data1[0]['alternate_payee.phone']
       party_email = user_data1[0]['alternate_payee.email']
       party_dob = user_data1[0]['alternate_payee.dob']
@@ -2137,7 +2147,7 @@ code: |
       alternate_party_ssn = user_data1[0]['alternate_payee.ssn']
       
         
-    if len(file) > 0 and file[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
+    if len(filee) > 0 and filee[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
       if who_is_participant == "Petitioner-Plaintiff":
         party_phone =  user_data11[0]['petitioner_field']['petitioner_phone']
         party_email=  user_data11[0]['petitioner_field']['petitioner_email']
@@ -2233,7 +2243,7 @@ code: |
   if (user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0:
     dom = qdro_intake_data_details[0]['data']['date_of_marriage']
   else:
-    if len(file) > 0 and file[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
+    if len(filee) > 0 and filee[0] == 'docassemble.playground3QDRO:joinder_generator.yml' and len(which_button) > 0 and which_button[0][2] == "reuse":
       dom = user_data11[0]['petition_dom']
     else:
       dom = user_data1[0]['date_of_marriage']
@@ -2411,26 +2421,28 @@ validation code: |
     check_cookie_value(get_cookies())  
     if CheckboX:
       delete_return_id = delete_return_addresses()
-      return_address = clicksend_post_return_adress(data_from_registration[0])
-      return_address_id = return_address['data']['return_address_id']
-      clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
-      if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
-        clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
+      if data_from_registration and len(data_from_registration) > 0:
+        return_address = clicksend_post_return_adress(data_from_registration[0])
+        return_address_id = return_address['data']['return_address_id']
+        clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
+        if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
+          clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
 ---
 event: payment.success
 code: |
   payment.process()
   #log(interview_id, "info")
   if update_payment_status(interview_id):
-    check_cookie_value(get_cookies())
-    #yml_veriables(retrieve_interview_id(),user_info().filename,url_args)    
+    #yml_variables(retrieve_interview_id(),user_info().filename,url_args)
+    check_cookie_value(get_cookies())  
     if CheckboX:
       delete_return_id = delete_return_addresses()
-      return_address = clicksend_post_return_adress(data_from_registration[0])
-      return_address_id = return_address['data']['return_address_id']
-      clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
-      if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
-        clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
+      if data_from_registration and len(data_from_registration) > 0:
+        return_address = clicksend_post_return_adress(data_from_registration[0])
+        return_address_id = return_address['data']['return_address_id']
+        clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
+        if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
+          clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
 ---
 event: final_shown
 question: |
