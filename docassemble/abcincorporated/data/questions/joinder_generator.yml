@@ -3,7 +3,7 @@ metadata:
     Joinder Generator
   short title: |
     Thanks
-  show login: False
+  show login: True
   allow registration: False
   exit url: "http://lexyalgo.com/"
   exit link: logout
@@ -28,6 +28,11 @@ objects:
 mandatory: True
 code: |
   set_parts(logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
+---
+initial: True
+code: |
+  if not user_logged_in():
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml') 
 ---
 initial: True
 code: |

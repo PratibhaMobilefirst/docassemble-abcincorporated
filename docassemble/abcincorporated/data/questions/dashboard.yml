@@ -3,7 +3,7 @@ metadata:
     Dashboard
   short title: |
     Thanks
-  show login: False
+  show login: True
   allow registration: False
   exit url: "http://lexyalgo.com/"
   exit link: logout
@@ -45,7 +45,7 @@ code: |
 ---
 reconsider: True
 code: |
-  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:edit_profile.yml', 'label': 'Edit Profile'},{'url': url_of('change_password'), 'label': 'Change password'} ]
+  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:edit_profile.yml&new_session=1', 'label': 'Edit Profile'} ]
   dashData = dash()
   current_info = user_info()
   list_of_interviews1 = len(dashData)

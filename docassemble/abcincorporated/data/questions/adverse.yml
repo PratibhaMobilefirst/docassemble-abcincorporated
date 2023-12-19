@@ -3,7 +3,7 @@ metadata:
     Notice of Adverse Interest
   short title: |
     Thanks
-  show login: False
+  show login: True
   allow registration: False
   exit url: "http://lexyalgo.com/"
   exit link: logout
@@ -50,6 +50,7 @@ code: |
   if not user_logged_in():
     command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml')       
 ---
+initial: True
 code: |
   menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml', 'label': 'Dashboard'},{'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:edit_profile.yml', 'label': 'Edit Profile'}]
   data_from_registration = register_data()
