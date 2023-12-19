@@ -59,8 +59,8 @@ def add(da, mainid, is_pay, type_of_interview):
                 primary_key_value = mainid
             else:
                 # Insert a new row into the interview table with the provided ID
-                postgres_insert_query = """INSERT INTO interview (id, data, user_id, filename) VALUES (%s, %s, %s, %s) RETURNING id;"""
-                record_to_insert = (mainid, da1, user_info().id, user_info().filename)
+                postgres_insert_query = """INSERT INTO interview (data, user_id, filename) VALUES (%s, %s, %s) RETURNING id;"""
+                record_to_insert = (da1, user_info().id, user_info().filename)
                 cur.execute(postgres_insert_query, record_to_insert)
                 primary_key_value = cur.fetchone()[0]
                 log('After insert payment: ' + is_pay)
@@ -111,19 +111,19 @@ def display():
     return results
 
 def display_copy(mainid):
-    if mainid == 'unknown':
+    if mainid == 'unknown' or not mainid:
       results = []
       return results
     else:
       conn = variables_snapshot_connection()
       cur = conn.cursor()
-      cur.execute("select data from interview where id=" + mainid + " and user_id="+ str(user_info().id))
+      cur.execute("SELECT data FROM interview WHERE id = %s AND user_id = %s", (mainid, str(user_info().id)))
       results = [record[0] for record in cur.fetchall()]
       conn.close()
       return results
 
 def display_payment(mainid):
-    if mainid == 'unknown':
+    if mainid == 'unknown' or not mainid:
       results = []
       return results
     else:
@@ -170,7 +170,7 @@ def delete_data(mainid):
     return msg
 
 def reuse_data(mainid):
-    if mainid == 'unknown':
+    if mainid == 'unknown' or not mainid:
       results = []
       return results
     else:
@@ -220,7 +220,7 @@ def update_profile1(da):
 
   
 def display_register_data(mainid):
-    if mainid == 'unknown':
+    if mainid == 'unknown' or not mainid:
       conn = variables_snapshot_connection()
       cur = conn.cursor()
       cur.execute("select * from \"user\" where id = " + str(user_info().id))
@@ -363,7 +363,7 @@ def add_to_joinder(data, mainid, type_of_interview):
     cur = conn.cursor()
     dump_data = json.dumps(data)
     exists_data = display_copy(mainid)
-    if mainid == 'unknown':  # Check if mainid is "unknown"
+    if mainid == 'unknown' or not mainid:  # Check if mainid is "unknown"
         # Create a new row without specifying the "id" column
         postgres_insert_query = """INSERT INTO interview (data, user_id, filename) VALUES (%s, %s, %s) RETURNING id;"""
         record_to_insert = (dump_data, user_info().id, user_info().filename)
@@ -386,8 +386,8 @@ def add_to_joinder(data, mainid, type_of_interview):
     else:
         #log('No id: ' + mainid)
         # Insert a new row with the provided ID
-        postgres_insert_query = """INSERT INTO interview (id, data, user_id, filename) VALUES (%s, %s, %s, %s) RETURNING id;"""
-        record_to_insert = (mainid, dump_data, user_info().id, user_info().filename)
+        postgres_insert_query = """INSERT INTO interview (data, user_id, filename) VALUES (%s, %s, %s) RETURNING id;"""
+        record_to_insert = (dump_data, user_info().id, user_info().filename)
         cur.execute(postgres_insert_query, record_to_insert)
         primary_key_value = cur.fetchone()[0]
 
@@ -421,7 +421,7 @@ def add_interview_type(mainid, file, type_of_interview):
         return ""
     
 def display_type_of_interview(mainid):
-    if mainid == 'unknown':
+    if mainid == 'unknown' or not mainid:
       results = []
       return results
     else:
@@ -466,7 +466,7 @@ def edit_interview_type(mainid,file):
         command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:qdro.yml&id='+str(mainid)+'&new_session=1')
       return "" 
 def file_name(mainid):
-    if mainid == 'unknown':
+    if mainid == 'unknown' or not mainid:
       results = []
       return results
     else:
@@ -487,7 +487,7 @@ def reuse_from_diff_interview(which_doc, type_of_interview):
         command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:adverse.yml&id=' + str(retrieve_interview_id()) + '&new_session=1')
    
 def display_qdro_intake_data_copy(mainid):
-    if mainid == 'unknown':
+    if mainid == 'unknown' or not mainid:
       results = []
       return results
     else:
@@ -504,7 +504,7 @@ def add_to_qdro_intake(data, mainid, username):
     cur = conn.cursor()
     dump_data = json.dumps(data)
     exists_data = display_qdro_intake_data_copy(mainid)
-    if mainid == 'unknown':  # Check if mainid is "unknown"
+    if mainid == 'unknown' or not mainid:  # Check if mainid is "unknown"
         # Create a new row without specifying the "id" column
         postgres_insert_query = """INSERT INTO qdro_intake_new (data, username) VALUES (%s, %s) RETURNING id;"""
         record_to_insert = (dump_data, username)

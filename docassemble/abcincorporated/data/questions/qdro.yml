@@ -20,7 +20,6 @@ modules:
   - .webhook_new
   - .price_retrieve
   - .read_data
-  - .read_data
   - .data_from_database
   - .clicksend
   - .delete_return_id
@@ -1431,7 +1430,7 @@ code: |
 ---
 mandatory: True
 code: |
-    if len(filee) > 0 and len(which_button) > 0 and which_button[0][2] == "reuse":
+    if len(filee) > 0 and len(which_button) > 0 and (which_button[0][2] == "reuse" or which_button[0][2] == "edit"):
       filing_add = data_from_registration[0]['user.address.address'] if data_from_registration and 'user.address.address' in data_from_registration[0] else ''
       filing_unit = data_from_registration[0]['user.address.unit'] if data_from_registration and 'user.address.unit' in data_from_registration[0] else ''
       filing_city = data_from_registration[0]['user.address.city'] if data_from_registration and 'user.address.city' in data_from_registration[0] else ''

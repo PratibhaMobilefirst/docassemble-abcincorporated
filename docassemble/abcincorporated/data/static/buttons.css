@@ -122,3 +122,7 @@ display: none;
     color: #212529;
     background-color: #E80D4E;;
 }
+
+a.btn.btn-primary.btn-darevisit[href="/restart_session?i=docassemble.playground3QDRO:adverse.yml"] {
+    float: right;
+}

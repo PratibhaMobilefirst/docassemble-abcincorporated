@@ -43,11 +43,12 @@ def add(da,mainid,is_pay):
       cur.close()
       return ''
     else:
-      postgres_insert_query = """ INSERT INTO interview (data, user_id, filename) VALUES (%s,%s,%s)RETURNING id;"""
-      record_to_insert = (da1, user_info().id, 'docassemble.playground3QDRO:copy_demo.yml')
+      postgres_insert_query = """ INSERT INTO interview (data, user_id, filename) VALUES (%s,%s,%s) RETURNING id;"""
+      record_to_insert = (da1, user_info().id, user_info().filename)
       cur.execute(postgres_insert_query, record_to_insert)
       primary_key_value = cur.fetchone()[0]
-      log('After insert payment: ' + is_pay)
+
+      #log('After insert payment: ' + is_pay)
       
      # cur.execute("""SELECT id FROM interview where user_id = %s ORDER BY id DESC LIMIT 1""")
      # last_id = cur.fetchone()[0]
@@ -89,15 +90,16 @@ def display():
 
 def display_copy(mainid):
     if mainid == 'unknown':
-      results = []
-      return results
+        results = []
+        return results
     else:
-      conn = variables_snapshot_connection()
-      cur = conn.cursor()
-      cur.execute("select data from interview where id=" + mainid + " and user_id="+ str(user_info().id)   +" and filename='" + user_info().filename + "'")
-      results = [record[0] for record in cur.fetchall()]
-      conn.close()
-      return results
+        conn = variables_snapshot_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT data FROM interview WHERE id = %s AND user_id = %s AND filename = %s", (mainid, str(user_info().id), user_info().filename))
+        results = [record[0] for record in cur.fetchall()]
+        conn.close()
+        return results
+
 
 def display_payment(mainid):
     if mainid == 'unknown':

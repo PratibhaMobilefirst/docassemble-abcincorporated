@@ -159,5 +159,5 @@ subquestion: |
   Click on the below button to go to Dashboard screen.
 action buttons:
   - label: Dashboard
-    action: 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml#page1'
+    action: 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml'
     color: link
