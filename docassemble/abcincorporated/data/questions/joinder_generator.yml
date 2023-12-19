@@ -1052,24 +1052,25 @@ code: |
       respond_email = qdro_intake_data_details[0]['data']['your_field']['Respondent_email']
       respond_phone = qdro_intake_data_details[0]['data']['your_field']['Respondent_phone']
   else:
-    petitioner_fname = user_data1[0]['petitioner_field']['petitioner.name.first']
-    petitioner_lname = user_data1[0]['petitioner_field']['petitioner.name.last']
-    respondent_fname = user_data1[0]['respondent_field']['respondent.name.first']
-    respondent_lname = user_data1[0]['respondent_field']['respondent.name.last']
-    petitioner_add = user_data1[0]['petitioner_field']['petitioner.address.address']
-    petitioner_unit = user_data1[0]['petitioner_field']['petitioner.address.unit']
-    petitioner_city = user_data1[0]['petitioner_field']['petitioner.address.city']
-    petitioner_state = user_data1[0]['petitioner_field']['petitioner.address.state']
-    petitioner_zip = user_data1[0]['petitioner_field']['petitioner.address.zip']
-    party_email = user_data1[0]['petitioner_field']['petitioner_email']
-    party_phone = user_data1[0]['petitioner_field']['petitioner_phone']
-    respondent_add = user_data1[0]['respondent_field']['respondent.address.address']
-    respondent_unit = user_data1[0]['respondent_field']['respondent.address.unit']
-    respondent_city = user_data1[0]['respondent_field']['respondent.address.city']
-    respondent_state = user_data1[0]['respondent_field']['respondent.address.state']
-    respondent_zip = user_data1[0]['respondent_field']['respondent.address.zip']
-    respond_email = user_data1[0]['respondent_field']['respondent_email']
-    respond_phone = user_data1[0]['respondent_field']['respondent_phone']
+    petitioner_fname = user_data1[0]['petitioner_field'].get('petitioner.name.first', '')
+    petitioner_lname = user_data1[0]['petitioner_field'].get('petitioner.name.last', '')
+    respondent_fname = user_data1[0]['respondent_field'].get('respondent.name.first', '')
+    respondent_lname = user_data1[0]['respondent_field'].get('respondent.name.last', '')
+    petitioner_add = user_data1[0]['petitioner_field'].get('petitioner.address.address', '')
+
+    petitioner_unit = user_data1[0]['petitioner_field'].get('petitioner.address.unit', '')
+    petitioner_city = user_data1[0]['petitioner_field'].get('petitioner.address.city', '')
+    petitioner_state = user_data1[0]['petitioner_field'].get('petitioner.address.state', '')
+    petitioner_zip = user_data1[0]['petitioner_field'].get('petitioner.address.zip', '')
+    party_email = user_data1[0]['petitioner_field'].get('petitioner_email', '')
+    party_phone = user_data1[0]['petitioner_field'].get('petitioner_phone', '')
+    respondent_add = user_data1[0]['respondent_field'].get('respondent.address.address', '')
+    respondent_unit = user_data1[0]['respondent_field'].get('respondent.address.unit', '')
+    respondent_city = user_data1[0]['respondent_field'].get('respondent.address.city', '')
+    respondent_state = user_data1[0]['respondent_field'].get('respondent.address.state', '')
+    respondent_zip = user_data1[0]['respondent_field'].get('respondent.address.zip', '')
+    respond_email = user_data1[0]['respondent_field'].get('respondent_email', '')
+    respond_phone = user_data1[0]['respondent_field'].get('respondent_phone', '')
 
 ---
 field: petitioner_field

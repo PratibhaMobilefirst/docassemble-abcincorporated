@@ -12,6 +12,8 @@ def retrieve_product_price():
     return product.unit_amount / 100
 
 def check_cookie_value(cookie_value):
+    if cookie_value is None:
+        return ''
     current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " America/New_York"
     split_cookie = cookie_value.split('=')
     

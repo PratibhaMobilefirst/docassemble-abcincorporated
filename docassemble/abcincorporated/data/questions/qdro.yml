@@ -2454,7 +2454,7 @@ action buttons:
     action: restart_interview
     color: warning
   - label: Dashboard
-    action: 'https://dadev.esq2u.com/interview?i=docassemble.playground3:dashboard.yml'
+    action: 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml#page1'
     color: link
     
 attachment code: |  

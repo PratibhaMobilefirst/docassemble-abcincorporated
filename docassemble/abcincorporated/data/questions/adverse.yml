@@ -1594,7 +1594,7 @@ code: |
 ---
 field: coupon_page1
 question: |
-  Enter coupon code? ${a} 
+  Enter coupon code? ${a}
 fields:
   - Coupon code: coupon_code1
 validation code: |

@@ -51,8 +51,8 @@ def add(da, mainid, is_pay, type_of_interview):
     else:
         if mainid != 'unknown':
             if len(exists_data) > 0:
-                log('main id: ' + mainid)
-                log('payment: ' + is_pay)
+                #log('main id: ' + mainid)
+                #log('payment: ' + is_pay)
                 # Update the existing row with the same ID
                 sql_update_query = """UPDATE interview SET data = %s WHERE user_id = %s AND id = %s"""
                 cur.execute(sql_update_query, (da1, user_info().id, mainid))
@@ -73,7 +73,7 @@ def add(da, mainid, is_pay, type_of_interview):
 
             conn.commit()
             cur.close()
-            log('Print Id: ' + str(primary_key_value))
+            #log('Print Id: ' + str(primary_key_value))
             interview_id = primary_key_value
             return ''
         else:
@@ -93,7 +93,7 @@ def add(da, mainid, is_pay, type_of_interview):
 
             conn.commit()
             cur.close()
-            log('Print Id: ' + str(primary_key_value))
+            #log('Print Id: ' + str(primary_key_value))
             interview_id = primary_key_value
             return ''
 
@@ -277,7 +277,7 @@ def update_payment_status(interview_id):
       conn.close()
       return True
   except Exception as e:
-      log("Error executing query: %s" % e)
+      #log("Error executing query: %s" % e)
       conn.rollback()  # Rollback the transaction in case of an error
       conn.close()
       return False
@@ -370,7 +370,7 @@ def add_to_joinder(data, mainid, type_of_interview):
         cur.execute(postgres_insert_query, record_to_insert)
         primary_key_value = cur.fetchone()[0]
     elif len(exists_data) > 0:
-        log('main id: ' + mainid)
+        #log('main id: ' + mainid)
         if type_of_interview == 'reuse':
             # Create a new row without specifying the "id" column
             postgres_insert_query = """INSERT INTO interview (data, user_id, filename) VALUES (%s, %s, %s) RETURNING id;"""
@@ -384,7 +384,7 @@ def add_to_joinder(data, mainid, type_of_interview):
             primary_key_value = mainid
 
     else:
-        log('No id: ' + mainid)
+        #log('No id: ' + mainid)
         # Insert a new row with the provided ID
         postgres_insert_query = """INSERT INTO interview (id, data, user_id, filename) VALUES (%s, %s, %s, %s) RETURNING id;"""
         record_to_insert = (mainid, dump_data, user_info().id, user_info().filename)
@@ -437,7 +437,7 @@ def edit_interview_type(mainid,file):
     cur = conn.cursor()
     exists_data = display_type_of_interview(mainid)
     if len(exists_data) > 0:
-      log('main id: ' + str(mainid))
+      #log('main id: ' + str(mainid))
       sql_update_query = """Update interview_type set type_of_interview = %s where user_id = %s and id = %s"""
       cur.execute(sql_update_query, ('edit', user_info().id,mainid))
       conn.commit()

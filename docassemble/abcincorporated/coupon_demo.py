@@ -7,7 +7,7 @@ from docassemble.base.util import *
 def check_coupon(coupon_code, interview_id):
   stripe.api_key = get_config('stripe secret key')
   coupon = stripe.Coupon.retrieve(coupon_code)
-  log('check_coupon function called with interview_id: ' + str(interview_id))
+  #log('check_coupon function called with interview_id: ' + str(interview_id))
   if coupon:
     conn = variables_snapshot_connection()
     cur = conn.cursor()
@@ -16,11 +16,11 @@ def check_coupon(coupon_code, interview_id):
     try:
         cur.execute(update_payment_status, values)
         conn.commit()  # Commit the changes to the database
-        log("Executing query: %s" % cur.mogrify(update_payment_status, values))
+        #log("Executing query: %s" % cur.mogrify(update_payment_status, values))
         conn.close()
         return True
     except Exception as e:
-        log("Error executing query: %s" % e)
+        #log("Error executing query: %s" % e)
         conn.rollback()  # Rollback the transaction in case of an error
         conn.close()
         return False

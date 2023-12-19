@@ -18,13 +18,7 @@ def clicksend_post_return_adress(user_data):
 
   # create an instance of the API class
   api_instance = clicksend_client.PostReturnAddressApi(clicksend_client.ApiClient(configuration))
-  user_name = ''
-  if user_data.get('user.name.first') is not None :
-    user_name += user_data.get('user.name.first') + " "
-  if user_data.get('user.name.middle') is not None :
-    user_name += user_data.get('user.name.middle') + " "
-  if user_data.get('user.name.last') is not None :
-    user_name += user_data.get('user.name.last')
+  user_name = user_info().first_name + '' + user_data.get('user.name.middle') + '' + user_info().last_name
   return_address = clicksend_client.Address(address_name=user_name,
                               address_line_1=user_data.get('user.address.address'),
                               address_city=user_data.get('user.address.city'),
