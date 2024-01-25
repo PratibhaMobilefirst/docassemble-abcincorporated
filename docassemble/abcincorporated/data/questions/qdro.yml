@@ -51,10 +51,12 @@ code: |
   if not user_logged_in():
     command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml')       
 ---
-initial: True
+mandatory: True
+code: |
+  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml', 'label': 'Dashboard'},{'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:edit_profile.yml&new_session=1', 'label': 'Edit Profile'}]
+---
 code: |
   is_pay = 'false'
-  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml', 'label': 'Dashboard'},{'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:edit_profile.yml', 'label': 'Edit Profile'}]
   user_data11 = display_copy(origin_of_interviewee)
   data_from_registration = register_data()
   register_dataq = display_register_data(origin_of_interviewee)
@@ -399,10 +401,10 @@ code: |
   else:
     Pension = ''
   plan_sponsor_adress_details
-  if plan_sponsor_address != '' or plan_sponsor.address.on_one_line() != ', ':
+  if plan_sponsor.address.on_one_line() != ', ':
     plan_sponsor_name
   plan_admin_adress_details
-  if plan_admin_address != '' or plan_admin.address.on_one_line() != ', ':
+  if plan_admin.address.on_one_line() != ', ':
     plan_admin_namee
   document
   if document == 'California' or document == 'Kansas':
@@ -977,8 +979,7 @@ code: |
       } 
   if len(which_button) > 0 and which_button[0][2] == "reuse":
     draft_shown
-    CheckboX
-    if CheckboX:
+    if plan_admin.address.on_one_line() == ', ' and plan_sponsor.address.on_one_line() == ', ':
       check1
       if check1:
         coupon_page
@@ -988,20 +989,32 @@ code: |
           payment_screen
         if payment.paid:
           final_shown
+      
     else:
-      check1
-      if check1:
-        coupon_page
-        final_shown
-      else:
-        if not payment.paid:
-          payment_screen
-        if payment.paid:
+      CheckboX
+      if CheckboX:
+        check1
+        if check1:
+          coupon_page
           final_shown
+        else:
+          if not payment.paid:
+            payment_screen
+          if payment.paid:
+            final_shown
+      else:
+        check1
+        if check1:
+          coupon_page
+          final_shown
+        else:
+          if not payment.paid:
+            payment_screen
+          if payment.paid:
+            final_shown
   elif len(pay_d) > 0 and pay_d[0]['is_paid'] == 'true':
     draft_shown = ''
-    CheckboX
-    if CheckboX:
+    if plan_admin.address.on_one_line() == ', ' and plan_sponsor.address.on_one_line() == ', ':
       check1
       if check1:
         coupon_page
@@ -1010,13 +1023,24 @@ code: |
         if not payment.paid:
           payment_screen
         if payment.paid:
-          final_shown
+          final_shown    
     else:
-      final_shown
+      CheckboX
+      if CheckboX:
+        check1
+        if check1:
+          coupon_page
+          final_shown
+        else:
+          if not payment.paid:
+            payment_screen
+          if payment.paid:
+            final_shown
+      else:
+        final_shown
   elif len(pay_d) > 0 and pay_d[0]['is_paid'] == 'false':
     draft_shown
-    CheckboX
-    if CheckboX:
+    if plan_admin.address.on_one_line() == ', ' and plan_sponsor.address.on_one_line() == ', ':
       check1
       if check1:
         coupon_page
@@ -1026,20 +1050,32 @@ code: |
           payment_screen
         if payment.paid:
           final_shown
-    else:
-      check1
-      if check1:
-        coupon_page
-        final_shown
-      else:
-        if not payment.paid:
-          payment_screen
-        if payment.paid:
+    else: 
+      CheckboX
+      if CheckboX:
+        check1
+        if check1:
+          coupon_page
           final_shown
+        else:
+          if not payment.paid:
+            payment_screen
+          if payment.paid:
+            final_shown
+      else:
+        check1
+        if check1:
+          coupon_page
+          final_shown
+        else:
+          if not payment.paid:
+            payment_screen
+          if payment.paid:
+            final_shown
+      
   else:
     draft_shown
-    CheckboX
-    if CheckboX:
+    if plan_admin.address.on_one_line() == ', ' and plan_sponsor.address.on_one_line() == ', ':
       check1
       if check1:
         coupon_page
@@ -1050,16 +1086,27 @@ code: |
         if payment.paid:
           final_shown
     else:
-      check1
-      if check1:
-        coupon_page
-        final_shown
-      else:
-        if not payment.paid:
-          payment_screen
-        if payment.paid:
+      CheckboX
+      if CheckboX:
+        check1
+        if check1:
+          coupon_page
           final_shown
-
+        else:
+          if not payment.paid:
+            payment_screen
+          if payment.paid:
+            final_shown
+      else:
+        check1
+        if check1:
+          coupon_page
+          final_shown
+        else:
+          if not payment.paid:
+            payment_screen
+          if payment.paid:
+            final_shown
 ---
 code: |
   if 'cid' in url_args:
@@ -1074,6 +1121,7 @@ code: |
     origin_of_interviewee = 'unknown'
 
 ---
+ga id: Q_StartWithYou
 question: |
   Let’s start with you. 
 subquestion: |
@@ -1103,6 +1151,7 @@ code: |
       results.append([key])
   json_response(results)
 ---
+ga id: Q_PickPlan
 question: |
   What type of plan will you be dividing today?
 fields: 
@@ -1115,7 +1164,7 @@ fields:
       - Pension Plan (Plans that guarantee monthly retirement income)
 
 ---
-
+ga id: Q_PlanName
 question: |
   What is the retirement plan name? 
 subquestion: |
@@ -1136,8 +1185,8 @@ fields:
     show if: add_other_plan
     default: |
       ${ user_data1[0]['other_plan'] }
-under: |
-  Note: Please enter at least three letters, numbers, or spaces to search.
+post: |
+  **Note:** Please enter at least three letters, numbers, or spaces to search.
 ---
 code: |
   plan = display_plan1() 
@@ -1168,6 +1217,7 @@ code: |
     else:
       state = user_data1[0]['document']
 ---
+ga id: Q_Divorced_State
 question: |
   In which state was the divorce?
 fields: 
@@ -1227,6 +1277,7 @@ fields:
       - Wyoming
       - Washington
 ---
+ga id: Q_FilingPartyRole
 question: |
   What is the filing party's role in the case?
 subquestion: |
@@ -1282,6 +1333,7 @@ code: |
     respondent_fname = user_data1[0]['respondent_field']['respondent.name.first']
     respondent_lname = user_data1[0]['respondent_field']['respondent.name.last']
 ---
+ga id: Q_PetitionerField
 field: petitioner_field
 question: |
   What is the Petitioner/Plaintiff's Name?
@@ -1297,6 +1349,7 @@ fields:
     default: |
       ${ petitioner_lname }
 ---
+ga id: Q_RespondentField
 field: respondent_field
 question: |
   What is the Respondent/Defendant's name?
@@ -1345,6 +1398,7 @@ code: |
       filing_phone = user_data1[0]['filing_party_name_info']['filing_party.phone']
     
 ---
+ga id: Q_filing_prty_name
 field: filing_party_name_info
 question: |
   Who will be filing this with the court?
@@ -1461,6 +1515,7 @@ code: |
     filing_party_bar_number = ''
     filing_party_addresS = ''
 ---
+ga id: Q_filing_prty_add
 field: filing_party_address_info
 question: |
   Please provide the filling party's address. 
@@ -1498,6 +1553,7 @@ code: |
     courtt = user_data1[0]['court']
     countyy = user_data1[0]['county']
 ---
+ga id: Q_county
 question: |
   In which county did the divorce take place?
 subquestion: |
@@ -1507,7 +1563,7 @@ fields:
     default: |
       ${ countyy }
 ---
-
+ga id: Q_court
 question: |
   Please provide the name of the court where your divorce was processed. 
 subquestion: |
@@ -1517,6 +1573,7 @@ fields:
     default: |
       ${ courtt }
 ---
+ga id: Q_division_number
 question: |
   Division Number
 fields:
@@ -1524,6 +1581,7 @@ fields:
     default: |
       ${ user_data1[0]['division_number'] }
 ---
+ga id: Q_judicial_dist
 question: |
   What is the judicial district?
 fields:
@@ -1537,6 +1595,7 @@ code: |
   else: 
     case_num = user_data1[0]['case_number']
 ---
+ga id: Q_case_number
 question: |
   Case Number
 fields:
@@ -1547,14 +1606,18 @@ fields:
 code: |
   add1 = address_of_admin_and_sponsor(plan_name)
 ---
+ga id: Q_sponsor_add_details
 field: plan_sponsor_adress_details
 question: |
   Please provide the Plan Sponsor's address details.
+subquestion: |
+  If you do not have this information, hit **continue to skip**.
 fields:
   - Street address: plan_sponsor.address.address
     default: |
       ${ plan_sponsor_add1 }
     address autocomplete: True
+    required: False
   - Unit: plan_sponsor.address.unit
     default: |
       ${ plan_sponsor_add2 }
@@ -1562,13 +1625,17 @@ fields:
   - City: plan_sponsor.address.city
     default: |
       ${ plan_sponsor_city }
+    required: False
   - State: plan_sponsor.address.state
     default: |
       ${ plan_sponsor_state }
+    required: False
   - Zip: plan_sponsor.address.zip
     default: |
       ${ plan_sponsor_zip }
+    required: False
 ---
+ga id: Q_sponsor_name
 question: |
   Please enter plan sponsor name.
 fields:
@@ -1576,11 +1643,12 @@ fields:
     default: |
       ${plan_sponsor_nme}
 ---
+ga id: Q_plan_admin_address
 field: plan_admin_adress_details
 question: |
   Please provide the Plan Admin's address. 
 subquestion: |
-  If you do not have this information, hit continue to skip.
+  If you do not have this information, hit **continue to skip**.
 fields:
   - Street address: plan_admin.address.address
     default: |
@@ -1604,6 +1672,7 @@ fields:
       ${ plan_admin_zip }
     required: False
 ---
+ga id: Q_plan_admin_name
 question: |
   Please enter plan admin name.
 fields:
@@ -1808,6 +1877,7 @@ code: |
   else:
     which_party = user_data1[0]['who_is_participant']
 ---
+ga id: Q_who_is_participant
 question: |
   Please select the employee (participant) spouse who is associated with this retirement plan.
 fields:
@@ -1868,6 +1938,7 @@ fields:
       is: Respondent-Defendant
 
 ---
+ga id: Q_participant_information
 field: participant_info
 question: |
   Please fill in the Participant's information. 
@@ -2005,6 +2076,7 @@ code: |
         alternate_party_state=  user_data11[0]['petitioner_field']['petitioner.address.state']
         alternate_party_zip =  user_data11[0]['petitioner_field']['petitioner.address.zip']
 ---
+ga id: Q_participant_address_info
 field: participant_address_info
 question: |
   Please fill in the Participant's address.
@@ -2028,6 +2100,7 @@ fields:
       ${ party_zip }
 
 ---
+ga id: Q_alternate_payee_info
 field: alternate_payee_info
 question: |
   Please fill in the Alternate Payee's information.
@@ -2054,6 +2127,7 @@ validation code: |
   if not phone_number_is_valid(phone_number_formatted(alternate_payee.phone)):
     validation_error('Phone number is not valid')
 ---
+ga id: Q_alternate_payee_address_info
 field: alternate_payee_address_info
 question: |
   Please fill in the Alternate Payee's address.
@@ -2213,6 +2287,7 @@ code: |
     alternate_payee_email = ''
 
 ---
+ga id: Q_assignment_date
 question: |
   What is the assignment date?
 subquestion: |
@@ -2223,6 +2298,7 @@ fields:
       ${ user_data1[0]['assignment_date'] }
     datatype: date
 ---
+ga id: Q_how_plan_is_divided
 question: |
   How should the plan be divided? 
 fields:
@@ -2248,6 +2324,7 @@ code: |
     else:
       dom = user_data1[0]['date_of_marriage']
 ---
+ga id: Q_date_of_marriage
 question: |
   Date of Marriage
 fields:
@@ -2256,6 +2333,7 @@ fields:
       ${ dom }
     datatype: date
 ---
+ga id: Q_dollar
 question: |
   What is the dollar amount that the non-employee spouse will receive?  
 fields:
@@ -2265,6 +2343,7 @@ fields:
     datatype: currency 
 continue button color: primary
 ---
+ga id: Q_percentage
 question: |
   What is the percentage that the non-employee spouse will receive? 
 subquestion: |
@@ -2276,6 +2355,7 @@ fields:
     datatype: integer
 
 ---
+ga id: Q_pension_plan
 question: |
   Has the plan participant (employee) retired or are they still working?
 fields:
@@ -2304,6 +2384,7 @@ code: |
   if Pension1 == 'Retired':
     Pension = ''
 ---
+ga id: Q_division_payment_type
 question: |
   Select your division method.
 fields:
@@ -2325,6 +2406,7 @@ code: |
   interview_id = retrieve_interview_id()
 
 ---
+ga id: Q_you_to_pay_first
 event: payment_screen
 question: |
   You need to pay first. ${ check } 
@@ -2334,48 +2416,63 @@ code: |
   output_file = [final_document.path(),addendum_final.path()]
   urls=''
   if len(which_button) > 0 and which_button[0][2] == "reuse":
-    if CheckboX:
-      urls = [item['data']['_url'] for item in file_url(output_file)]
-      if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', '):
-        payment_amount = (9.99*2)+99.00
+    if plan_admin.address.on_one_line() != ', ' or plan_sponsor.address.on_one_line() != ', ':
+      if CheckboX:
+        urls = [item['data']['_url'] for item in file_url(output_file)]
+        if (plan_sponsor.address.on_one_line() != ', ' and plan_admin.address.on_one_line() != ', '):
+          payment_amount = (9.99*2)+99.00
+        elif (plan_sponsor.address.on_one_line() != ', ' or plan_admin.address.on_one_line() != ', '):
+          payment_amount = 108.99
       else:
-        payment_amount = 108.99
+        payment_amount = 99.00
     else:
       payment_amount = 99.00
   elif len(which_button) > 0 and which_button[0][2] == "edit" and len(pay_d) > 0 and pay_d[0]['is_paid'] == 'false':
-    if CheckboX:
-      urls =  [item['data']['_url'] for item in file_url(output_file)]
-      if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', '):
-        payment_amount = (9.99*2)+99.00
+    if plan_admin.address.on_one_line() != ', ' or plan_sponsor.address.on_one_line() != ', ':
+      if CheckboX:
+        urls =  [item['data']['_url'] for item in file_url(output_file)]
+        if (plan_sponsor.address.on_one_line() != ', ' and plan_admin.address.on_one_line() != ', '):
+          payment_amount = (9.99*2)+99.00
+        elif (plan_sponsor.address.on_one_line() != ', ' or plan_admin.address.on_one_line() != ', '):
+          payment_amount = 108.99
       else:
-        payment_amount = 108.99
+        payment_amount = 99.00
     else:
       payment_amount = 99.00
   elif len(which_button) > 0 and which_button[0][2] == "edit" and len(pay_d) > 0 and pay_d[0]['is_paid'] == 'true':
-    if CheckboX:
-      urls =  [item['data']['_url'] for item in file_url(output_file)]
-      if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', '):
-        payment_amount = (9.99*2)
-      else:
-        payment_amount = 9.99
+    if plan_admin.address.on_one_line() != ', ' or plan_sponsor.address.on_one_line() != ', ':
+      if CheckboX:
+        urls =  [item['data']['_url'] for item in file_url(output_file)]
+        if (plan_sponsor.address.on_one_line() != ', ' and plan_admin.address.on_one_line() != ', '):
+          payment_amount = (9.99*2)
+        elif (plan_sponsor.address.on_one_line() != ', ' or plan_admin.address.on_one_line() != ', '):
+          payment_amount = 9.99
+    else:
+      final_shown
   else:
-    if CheckboX:
-      urls =  [item['data']['_url'] for item in file_url(output_file)]
-      if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', '):
-        payment_amount = (9.99*2)+99.00
+    if plan_admin.address.on_one_line() != ', ' or plan_sponsor.address.on_one_line() != ', ':
+      if CheckboX:
+        urls =  [item['data']['_url'] for item in file_url(output_file)]
+        if (plan_sponsor.address.on_one_line() != ', ' and plan_admin.address.on_one_line() != ', '):
+          payment_amount = (9.99*2)+99.00
+        else:
+          payment_amount = 108.99
       else:
-        payment_amount = 108.99
+        payment_amount = 99.00
     else:
       payment_amount = 99.00
   payment.amount = payment_amount
 ---
+ga id: Q_to_proceed_make_payment
 question: |
   To proceed, please make a payment for your documents.
 subquestion: |
   In order to cover our development costs, we are initially charging $${payment.amount} per QDRO. If you are unhappy with your QDRO, we have a 100% satisfaction guarantee - just reach out within three months, give us a chance to make the QDRO right, and we'll give a full refund if the QDRO can't be fixed.
   
+   % if plan_admin.address.on_one_line() != ', ' or plan_sponsor.address.on_one_line() != ', ':
    % if CheckboX:
     *Since you asked us to mail your documents to the plan admin and/or sponsor, an additional charge of $9.99 per mailing for postage and handling is included in your total.*
+   % endif
    % endif
 post: |
   Can't afford the fee? Though we charge less than any other QDRO website out there, we've got your back. Please reach out to us via the contact form on [(http://lexyalgo.com/)](${ url_of('https://Lexyalgo.com/') }){:target="_blank"}.
@@ -2386,6 +2483,7 @@ buttons:
   
   
 ---
+ga id: Q_Payment_page
 event: payment.demand
 question: |
   Payment
@@ -2399,7 +2497,8 @@ code: |
   interview_id = retrieve_interview_id()
 
 ---
-question:
+ga id: Q_check_the_box_to_mail
+question: |
   Would you like us to mail your order to the retirement plan?
 fields:
   - note: By checking the box, you’re giving us consent to send your documents to the plan administrator and sponsor, if we have their contact information. There’s a charge of $9.99 per document for postage and handling.
@@ -2407,6 +2506,7 @@ fields:
     datatype: yesno
 
 ---
+ga id: Q_coupon_page
 field: coupon_page
 question: |
   Enter coupon code?
@@ -2419,14 +2519,15 @@ validation code: |
     check_coupon(coupon_code, retrieve_interview_id())
     #yml_variables(retrieve_interview_id(),user_info().filename,url_args)
     check_cookie_value(get_cookies())  
-    if CheckboX:
-      delete_return_id = delete_return_addresses()
-      if data_from_registration and len(data_from_registration) > 0:
-        return_address = clicksend_post_return_adress(data_from_registration[0])
-        return_address_id = return_address['data']['return_address_id']
-        clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
-        if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
-          clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
+    if plan_admin.address.on_one_line() != ', ' or plan_sponsor.address.on_one_line() != ', ':
+      if CheckboX:
+        delete_return_id = delete_return_addresses()
+        if data_from_registration and len(data_from_registration) > 0:
+          return_address = clicksend_post_return_adress(data_from_registration[0])
+          return_address_id = return_address['data']['return_address_id']
+          clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
+          if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
+            clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
 ---
 event: payment.success
 code: |
@@ -2444,6 +2545,7 @@ code: |
         if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
           clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
 ---
+ga id: Q_final_page
 event: final_shown
 question: |
   Download document for **${ document }** and **Addendum** attached below. ${ user_data } ${ delete_button_info(qdro_intake_data_details[0]['id']) }
@@ -2556,6 +2658,7 @@ code: |
 code: |
   interview_id = retrieve_interview_id()
 ---
+ga id: Q_preview_page
 question: |
   **Preview** Your QDRO Documents Before You Pay. ${ user_data } ${ delete_button_info(qdro_intake_data_details[0]['id']) } 
   

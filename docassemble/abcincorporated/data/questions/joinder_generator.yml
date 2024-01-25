@@ -34,9 +34,11 @@ code: |
   if not user_logged_in():
     command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml') 
 ---
-initial: True
+mandatory: True
 code: |
-  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml', 'label': 'Dashboard'},{'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:edit_profile.yml', 'label': 'Edit Profile'}]
+  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml', 'label': 'Dashboard'},{'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:edit_profile.yml&new_session=1', 'label': 'Edit Profile'}]
+---
+code: |
   register_dataj = display_register_data_j()
   retiremnet_plans = plans()
   courts_data = courts()
@@ -837,6 +839,7 @@ objects:
   - other: Individual
 
 ---
+ga id: J_StartWithYou
 question: |
   Let’s start with you.
 subquestion: |
@@ -853,6 +856,7 @@ fields:
       ${ user_info().email }
     datatype: email 
 ---
+ga id: J_WecomeToJoinderGenerator
 field: joinder
 question: |
   Welcome to the LexyAlgo Joinder Generator. This app will generate a joinder that can be served on retirement plans as part of a California divorce.
@@ -881,6 +885,7 @@ code: |
   else:
     courtt = user_data1[0]['court_name']
 ---
+ga id: J_court
 question: |
   In which court was this case filed?
 subquestion: |
@@ -934,6 +939,7 @@ code: |
     add_court = court_name
 
 ---
+ga id: J_need_more_info_about_the_case
 question: |
   We'll need some more information about the case to get started.
 fields: 
@@ -965,6 +971,7 @@ code: |
     petitioner_dom = user_data1[0]['petition_dom']
     respondent_dom = user_data1[0]['response_dom']
 ---
+ga id: J_dates_of_marriage_&_seperation
 question: |
   For this question, we'll need a copy of the petition for divorce and the response, if any, that was filed. We are looking for the date of marriage and date of separation on each form.
 fields: 
@@ -1078,6 +1085,7 @@ code: |
     respond_phone = user_data1[0]['respondent_field'].get('respondent_phone', '')
 
 ---
+ga id: J_Petitioner_fields
 field: petitioner_field
 question: |
   Tell us about the petitioner in the case.
@@ -1168,6 +1176,7 @@ code: |
     r_attorney_phone = user_data1[0]['respondent_attorney_phone']
     r_attorney_email = user_data1[0]['respondent_attorney_email']
 ---
+ga id: J_petitioner_attorney_fields
 field: petitioner_attorney_field
 question: |
   Let's get the contact information for the petitioner's attorney.
@@ -1238,6 +1247,7 @@ code: |
     respondent_attorney_details=respondent_attorney_name+" "+respondent_attorney_firm+" "+StateBarNo+"\n"+respondent_attorney.address.address+" "+respondent_attorney.address.city+" "+respondent_attorney.address.zip+"\n"+respondent_attorney_phone+" "+respondent_attorney_email
        
 ---
+ga id: J_respondent_fields
 question: |
   Now tell us about the respondent in the case.
 subquestion: |
@@ -1301,6 +1311,7 @@ mandatory: True
 code: |
   respondent_name = respondent.name.first + ' ' + respondent.name.middle + ' ' + respondent.name.last 
 ---
+ga id: J_respondent_attorney_fields
 field: respondent_attorney_field
 question: |
   Let's get the contact information for the respondent's attorney.
@@ -1512,6 +1523,7 @@ code: |
   else:
     choices= [peti,resp,attorney_pet,attorney_res,others]
 ---
+ga id: J_who_is_filing
 question: |
   Who will be filing this document?
 subquestion: |
@@ -1524,6 +1536,7 @@ fields:
       choices
       
 ---
+ga id: J_other_filing_field
 field: other_filing_field
 question: |
   Let's get the contact information for other.
@@ -1572,6 +1585,7 @@ validation code: |
   if who_is_filing == 'Other' and not phone_number_is_valid(phone_number_formatted(other_phone)):
         validation_error('Phone number is not valid')
 ---
+ga id: J_plan_name
 question: |
   Now let's pick the plan.
 subquestion: |
@@ -1602,7 +1616,7 @@ code: |
   else:
     add_plan = plan_name
 ---
-
+ga id: J_who_the_plan_participant_is
 question: |
   And finally, tell us who the plan participant (employee) is:
 fields: 
@@ -1656,6 +1670,7 @@ code: |
   #delete_interview_type=delete_data_from_interview_type(origin_of_interviewee)
   a = ''
 ---
+ga id: J_final_page
 mandatory: True
 question: |
   Here are your documents! ${ a } 

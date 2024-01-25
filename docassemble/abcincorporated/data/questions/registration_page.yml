@@ -14,6 +14,9 @@ metadata:
 modules:
   - .read_data
   - .registered_emails
+  - .click_id
+  - .parameters
+  
 ---
 objects:
   - user: Individual
@@ -47,12 +50,16 @@ code: |
   else:
     bar_num = ''
 ---
+code: |
+  click_id_key_value = get_cookies()
+---
+ga id: registration_first_page
 mandatory: True
 field: registration_main
 question: |
   Member Registration
 subquestion: | 
-  Already Registered? [Sign in](https://doc.lexyalgo.com/user/sign-in)
+  Already Registered? [Sign in](https://doc.lexyalgo.com/user/sign-in?${click_id_key_value})
   > Required fields are marked as <span class = "astric">*</span>
 css: |
   <style>
@@ -122,7 +129,7 @@ validation code: |
     validation_error("The email address provided has already been registered.", field="email")  
 
 ---
-
+ga id: registration_confirm_detail_page
 mandatory: True
 field: registration_confirm
 question: |
@@ -166,6 +173,7 @@ continue button label: Confirm
 back button label: |
   Edit Registration
 ---
+ga id: registration_password_page
 field: password_section
 question: | 
   Confirm your password 
@@ -206,11 +214,12 @@ code: |
       set_user_info(user_id= infor, first_name=user.name.first, middle_name=user.name.middle, last_name=user.name.last, Address= user.address.address, Unit=user.address.unit, City=user.address.city, State=user.address.state, Zip_code= user.address.zip_code, Phone_number=phone_number, Date_of_birth=dob)
       
 ---
+ga id: registration_final_page
 mandatory: true
 prevent going back: True
 question: |
   Welcome **${user.name}** You have successfully registered yourself.${ user_data }
-  Please [sign in](https://doc.lexyalgo.com/user/sign-in).
+  Please [sign in](https://doc.lexyalgo.com/user/sign-in?${click_id_key_value}).
 event: welcome
 
 

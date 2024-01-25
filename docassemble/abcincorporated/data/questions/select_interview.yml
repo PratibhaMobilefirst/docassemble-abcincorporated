@@ -34,6 +34,7 @@ code: |
   select_interview
   reuse_from_intake_interview(select_interview,username())
 ---
+ga id: select_interview
 mandatory: True
 question: |
   Which document do you want to generate?

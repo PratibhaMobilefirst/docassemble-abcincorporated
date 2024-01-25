@@ -50,9 +50,11 @@ code: |
   if not user_logged_in():
     command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml')       
 ---
-initial: True
+mandatory: True
 code: |
-  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml', 'label': 'Dashboard'},{'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:edit_profile.yml', 'label': 'Edit Profile'}]
+  menu_items = [ {'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml', 'label': 'Dashboard'},{'url': 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:edit_profile.yml&new_session=1', 'label': 'Edit Profile'}]
+---
+code: |
   data_from_registration = register_data()
   register_dataq = display_register_data(origin_of_interviewee)
   
@@ -423,10 +425,10 @@ code: |
   plan_name
   pick_plan
   plan_sponsor_adress_details
-  if plan_sponsor_address != '' or plan_sponsor.address.on_one_line() != ', ':
+  if plan_sponsor.address.on_one_line() != ', ':
     plan_sponsor_name
   plan_admin_adress_details
-  if plan_admin_address != '' or plan_admin.address.on_one_line() != ', ':
+  if plan_admin.address.on_one_line() != ', ':
     plan_admin_namee
   document
   role
@@ -450,19 +452,22 @@ code: |
   participant_address_info
   alternate_payee_info
   alternate_payee_address_info
-  CheckboX
-  if CheckboX:
-    check2
-    if check2:
-      coupon_page1
-      final_shown
-    else:
-      if not payment1.paid:
-        payment_screen
-      if payment1.paid:
-        final_shown
-  else:
+  if plan_admin.address.on_one_line() == ', ' and plan_sponsor.address.on_one_line() == ', ':
     final_shown
+  else: 
+    CheckboX
+    if CheckboX:
+      check2
+      if check2:
+        coupon_page1
+        final_shown
+      else:
+        if not payment1.paid:
+          payment_screen
+        if payment1.paid:
+          final_shown
+    else:
+      final_shown
 ---
 code: |
   if 'id' in url_args:
@@ -471,6 +476,7 @@ code: |
     origin_of_interviewee = 'unknown'
 
 ---
+ga id: A_StartWithYou
 question: |
   Let’s start with you. 
 subquestion: |
@@ -500,6 +506,7 @@ code: |
       results.append([key])
   json_response(results)
 ---
+ga id: A_PickPlan
 question: |
   What type of plan will you be dividing today?  
 fields: 
@@ -511,6 +518,7 @@ fields:
       - Deferred Compensation (Cash & Investment Account 401K)
       - Pension Plan (Plans that guarantee monthly retirement income)
 ---
+ga id: A_PlanName
 question: |
   What is the retirement plan name? 
 subquestion: |
@@ -533,19 +541,23 @@ fields:
       ${ user_data1[0]['other_plan'] }
   
 under: |
-  Note: Please enter at least three letters, numbers, or spaces to search.
+  **Note:** Please enter at least three letters, numbers, or spaces to search.
 ---
 code: |
   add1 = address_of_admin_and_sponsor(plan_name)
 ---
+ga id: A_sponsor_add_details
 field: plan_sponsor_adress_details
 question: |
   Please provide the Plan Sponsor's address details.
+subquestion: |
+  If you do not have this information, hit **continue to skip**.
 fields:
   - Street address: plan_sponsor.address.address
     default: |
       ${ plan_sponsor_add1 }
     address autocomplete: True
+    required: False
   - Unit: plan_sponsor.address.unit
     default: |
       ${ plan_sponsor_add2 }
@@ -553,13 +565,17 @@ fields:
   - City: plan_sponsor.address.city
     default: |
       ${ plan_sponsor_city }
+    required: False
   - State: plan_sponsor.address.state
     default: |
       ${ plan_sponsor_state }
+    required: False
   - Zip: plan_sponsor.address.zip
     default: |
       ${ plan_sponsor_zip }
+    required: False
 ---
+ga id: A_sponsor_name
 question: |
   Please enter plan sponsor name.
 fields:
@@ -578,11 +594,12 @@ code: |
     plan_name = ''
 
 ---
+ga id: A_plan_admin_address
 field: plan_admin_adress_details
 question: |
   Please provide the Plan Admin's address.
 subquestion: |
-  If you do not have this information, hit continue to skip.
+  If you do not have this information, hit **continue to skip**.
 fields:
   - Street address: plan_admin.address.address
     default: |
@@ -606,6 +623,7 @@ fields:
       ${ plan_admin_zip }
     required: False
 ---
+ga id: A_plan_admin_name
 question: |
   Please enter plan admin name.
 fields:
@@ -698,6 +716,7 @@ code: |
     else:
       state = user_data1[0]['document']
 ---
+ga id: A_Divorced_State
 question: |
   In which state was the divorce?
 fields: 
@@ -757,6 +776,7 @@ fields:
       - Wyoming
       - Washington
 ---
+ga id: A_FilingPartyRole
 question: |
   What is the your role in the case?
 subquestion: |
@@ -813,6 +833,7 @@ code: |
     respondent_fname = user_data1[0]['respondent_field']['respondent.name.first']
     respondent_lname = user_data1[0]['respondent_field']['respondent.name.last']
 ---
+ga id: A_PetitionerField
 field: petitioner_field
 question: |
   What is the Petitioner/Plaintiff's Name?
@@ -828,6 +849,7 @@ fields:
     default: |
       ${ petitioner_lname }
 ---
+ga id: A_RespondentField
 field: respondent_field
 question: |
   What is the Respondent/Defendant's name?
@@ -876,6 +898,7 @@ code: |
       filing_phone = user_data1[0]['filing_party_name_info']['filing_party.phone']
 
 ---
+ga id: A_filing_prty_name
 field: filing_party_name_info
 question: |
   Who will be sending this notice to the retirement plan?
@@ -956,6 +979,7 @@ code: |
       filing_state = user_data1[0]['filing_party_address_info']['filing_party.address.state']
       filing_zip = user_data1[0]['filing_party_address_info']['filing_party.address.zip']
 ---
+ga id: A_filing_prty_add
 field: filing_party_address_info
 question: |
   For the person sending notice to the retirement plan, please provide their address. 
@@ -996,6 +1020,7 @@ code: |
     courtt = user_data1[0]['court_name']
     countyy = user_data1[0]['county']
 ---
+ga id: A_county
 question: |
   In which county did the divorce take place? 
 subquestion: |
@@ -1005,7 +1030,7 @@ fields:
     default: |
       ${ countyy }
 ---
-
+ga id: A_court
 question: |
   Please provide the name of the court where your divorce was processed. 
 subquestion: |
@@ -1015,6 +1040,7 @@ fields:
     default: |
       ${ courtt }
 ---
+ga id: A_division_number
 question: |
   Division Number
 fields:
@@ -1022,6 +1048,7 @@ fields:
     default: |
       ${ user_data1[0]['division_number'] }
 ---
+ga id: A_judicial_dist
 question: |
   What is the judicial district?
 fields:
@@ -1035,6 +1062,7 @@ code: |
   else: 
     case_num = user_data1[0]['case_number']
 ---
+ga id: A_case_number
 question: |
   Case Number
 fields:
@@ -1052,6 +1080,7 @@ code: |
   else:
     which_party = user_data1[0]['who_is_participant']
 ---
+ga id: A_who_is_participant
 question: |
   Please select the employee (participant) spouse who is associated with this retirement plan. 
 fields:
@@ -1194,7 +1223,7 @@ code: |
     alternate_party_dob = user_data1[0]['alternate_payee.dob']
     alternate_party_ssn = user_data1[0]['alternate_payee.ssn']
 ---
-
+ga id: A_participant_information
 field: participant_info
 question: |
   Please fill in the Participant's information.
@@ -1307,6 +1336,7 @@ code: |
       alternate_party_zip = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.zip']
 
 ---
+ga id: A_participant_address_info
 field: participant_address_info
 question: |
   Please fill in the Participant's address.
@@ -1330,6 +1360,7 @@ fields:
       ${ party_zip }
 
 ---
+ga id: A_alternate_payee_info
 field: alternate_payee_info
 question: |
   Please fill in the Alternate Payee's information.
@@ -1356,6 +1387,7 @@ validation code: |
   if not phone_number_is_valid(phone_number_formatted(alternate_payee.phone)):
     validation_error('Phone number is not valid')
 ---
+ga id: A_alternate_payee_address_info
 field: alternate_payee_address_info
 question: |
   Please fill in the Alternate Payee's address.
@@ -1550,23 +1582,26 @@ code: |
 
 ---
 code: |
-  if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', '):
+  if plan_admin.address.on_one_line() != ', ' and plan_sponsor.address.on_one_line() != ', ':
     paymeny_amount = 9.99*2
   else:
     paymeny_amount = 9.99
 ---
+ga id: A_payment_screen
 event: payment_screen
 question: |
   You need to pay first.
 ---
-
+ga id: A_To_Proceed_Please_Make_Payment
 question: |
   To proceed, please make a payment for your documents.
 subquestion: |
   In order to cover our development costs, we are initially charging $${payment1.amount} per QDRO. If you are unhappy with your QDRO, we have a 100% satisfaction guarantee - just reach out within three months, give us a chance to make the QDRO right, and we'll give a full refund if the QDRO can't be fixed.
   
+   % if plan_admin.address.on_one_line() != ', ' and plan_sponsor.address.on_one_line() != ', ':
    % if CheckboX:
     *Since you asked us to mail your documents to the plan admin and/or sponsor, an additional charge of $9.99 per mailing for postage and handling is included in your total.*
+   % endif
    % endif
 post: |
   Can't afford the fee? Though we charge less than any other QDRO website out there, we've got your back. Please reach out to us via the contact form on [(http://lexyalgo.com/)](${ url_of('https://Lexyalgo.com/') }){:target="_blank"}. 
@@ -1575,6 +1610,7 @@ buttons:
   - Pay: False
   - Coupon: True 
 ---
+ga id: A_Payment_page
 event: payment1.demand
 question: |
   Payment ${a}
@@ -1593,6 +1629,7 @@ code: |
     urls =  [item['data']['_url'] for item in file_url(output_file)]
     a = ''
 ---
+ga id: A_coupon_page
 field: coupon_page1
 question: |
   Enter coupon code? ${a}
@@ -1611,7 +1648,8 @@ validation code: |
         if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
           clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
 ---
-question:
+ga id: A_checkbox_to_send_mail
+question: |
   Would you like us to mail your order to the retirement plan?
 fields:
   - note: By checking the box, you’re giving us consent to send your documents to the plan administrator and sponsor, if we have their contact information. There’s a charge of $9.99 per document for postage and handling.
@@ -1637,6 +1675,7 @@ code: |
         if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
           clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
 ---
+ga id: A_final_page
 event: final_shown
 question: |
   Download document for **${ document }** ${adverse_data} ${ delete_button_info(qdro_intake_data_details[0]['id']) }

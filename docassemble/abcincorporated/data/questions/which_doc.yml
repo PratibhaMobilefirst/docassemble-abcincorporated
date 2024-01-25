@@ -35,6 +35,7 @@ code: |
   which_doc
   reuse_from_diff_interview(which_doc,'reuse')
 ---
+ga id: Which_document_you_want_to_generate
 mandatory: True
 question: |
   Which document do you want to generate? 

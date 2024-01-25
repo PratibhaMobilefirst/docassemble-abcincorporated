@@ -66,6 +66,7 @@ code: |
   if row_item['title'] == 'Sign in button' or row_item['title'] == 'Registration Page':
     row_item = ''
 ---
+ga id: Dashboard
 table css class: table table-striped
 mandatory: True
 question: |
@@ -98,12 +99,13 @@ script: |
 
       // Redirect to the selected option's link when an option is selected
       dropdown.addEventListener("change", function () {
-        dropdown.style.borderColor = "#fff";
-        var selectedOption = dropdown.options[dropdown.selectedIndex];
-        if (selectedOption.value !== "") {
-          window.open(selectedOption.value, "_blank");
-        }
-      });
+      dropdown.style.borderColor = "#fff";
+      var selectedOption = dropdown.options[dropdown.selectedIndex];
+      if (selectedOption.value !== "") {
+      window.location.href = selectedOption.value;
+      }
+    });
+
       
     var daquestionElement = document.getElementById('daquestion');
 

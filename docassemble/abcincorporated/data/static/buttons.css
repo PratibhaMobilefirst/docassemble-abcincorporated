@@ -1,7 +1,22 @@
 .da-button-set.da-field-buttons .btn{
-  color: #000000;
+  color: #fff;
   border-color: #E80D4E;
 }
+
+button.btn.btn-link.btn-da.daquestionbackbutton.danonsubmit {
+    background-color: grey;
+    border-color: gray;
+}
+
+
+fieldset.da-button-set.da-field-buttons {
+    float: right;
+}
+
+.daformcontinue fieldset.da-button-set.da-field-buttons {
+    float: none;
+}
+
 svg.svg-inline--fa.fa-circle-question{
   color: purple;
 }
@@ -40,11 +55,14 @@ svg.svg-inline--fa.fa-circle-question{
 text-decoration: none;
 }
 
-
-
-a.btn.btn-warning.btn-da.daquestionactionbutton.danonsubmit {
-float: right;
+a.btn.btn-link.btn-da.daquestionactionbutton.danonsubmit {
+    color: #E80D4E;
 }
+
+.btn.btn-da.daquestionactionbutton.danonsubmit.btn-light[href="/interview?action=eyJhY3Rpb24iOiAicmVzdGFydF9pbnRlcnZpZXciLCAiYXJndW1lbnRzIjoge319&i=docassemble.playground3QDRO:qdro.yml"]{
+  float: none
+}
+
 a.btn.btn-da.daquestionactionbutton.danonsubmit.btn-light {
   float: right;
   background-color: #ffc107
@@ -54,16 +72,18 @@ background-color: #E80D4E
 }
 
 button[value="True"][name="Y2hlY2sx"] {
-float: right;
 background-color: #ffffff
 }
 
 button[value="True"][name="Y2hlY2sy"] {
-float: right;
 background-color: #ffffff
 }
 
 button[value="False"][name="Y2hlY2sx"] {
+padding: 0.375rem 1.8rem ;
+}
+
+button[value="False"][name="Y2hlY2sy"] {
 padding: 0.375rem 1.8rem ;
 }
 
@@ -72,12 +92,53 @@ padding: 0.375rem 1.8rem ;
 color: #000000
 }
 
-button.btn.btn-da.btn-light[value="False"][name="Y2hlY2sx"] {
-background-color: #E80D4E
+.btn.btn-da.btn-primary[name="ZHJhZnRfc2hvd24"]{
+float: right
 }
+
+.btn.btn-da.btn-secondary[name="ZHJhZnRfc2hvd24"]{
+float: right
+}
+
+.btn.btn-da.btn-primary[value="True"][name="Y2hlY2sx"]{
+color: #E80D4E
+}
+
+button.btn.btn-da.btn-light[value="False"][name="Y2hlY2sx"] {
+background-color: #E80D4E 
+}
+
+button.btn.btn-da.btn-light[value="True"][name="Y2hlY2sx"] { 
+color: #E80D4E
+}
+
 button.btn.btn-da.btn-secondary[value="True"][name="Y2hlY2sx"] {
 background-color: #ffffff
+color: #E80D4E
 }
+
+
+
+.btn.btn-da.btn-primary[value="True"][name="Y2hlY2sy"]{
+color: #E80D4E
+}
+
+button.btn.btn-da.btn-light[value="False"][name="Y2hlY2sy"] {
+background-color: #E80D4E 
+}
+
+button.btn.btn-da.btn-light[value="True"][name="Y2hlY2sy"] { 
+color: #E80D4E
+}
+
+button.btn.btn-da.btn-secondary[value="True"][name="Y2hlY2sy"] {
+background-color: #ffffff
+color: #E80D4E
+}
+
+
+
+
 
 button[name="dGFyZ2V0X3VybA"]{
 display: none
@@ -120,9 +181,28 @@ display: none;
 
 .dropdown-item.active, .dropdown-item:active{
     color: #212529;
-    background-color: #E80D4E;;
+    background-color: #E80D4E;
 }
 
 a.btn.btn-primary.btn-darevisit[href="/restart_session?i=docassemble.playground3QDRO:adverse.yml"] {
     float: right;
+    margin-left: 5px;
+}
+
+.da-attachment-alert.da-attachment-alert-multiple.alert.alert-success {
+    margin-top: 30px;
+}
+
+.da-attachment-alert.da-attachment-alert-single.alert.alert-success{
+  margin-top: 30px;
+}
+
+.row.da-review.da-review-button.bg-light.pt-2.my-2 h4 {
+  color: #797878;
+  font-size: larger;
+}
+
+#stripe-submit{
+  margin-left: 5px;
+  float: right;
 }

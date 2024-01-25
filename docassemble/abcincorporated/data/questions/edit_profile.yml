@@ -83,6 +83,7 @@ code: |
 
 
 ---
+ga id: profile_page
 mandatory: True
 field: profile_page
 question: |
@@ -103,6 +104,7 @@ review:
 
 skip undefined: False
 ---
+ga id: profile_user_name
 question: |
   Your name 
 fields:
@@ -119,6 +121,7 @@ fields:
 continue button field: screen['name']
 
 ---
+ga id: profile_user_address
 question: |
   Your address
 fields:
@@ -143,6 +146,7 @@ fields:
       ${ user_data1[0]['profile.user.address.zip'] }
 continue button field: screen['address']
 ---
+ga id: profile_bar_number
 question: |
   Bar Number
 fields:
@@ -151,6 +155,7 @@ fields:
       ${ user_data1[0]['profile.preferences.bar_number'] }
 continue button field: screen['preferences']
 ---
+ga id: profile_final_page
 mandatory: True
 event: final
 question: |
