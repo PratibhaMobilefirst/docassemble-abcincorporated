@@ -5,7 +5,7 @@ metadata:
     Thanks
   show login: True
   allow registration: False
-  exit url: "http://lexyalgo.com/"
+  exit url: "http://lexyalgo.com"
   exit link: logout
   exit label: |
     Exit
