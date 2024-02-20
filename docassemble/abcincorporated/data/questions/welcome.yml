@@ -25,18 +25,23 @@ objects:
 mandatory: True
 code: |
   set_parts( logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
-
+---
+modules:
+  - .read_data
+  - .data_from_database
 ---
 initial: True
 code: |
   if not user_logged_in():
     command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml')  
-
+---
+code: |
+  data_from_registration = register_data()
 ---
 ga id: welcome_page
 mandatory: True
 question: |
-  Welcome to the LexyAlgo QDRO Generator. 
+  Welcome to the LexyAlgo QDRO Generator.
 subquestion: |
   This app creates a QDRO customized to your state, retirement plan, and divorce agreement. Best of all, the templates are produced in an editable Word format, so that you can continue to make changes as needed. By continuing, you agree to and acknowledge the following:
   
@@ -61,7 +66,10 @@ continue button field: user_saw_intro
 initial: True
 code: |
   if user_saw_intro == True:
-    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml')
+    if len(data_from_registration) > 0 and 'user.address.address' in data_from_registration[0] and len(data_from_registration[0]['user.address.address'])>0:
+      command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml')
+    else:
+      command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:complete_profile_details.yml')  
 ---
 ga id: welcome_page_sign_in
 need: agrees_to_tos

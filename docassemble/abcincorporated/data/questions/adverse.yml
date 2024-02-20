@@ -9,6 +9,10 @@ metadata:
   exit link: logout
   exit label: |
     Exit
+  navigation bar html: |
+    <li class="nav-item">
+      <a class="nav-link home" href="https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml">Home</a>
+    </li>
 ---
 metadata:
   temporary session: True
@@ -28,10 +32,14 @@ modules:
 
 ---
 features:
+  labels above fields: True
+  progress bar: True
+  navigation back button: False
+  show progress bar percentage: True
   javascript: https://js.stripe.com/v3/
   popover trigger: click
   css: buttons.css
-  question back button: True  
+  question back button: True   
 ---
 objects:
   - payment1: DAStripe.using(payor=email_id, currency='usd')
@@ -44,11 +52,19 @@ objects:
   - plan_admin_foreign: Individual
   - plan_sponsor: Individual
   - plan_sponsor_foreign: Individual
+  - company_logo: DAStaticFile.using(filename='logo.png')
 ---
 initial: True
 code: |
   if not user_logged_in():
-    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml')       
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml') 
+  data_from_registration = register_data()
+  if user_logged_in() and len(data_from_registration) > 0 and 'user.address.address' not in data_from_registration[0]:
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:complete_profile_details.yml')     
+---
+mandatory: True
+code: |
+  set_parts(logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
 ---
 mandatory: True
 code: |
@@ -57,7 +73,6 @@ code: |
 code: |
   data_from_registration = register_data()
   register_dataq = display_register_data(origin_of_interviewee)
-  
   register_dataj = display_register_data_j()
   courts_data = courts()
   user_data11 = display_copy(origin_of_interviewee)
@@ -424,12 +439,6 @@ code: |
   email_id
   plan_name
   pick_plan
-  plan_sponsor_adress_details
-  if plan_sponsor.address.on_one_line() != ', ':
-    plan_sponsor_name
-  plan_admin_adress_details
-  if plan_admin.address.on_one_line() != ', ':
-    plan_admin_namee
   document
   role
   filing_party_name_info
@@ -452,20 +461,30 @@ code: |
   participant_address_info
   alternate_payee_info
   alternate_payee_address_info
+  optional_questions
+  plan_sponsor_adress_details
+  if plan_sponsor.address.on_one_line() != ', ':
+    plan_sponsor_name
+  plan_admin_adress_details
+  if plan_admin.address.on_one_line() != ', ':
+    plan_admin_namee
   if plan_admin.address.on_one_line() == ', ' and plan_sponsor.address.on_one_line() == ', ':
     final_shown
   else: 
-    CheckboX
-    if CheckboX:
-      check2
-      if check2:
-        coupon_page1
-        final_shown
-      else:
-        if not payment1.paid:
-          payment_screen
-        if payment1.paid:
+    if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')):
+      CheckboX
+      if CheckboX:
+        check2
+        if check2:
+          coupon_page1
           final_shown
+        else:
+          if not payment1.paid:
+            payment_screen
+          if payment1.paid:
+            final_shown
+      else:
+        final_shown
     else:
       final_shown
 ---
@@ -518,6 +537,7 @@ fields:
       - Deferred Compensation (Cash & Investment Account 401K)
       - Pension Plan (Plans that guarantee monthly retirement income)
 ---
+progress: 15
 ga id: A_PlanName
 question: |
   What is the retirement plan name? 
@@ -582,6 +602,7 @@ fields:
   - Plan Sponsor Name : plan_sponsor_name
     default: |
       ${plan_sponsor_nme}
+    required: False
 ---
 code: |
   plan = display_plan1()     
@@ -630,6 +651,7 @@ fields:
   - Plan Admin Name : plan_admin_namee
     default: |
       ${plan_admin_nme}
+    required: False
 ---
 code: |
   if len(add1) > 0:
@@ -1336,6 +1358,7 @@ code: |
       alternate_party_zip = user_data1[0]['alternate_payee_address_info']['alternate_payee.address.zip']
 
 ---
+progress: 60
 ga id: A_participant_address_info
 field: participant_address_info
 question: |
@@ -1360,6 +1383,7 @@ fields:
       ${ party_zip }
 
 ---
+progress: 80
 ga id: A_alternate_payee_info
 field: alternate_payee_info
 question: |
@@ -1387,6 +1411,7 @@ validation code: |
   if not phone_number_is_valid(phone_number_formatted(alternate_payee.phone)):
     validation_error('Phone number is not valid')
 ---
+progress: 90
 ga id: A_alternate_payee_address_info
 field: alternate_payee_address_info
 question: |
@@ -1587,6 +1612,12 @@ code: |
   else:
     paymeny_amount = 9.99
 ---
+progress: 100
+ga id: optional_questions
+field: optional_questions
+question: |
+  Your QDRO is ready. The following optional questions will help us build your cover letter to the retirement plan. If you do not have this information, hit continue to skip.
+---
 ga id: A_payment_screen
 event: payment_screen
 question: |
@@ -1598,7 +1629,7 @@ question: |
 subquestion: |
   In order to cover our development costs, we are initially charging $${payment1.amount} per QDRO. If you are unhappy with your QDRO, we have a 100% satisfaction guarantee - just reach out within three months, give us a chance to make the QDRO right, and we'll give a full refund if the QDRO can't be fixed.
   
-   % if plan_admin.address.on_one_line() != ', ' and plan_sponsor.address.on_one_line() != ', ':
+   % if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')):
    % if CheckboX:
     *Since you asked us to mail your documents to the plan admin and/or sponsor, an additional charge of $9.99 per mailing for postage and handling is included in your total.*
    % endif
@@ -1639,14 +1670,16 @@ validation code: |
   if check_coupon(coupon_code1, retrieve_interview_id()):
     #yml_variables(retrieve_interview_id(),user_info().filename,url_args)
     check_cookie_value(get_cookies())  
-    if CheckboX:
-      delete_return_id = delete_return_addresses()
-      if data_from_registration and len(data_from_registration) > 0:
-        return_address = clicksend_post_return_adress(data_from_registration[0])
-        return_address_id = return_address['data']['return_address_id']
-        clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
-        if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
-          clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
+    if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')):
+      if CheckboX:
+        delete_return_id = delete_return_addresses()
+        if data_from_registration and len(data_from_registration) > 0:
+          return_address = clicksend_post_return_adress(data_from_registration[0])
+          return_address_id = return_address['data']['return_address_id']
+          if (plan_sponsor_address != '' or plan_sponsor.address.on_one_line() != ', ') :
+            clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
+          if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
+            clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
 ---
 ga id: A_checkbox_to_send_mail
 question: |
@@ -1664,17 +1697,19 @@ code: |
   payment1.process()
   #log(interview_id, "info")
   if update_payment_status(interview_id):
-    check_cookie_value(get_cookies())
-    #yml_variables(retrieve_interview_id(),user_info().filename,url_args)
-    if CheckboX:
-      delete_return_id = delete_return_addresses()
-      if data_from_registration and len(data_from_registration) > 0:
-        return_address = clicksend_post_return_adress(data_from_registration[0])
-        return_address_id = return_address['data']['return_address_id']
-        clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
-        if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
-          clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
+    check_cookie_value(get_cookies()) 
+    if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')):
+      if CheckboX:
+        delete_return_id = delete_return_addresses()
+        if data_from_registration and len(data_from_registration) > 0:
+          return_address = clicksend_post_return_adress(data_from_registration[0])
+          return_address_id = return_address['data']['return_address_id']
+          if (plan_sponsor_address != '' or plan_sponsor.address.on_one_line() != ', ') :
+            clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
+          if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
+            clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
 ---
+progrss: 100
 ga id: A_final_page
 event: final_shown
 question: |

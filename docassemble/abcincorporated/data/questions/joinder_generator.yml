@@ -9,12 +9,20 @@ metadata:
   exit link: logout
   exit label: |
     Exit
+  navigation bar html: |
+    <li class="nav-item">
+      <a class="nav-link home" href="https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml">Home</a>
+    </li>
 ---
 metadata:
   temporary session: True
   hidden: True
 ---
 features:
+  labels above fields: True
+  progress bar: True
+  navigation back button: False
+  show progress bar percentage: True
   popover trigger: click
   css: buttons.css 
   question back button: True
@@ -33,6 +41,9 @@ initial: True
 code: |
   if not user_logged_in():
     command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml') 
+  data_from_registration = register_data()
+  if user_logged_in() and len(data_from_registration) > 0 and 'user.address.address' not in data_from_registration[0]:
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:complete_profile_details.yml')
 ---
 mandatory: True
 code: |
@@ -44,7 +55,7 @@ code: |
   courts_data = courts()
   user_data11 = display_copy(origin_of_interviewee)
   which_button=display_type_of_interview(origin_of_interviewee)
-  file=file_name(origin_of_interviewee)
+  filee=file_name(origin_of_interviewee)
   dash_results = dash()
   qdro_intake_user_name = qdro_intake_user_name_details()
   qdro_intake_data_details = reuse_intake_data(qdro_intake_user_name[0])
@@ -134,7 +145,7 @@ code: |
       user_data1 = user_data11
     else:
       user_data1[0]['response_dos'] = ''
-    if ((file[0] == 'docassemble.playground3QDRO:qdro.yml' or file[0] == 'docassemble.playground3QDRO:adverse.yml') and len(which_button) > 0 and which_button[0][2] == "reuse"):
+    if (len(filee) > 0 and (filee[0] == 'docassemble.playground3QDRO:qdro.yml' or filee[0] == 'docassemble.playground3QDRO:adverse.yml' or filee[0] == 'docassemble.playground3QDRO:Government_Plan_DRO.yml') and len(which_button) > 0 and which_button[0][2] == "reuse"):
       default_petitioner_address = {
         'petitioner.name.first': '',
         'petitioner.name.middle': '',
@@ -839,6 +850,7 @@ objects:
   - other: Individual
 
 ---
+progress: 15
 ga id: J_StartWithYou
 question: |
   Let’s start with you.
@@ -880,7 +892,7 @@ code: |
 ---
 mandatory: True
 code: |
-  if len(file) > 0 and (file[0] == 'docassemble.playground3QDRO:adverse.yml' or file[0] == 'docassemble.playground3QDRO:qdro.yml') and len(which_button) > 0 and which_button[0][2] == "reuse":
+  if len(filee) > 0 and (filee[0] == 'docassemble.playground3QDRO:adverse.yml' or filee[0] == 'docassemble.playground3QDRO:qdro.yml' or filee[0] == 'docassemble.playground3QDRO:Government_Plan_DRO.yml') and len(which_button) > 0 and which_button[0][2] == "reuse":
     courtt = user_data1[0]['court']
   else:
     courtt = user_data1[0]['court_name']
@@ -1176,6 +1188,7 @@ code: |
     r_attorney_phone = user_data1[0]['respondent_attorney_phone']
     r_attorney_email = user_data1[0]['respondent_attorney_email']
 ---
+progress: 35
 ga id: J_petitioner_attorney_fields
 field: petitioner_attorney_field
 question: |
@@ -1311,6 +1324,7 @@ mandatory: True
 code: |
   respondent_name = respondent.name.first + ' ' + respondent.name.middle + ' ' + respondent.name.last 
 ---
+progress: 50
 ga id: J_respondent_attorney_fields
 field: respondent_attorney_field
 question: |
@@ -1523,6 +1537,7 @@ code: |
   else:
     choices= [peti,resp,attorney_pet,attorney_res,others]
 ---
+progress: 70
 ga id: J_who_is_filing
 question: |
   Who will be filing this document?
@@ -1585,6 +1600,7 @@ validation code: |
   if who_is_filing == 'Other' and not phone_number_is_valid(phone_number_formatted(other_phone)):
         validation_error('Phone number is not valid')
 ---
+progress: 85
 ga id: J_plan_name
 question: |
   Now let's pick the plan.
@@ -1616,6 +1632,7 @@ code: |
   else:
     add_plan = plan_name
 ---
+progress: 95 
 ga id: J_who_the_plan_participant_is
 question: |
   And finally, tell us who the plan participant (employee) is:
@@ -1670,6 +1687,7 @@ code: |
   #delete_interview_type=delete_data_from_interview_type(origin_of_interviewee)
   a = ''
 ---
+progress: 100
 ga id: J_final_page
 mandatory: True
 question: |

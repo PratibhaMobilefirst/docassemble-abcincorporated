@@ -17,6 +17,9 @@ metadata:
 features:
   javascript: my-functions.js
   css: buttons.css
+  navigation back button: False
+  labels above fields: True
+  question back button: True
 ---
 modules:
   - .read_data

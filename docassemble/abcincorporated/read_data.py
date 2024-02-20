@@ -1,4 +1,4 @@
-from docassemble.base.util import variables_snapshot_connection,get_config, user_info, json
+from docassemble.base.util import variables_snapshot_connection,get_config, user_info, json, get_config
 import psycopg2
 from cryptography.fernet import Fernet
 from docassemble.base.util import log
@@ -6,7 +6,7 @@ from docassemble.base.util import *
 interview_id = ''  # Define the global variable
 which_user = ''
 
-__all__ = ['add','display','encryptStr','decryptStr','dash','display_copy','delete_data','display_payment','display_register_data','add_registered_data','register_data','reg','retrieve_interview_id','update_payment_status','update_profile','update_profile1','display_register_data_j','courts','plans','court_address','claimant','add_to_joinder','reuse_data','add_interview_type','display_type_of_interview','edit_interview_type','file_name','reuse_from_diff_interview','display_qdro_intake_data_copy','add_to_qdro_intake','address_of_admin_and_sponsor','qdro_intake_new_users','reuse_intake_data','reuse_from_intake_interview','qdro_intake_user_id','qdro_intake_user_information','qdro_intake_user_name_details','username','use_intake_button','reuse_button_info', 'delete_button_info','delete_previous_button_info','display_plan1','get_plan_type']    
+__all__ = ['add','display','encryptStr','decryptStr','dash','display_copy','delete_data','display_payment','display_register_data','add_registered_data','add_registered_data1','register_data','reg','retrieve_interview_id','update_payment_status','update_profile','update_profile1','display_register_data_j','courts','plans','court_address','claimant','add_to_joinder','reuse_data','add_interview_type','display_type_of_interview','edit_interview_type','file_name','reuse_from_diff_interview','display_qdro_intake_data_copy','add_to_qdro_intake','address_of_admin_and_sponsor','qdro_intake_new_users','reuse_intake_data','reuse_from_intake_interview','qdro_intake_user_id','qdro_intake_user_information','qdro_intake_user_name_details','username','use_intake_button','reuse_button_info', 'delete_button_info','delete_previous_button_info','display_plan1','get_plan_type']    
 
 def encryptStr(textToConvert):
   key = 'ZmDfcTF7_60GrrY167zsiPd67pEvs0aGOv2oasOM1Pg='
@@ -184,7 +184,7 @@ def reuse_data(mainid):
       return r
 #reuse1    
     
-def add_registered_data(da,user_id):
+def add_registered_data1(da,user_id):
     conn = variables_snapshot_connection()
     cur = conn.cursor()
     da1 = json.dumps(da)
@@ -195,17 +195,35 @@ def add_registered_data(da,user_id):
     cur.close()
     return "" 
 
+def add_registered_data(da):
+    conn = variables_snapshot_connection()
+    cur = conn.cursor()
+    da1 = json.dumps(da)
+    postgres_insert_query = """
+        INSERT INTO register (data, user_id, filename)
+        VALUES (%s, %s, %s)
+        ON CONFLICT (user_id) DO UPDATE
+        SET data = register.data || excluded.data
+    """
+    record_to_insert = (da1, user_info().id, user_info().filename)
+    cur.execute(postgres_insert_query, record_to_insert)
+    conn.commit()
+    cur.close()
+    return ""
+
 def update_profile(da):
     conn = variables_snapshot_connection()
     cur = conn.cursor()
     da1 = json.dumps(da)
     exists_data = reg()
     if len(exists_data) > 0:
-      sql_update_query = """Update register set data = %s where user_id = %s"""
-      cur.execute(sql_update_query, (da1, user_info().id))
-      conn.commit()
-      cur.close()
-      return ''
+        sql_update_query = """UPDATE register SET data = %s WHERE user_id = %s"""
+        cur.execute(sql_update_query, (da1, user_info().id))
+        conn.commit()
+        cur.close()
+        return ''
+    else:
+        return ''
     
 def update_profile1(da):
     conn = variables_snapshot_connection()
@@ -447,6 +465,8 @@ def edit_interview_type(mainid,file):
         command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:joinder_generator.yml&id='+str(mainid)+'&new_session=1')
       elif file[0]=='docassemble.playground3QDRO:adverse.yml' or file[0]=='docassemble.playground3:adverse.yml':
         command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:adverse.yml&id='+str(mainid)+'&new_session=1')
+      elif file[0]=='docassemble.playground3:Government_Plan_DRO.yml' or file[0]=='docassemble.playground3QDRO:Government_Plan_DRO.yml':
+        command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:Government_Plan_DRO.yml&id='+str(mainid)+'&new_session=1')
       else:
         command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:qdro.yml&id='+str(mainid)+'&new_session=1')
       return ''
@@ -458,10 +478,12 @@ def edit_interview_type(mainid,file):
       cur.execute(postgres_insert_query, record_to_insert)
       conn.commit()
       cur.close()
-      if file[0]=='docassemble.playground3QDRO:joinder_generator.yml' or file[0]=='docassemble.playground3QDRO:joinder_generator.yml':
+      if file[0]=='docassemble.playground3:joinder_generator.yml' or file[0]=='docassemble.playground3QDRO:joinder_generator.yml':
         command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:joinder_generator.yml&id='+str(mainid)+'&new_session=1')
-      elif file[0]=='docassemble.playground3QDRO:adverse.yml' or file[0]=='docassemble.playground3QDRO:adverse.yml':
+      elif file[0]=='docassemble.playground3:adverse.yml' or file[0]=='docassemble.playground3QDRO:adverse.yml':
         command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:adverse.yml&id='+str(mainid)+'&new_session=1')
+      elif file[0]=='docassemble.playground3:Government_Plan_DRO.yml' or file[0]=='docassemble.playground3QDRO:Government_Plan_DRO.yml':
+        command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:Government_Plan_DRO.yml&id='+str(mainid)+'&new_session=1')
       else:
         command('leave',url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:qdro.yml&id='+str(mainid)+'&new_session=1')
       return "" 
@@ -485,6 +507,8 @@ def reuse_from_diff_interview(which_doc, type_of_interview):
         command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:qdro.yml&id=' + str(retrieve_interview_id()) + '&new_session=1')
     elif type_of_interview == 'reuse' and which_doc == 'Notice of Adverse Interest':
         command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:adverse.yml&id=' + str(retrieve_interview_id()) + '&new_session=1')
+    elif type_of_interview == 'reuse' and which_doc == 'Government Plan DRO':
+        command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:Government_Plan_DRO.yml&id=' + str(retrieve_interview_id()) + '&new_session=1')
    
 def display_qdro_intake_data_copy(mainid):
     if mainid == 'unknown' or not mainid:
@@ -664,6 +688,8 @@ def reuse_from_intake_interview(select_interview,which_user):
         command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:adverse.yml&username='+ str(which_user) + '&new_session=1')
     elif select_interview == 'QDRO':
         command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:qdro.yml&username=' + str(which_user) + '&new_session=1')
+    elif select_interview == 'Government Plan DRO':
+        command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:Government_Plan_DRO.yml&username=' + str(which_user) + '&new_session=1')
     return which_user
 
 def username():

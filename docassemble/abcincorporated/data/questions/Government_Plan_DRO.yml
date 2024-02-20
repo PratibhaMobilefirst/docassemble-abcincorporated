@@ -1,11 +1,11 @@
 metadata: 
   title: |
-    QDRO
+    Government Plan DRO
   short title: |
     Thanks
   show login: True
   allow registration: False
-  exit url: "http://lexyalgo.com"
+  exit url: "http://lexyalgo.com/"
   exit link: logout
   exit label: |
     Exit
@@ -26,9 +26,9 @@ modules:
   - .read_data
   - .data_from_database
   - .clicksend
+  - .parameters
   - .delete_return_id
   - .click_id
-  - .parameters
 ---
 features:
   labels above fields: True
@@ -56,12 +56,11 @@ objects:
 ---
 initial: True
 code: |
-  if not user_logged_in():
-    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml') 
   data_from_registration = register_data()
   if user_logged_in() and len(data_from_registration) > 0 and 'user.address.address' not in data_from_registration[0]:
     command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:complete_profile_details.yml')
-    
+  if not user_logged_in():
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:signIn_signUp.yml')       
 ---
 mandatory: True
 code: |
@@ -97,24 +96,33 @@ code: |
       user_data1 = user_data11
     else:
       user_data1[0]['email_id'] = ''
-    if "pick_plan" in user_data11[0]:
+    if "government_plan" in user_data11[0]:
       if len(which_button) > 0 and which_button[0][2] == "reuse":
-        user_data1[0]['pick_plan'] = ''
+        user_data1[0]['government_plan'] = ''
       else:
         user_data1 = user_data11
     else:
-      user_data1[0]['pick_plan'] = ''
-    if "Pension" in user_data11[0]:
-      if len(which_button) > 0 and which_button[0][2] == "reuse":
-        user_data1[0]['Pension'] = ''
-      else:
-        user_data1 = user_data11
-    else:
-      user_data1[0]['Pension'] = ''
+      user_data1[0]['government_plan'] = ''
     if "Payment_type" in user_data11[0]:
       user_data1 = user_data11
     else:
       user_data1[0]['Payment_type'] = ''
+    if "benifit_type" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['benifit_type'] = ''
+    if "continuing_benefit" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['continuing_benefit'] = ''
+    if "tda_division_method" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['tda_division_method'] = ''
+    if "shall" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['shall'] = ''
     if "document" in user_data11[0]:
       user_data1 = user_data11
     else:
@@ -175,6 +183,14 @@ code: |
       user_data1 = user_data11
     else:
       user_data1[0]['division_number'] = ''
+    if "Date_Ddvorce_was_commenced" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['Date_Ddvorce_was_commenced'] = ''
+    if "date_of_judgment" in user_data11[0]:
+      user_data1 = user_data11
+    else:
+      user_data1[0]['date_of_judgment'] = ''
     if "petitioner_field" in user_data11[0]:
       user_data1 = user_data11
     else:
@@ -191,13 +207,6 @@ code: |
         'respondent.name.middle': '',
         'respondent.name.last': ''
       }
-    if "plan_name" in user_data11[0]:
-      if len(which_button) > 0 and which_button[0][2] == "reuse":
-        user_data1[0]['plan_name'] = ''
-      else:
-        user_data1 = user_data11
-    else:
-      user_data1[0]['plan_name'] = ''
     if "who_is_participant" in user_data11[0]:
       if len(which_button) > 0 and which_button[0][2] == "reuse":
         user_data1[0]['who_is_participant'] = ''
@@ -257,13 +266,6 @@ code: |
         'alternate_payee.address.state':'',
         'alternate_payee.address.zip':''
       }
-    if "awarding" in user_data11[0]:
-      if len(which_button) > 0 and which_button[0][2] == "reuse":
-        user_data1[0]['awarding'] = ''
-      else:
-        user_data1 = user_data11
-    else:
-      user_data1[0]['awarding'] = ''
     if "percentage" in user_data11[0]:
       if len(which_button) > 0 and which_button[0][2] == "reuse":
         user_data1[0]['percentage'] = ''
@@ -293,27 +295,6 @@ code: |
         user_data1 = user_data11
     else:
       user_data1[0]['other'] = ''
-    if "Pension1" in user_data11[0]:
-      if len(which_button) > 0 and which_button[0][2] == "reuse":
-        user_data1[0]['Pension1'] = ''
-      else:
-        user_data1 = user_data11
-    else:
-      user_data1[0]['Pension1'] = ''
-    if "add_other_plan" in user_data11[0]:
-      if len(which_button) > 0 and which_button[0][2] == "reuse":
-        user_data1[0]['add_other_plan'] = ''
-      else:
-        user_data1 = user_data11
-    else:
-      user_data1[0]['add_other_plan'] = ''
-    if "other_plan" in user_data11[0]:
-      if len(which_button) > 0 and which_button[0][2] == "reuse":
-        user_data1[0]['other_plan'] = ''
-      else:
-        user_data1 = user_data11
-    else:
-      user_data1[0]['other_plan'] = ''
 
   else:
     user_data1 = [{
@@ -321,7 +302,6 @@ code: |
     'l_name': register_dataq[0]['last_name'] if len(register_dataq) > 0 else '',
     'email_id': register_dataq[0]['email'] if len(register_dataq) > 0 else '',
     'pick_plan':'',
-    'Pension':'',
     'document':'',
     'role':'',
     'role1':'',
@@ -345,6 +325,8 @@ code: |
     'case_number':'',
     'judicial_district':'',
     'division_number':'',
+    'Date_Ddvorce_was_commenced':'',
+    'date_of_judgment':'',
     'petitioner_field':{
         'petitioner.name.first': '',
         'petitioner.name.middle': '',
@@ -355,7 +337,6 @@ code: |
         'respondent.name.middle': '',
         'respondent.name.last': ''
       },
-    'plan_name':'',
     'who_is_participant':'',
     'participant.dob':'',
     'participant.ssn':'',
@@ -379,17 +360,83 @@ code: |
       'alternate_payee.address.state':'',
       'alternate_payee.address.zip':''
     },
-    'awarding':'',
     'percentage':'',
     'assignment_date':'',
     'dollar':'',
     'date_of_marriage':'',
-    'Payment_type': '',
-    'Pension1':'',
+    'Payment_type':'',
+    'benifit_type':'',
+    'continuing_benefit':'',
+    'tda_division_method':'',
+    'shall':'',
     'add_other_plan':'',
     'other_plan':'',
     'other':''
     }]
+  
+  
+  jsond = {
+    'f_name':f_name,
+    'l_name':l_name,
+    'email_id':email_id,
+    'pick_plan':pick_plan,
+    'document':document,
+    'role':role,
+    'role1':role1,
+    'filing_party_name_info':filingJson,
+    'filing_party_address_info':filingAddressJson,
+    'county':county,
+    'court':court,
+    'case_number':case_number,
+    'judicial_district':judicial_district,
+    'division_number':division_number,
+    'Date_Ddvorce_was_commenced':str(Date_Ddvorce_was_commenced),
+    'date_of_judgment':str(date_of_judgment),
+    'petitioner_field':{
+  'petitioner.name.first': petitioner.name.first,
+  'petitioner.name.middle': petitioner.name.middle,
+  'petitioner.name.last': petitioner.name.last
+    },
+    'respondent_field':{
+  'respondent.name.first': respondent.name.first,
+  'respondent.name.middle': respondent.name.middle,
+  'respondent.name.last': respondent.name.last
+    },
+    'who_is_participant':who_is_participant,
+    'participant.dob':encryptStr(str(participant.dob)),
+    'participant.ssn':encryptStr(participant.ssn),
+    'participant.phone':encryptStr(participant.phone),
+    'participant.email':participant.email,
+    'participant_address_info':{
+  'participant.address.address': participant.address.address,
+  'participant.address.unit': participant.address.unit,
+  'participant.address.city': participant.address.city,
+  'participant.address.state':participant.address.state,
+  'participant.address.zip':participant.address.zip
+    },
+    'alternate_payee.dob':encryptStr(str(alternate_payee.dob)),
+    'alternate_payee.ssn':encryptStr(alternate_payee.ssn),
+    'alternate_payee.phone':encryptStr(alternate_payee.phone),
+    'alternate_payee.email':alternate_payee.email,
+    'alternate_payee_address_info':{
+  'alternate_payee.address.address': alternate_payee.address.address,
+  'alternate_payee.address.unit': alternate_payee.address.unit,
+  'alternate_payee.address.city': alternate_payee.address.city,
+  'alternate_payee.address.state':alternate_payee.address.state,
+  'alternate_payee.address.zip':alternate_payee.address.zip
+    },
+    'Payment_type':Payment_type,
+    'benifit_type': serialized_benefit_type,
+    'continuing_benefit': continuing_benefit if serialized_benefit_type["continuing_benefit"] else '',
+    'tda_division_method':tda_division_method,
+    'shall':shall if tda_division_method == 'Fixed Monthly Dollar Amount' or tda_division_method == 'Fixed Percentage' else '',
+    'percentage':percentage if tda_division_method == 'Fixed Percentage' or Payment_type == 'Fixed Percentage' else '',
+    'dollar':dollar if tda_division_method == 'Fixed Monthly Dollar Amount' or Payment_type == 'Fixed Monthly Dollar Amount' else '',
+    'assignment_date':str(assignment_date) if serialized_benefit_type["continuing_benefit"] or serialized_benefit_type["survivor_post_retirement"] or serialized_benefit_type["survivor_pre_retirement"] or tda_division_method == 'Fixed Percentage' or tda_division_method == 'Fixed Monthly Dollar Amount' else '',
+    'other':other,
+    'add_other_plan': add_other_plan,
+    'plan_name': plan_name,
+     }
 
   if len(which_button) > 0 and which_button[0][2] == "reuse":
     button_of_interview = which_button[0][2]
@@ -401,17 +448,14 @@ code: |
 ---
 mandatory: True
 code: |
-  set_parts(title='QDRO', logo='<img src="' + company_logo.url_for() + '" style="height: 50px">')
+  set_parts(logo='<img src="' + company_logo.url_for() + '" style="height: 50px">')
 ---
 id: interview order
 mandatory: True
 code: |
   email_id
   pick_plan
-  if pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)":
-    Pension
-  else:
-    Pension = ''
+  plan_sponsor_adress_details
   document
   if document == 'California' or document == 'Kansas':
     role
@@ -444,555 +488,34 @@ code: |
   participant_address_info
   alternate_payee_info
   alternate_payee_address_info
-  if (pick_plan == "Deferred Compensation (Cash & Investment Account 401K)" and awarding == "Percentage To The Alternate Payee") or (pick_plan == "Deferred Compensation (Cash & Investment Account 401K)" and awarding == "Percentage Of An Employee Stock Ownership Plan (ESOP)"):
-    percentage
-    assignment_date
-    jsond = {
-      'f_name':f_name,
-      'l_name':l_name,
-      'email_id':email_id,
-      'pick_plan':pick_plan,
-      'document':document,
-      'role':role,
-      'role1':role1,
-      'filing_party_name_info':filingJson,
-      'filing_party_address_info':filingAddressJson,
-      'county':county,
-      'court':court,
-      'case_number':case_number,
-      'judicial_district':judicial_district,
-      'division_number':division_number,
-      'petitioner_field':{
-        'petitioner.name.first': petitioner.name.first,
-        'petitioner.name.middle': petitioner.name.middle,
-        'petitioner.name.last': petitioner.name.last
-      },
-      'respondent_field':{
-        'respondent.name.first': respondent.name.first,
-        'respondent.name.middle': respondent.name.middle,
-        'respondent.name.last': respondent.name.last
-      },
-      'plan_name':plan_name,
-      'who_is_participant':who_is_participant,
-      'participant.dob':encryptStr(str(participant.dob)),
-      'participant.ssn':encryptStr(participant.ssn),
-      'participant.phone':encryptStr(participant.phone),
-      'participant.email':participant.email,
-      'participant_address_info':{
-        'participant.address.address': participant.address.address,
-        'participant.address.unit': participant.address.unit,
-        'participant.address.city': participant.address.city,
-        'participant.address.state':participant.address.state,
-        'participant.address.zip':participant.address.zip
-      },
-      'alternate_payee.dob':encryptStr(str(alternate_payee.dob)),
-      'alternate_payee.ssn':encryptStr(alternate_payee.ssn),
-      'alternate_payee.phone':encryptStr(alternate_payee.phone),
-      'alternate_payee.email':alternate_payee.email,
-      'alternate_payee_address_info':{
-        'alternate_payee.address.address': alternate_payee.address.address,
-        'alternate_payee.address.unit': alternate_payee.address.unit,
-        'alternate_payee.address.city': alternate_payee.address.city,
-        'alternate_payee.address.state':alternate_payee.address.state,
-        'alternate_payee.address.zip':alternate_payee.address.zip
-      },
-      'awarding':awarding,
-      'percentage':percentage,
-      'assignment_date':str(assignment_date),
-      'other':other,
-      'add_other_plan': add_other_plan,
-      'other_plan': other_plan if add_other_plan else '',
-       }
-    
-  if pick_plan == "Deferred Compensation (Cash & Investment Account 401K)" and awarding == "Fixed Dollar Amount With Gains Or Losses":
-    dollar
-    assignment_date
-    jsond = {
-      'f_name':f_name,
-      'l_name':l_name,
-      'email_id':email_id,
-      'pick_plan':pick_plan,
-      'document':document,
-      'role':role,
-      'role1':role1,
-      'filing_party_name_info':filingJson,
-      'filing_party_address_info':filingAddressJson,
-      'county':county,
-      'court':court,
-      'case_number':case_number,
-      'judicial_district':judicial_district,
-      'division_number':division_number,
-      'petitioner_field':{
-        'petitioner.name.first': petitioner.name.first,
-        'petitioner.name.middle': petitioner.name.middle,
-        'petitioner.name.last': petitioner.name.last
-      },
-      'respondent_field':{
-        'respondent.name.first': respondent.name.first,
-        'respondent.name.middle': respondent.name.middle,
-        'respondent.name.last': respondent.name.last
-      },
-      'plan_name':plan_name,
-      'who_is_participant':who_is_participant,
-      'participant.dob':encryptStr(str(participant.dob)),
-      'participant.ssn':encryptStr(participant.ssn),
-      'participant.phone':encryptStr(participant.phone),
-      'participant.email':participant.email,
-      'participant_address_info':{
-        'participant.address.address': participant.address.address,
-        'participant.address.unit': participant.address.unit,
-        'participant.address.city': participant.address.city,
-        'participant.address.state':participant.address.state,
-        'participant.address.zip':participant.address.zip
-      },
-      'alternate_payee.dob':encryptStr(str(alternate_payee.dob)),
-      'alternate_payee.ssn':encryptStr(alternate_payee.ssn),
-      'alternate_payee.phone':encryptStr(alternate_payee.phone),
-      'alternate_payee.email':alternate_payee.email,
-      'alternate_payee_address_info':{
-        'alternate_payee.address.address': alternate_payee.address.address,
-        'alternate_payee.address.unit': alternate_payee.address.unit,
-        'alternate_payee.address.city': alternate_payee.address.city,
-        'alternate_payee.address.state':alternate_payee.address.state,
-        'alternate_payee.address.zip':alternate_payee.address.zip
-      },
-      'awarding':awarding,
-      'assignment_date':str(assignment_date),
-      'dollar':dollar, 
-      'other':other,
-      'add_other_plan': add_other_plan,
-      'other_plan': other_plan if add_other_plan else '',
-       }
-  if pick_plan == "Deferred Compensation (Cash & Investment Account 401K)" and awarding == "Fixed Dollar Amount With No Gains Or Losses":
-    dollar
-    jsond = {
-      'f_name':f_name,
-      'l_name':l_name,
-      'email_id':email_id,
-      'pick_plan':pick_plan,
-      'document':document,
-      'role':role,
-      'role1':role1,
-      'filing_party_name_info':filingJson,
-      'filing_party_address_info':filingAddressJson,
-      'county':county,
-      'court':court,
-      'case_number':case_number,
-      'judicial_district':judicial_district,
-      'division_number':division_number,
-      'petitioner_field':{
-        'petitioner.name.first': petitioner.name.first,
-        'petitioner.name.middle': petitioner.name.middle,
-        'petitioner.name.last': petitioner.name.last
-      },
-      'respondent_field':{
-        'respondent.name.first': respondent.name.first,
-        'respondent.name.middle': respondent.name.middle,
-        'respondent.name.last': respondent.name.last
-      },
-      'plan_name':plan_name,
-      'who_is_participant':who_is_participant,
-      'participant.dob':encryptStr(str(participant.dob)),
-      'participant.ssn':encryptStr(participant.ssn),
-      'participant.phone':encryptStr(participant.phone),
-      'participant.email':participant.email,
-      'participant_address_info':{
-        'participant.address.address': participant.address.address,
-        'participant.address.unit': participant.address.unit,
-        'participant.address.city': participant.address.city,
-        'participant.address.state':participant.address.state,
-        'participant.address.zip':participant.address.zip
-      },
-      'alternate_payee.dob':encryptStr(str(alternate_payee.dob)),
-      'alternate_payee.ssn':encryptStr(alternate_payee.ssn),
-      'alternate_payee.phone':encryptStr(alternate_payee.phone),
-      'alternate_payee.email':alternate_payee.email,
-      'alternate_payee_address_info':{
-        'alternate_payee.address.address': alternate_payee.address.address,
-        'alternate_payee.address.unit': alternate_payee.address.unit,
-        'alternate_payee.address.city': alternate_payee.address.city,
-        'alternate_payee.address.state':alternate_payee.address.state,
-        'alternate_payee.address.zip':alternate_payee.address.zip
-      },
-      'awarding':awarding,
-      'dollar':dollar, 
-      'other':other,
-      'add_other_plan': add_other_plan,
-      'other_plan': other_plan if add_other_plan else '',
-       }
-  if (pick_plan == "Deferred Compensation (Cash & Investment Account 401K)" and awarding == "Percentage, But Excluding Pre-Marital Balance") or (pick_plan == "Deferred Compensation (Cash & Investment Account 401K)" and awarding == "Percentage, But Excluding Pre-Marital Balance With Passive Growth"):
-    percentage
+  date_of_marriage
+  Date_Ddvorce_was_commenced
+  date_of_judgment 
+  if Payment_type == 'Coverture (Time Rule)':
     assignment_date
     date_of_marriage
-    jsond = {
-      'f_name':f_name,
-      'l_name':l_name,
-      'email_id':email_id,
-      'pick_plan':pick_plan,
-      'document':document,
-      'role':role,
-      'role1':role1,
-      'filing_party_name_info':filingJson,
-      'filing_party_address_info':filingAddressJson,
-      'county':county,
-      'court':court,
-      'case_number':case_number,
-      'judicial_district':judicial_district,
-      'division_number':division_number,
-      'petitioner_field':{
-        'petitioner.name.first': petitioner.name.first,
-        'petitioner.name.middle': petitioner.name.middle,
-        'petitioner.name.last': petitioner.name.last
-      },
-      'respondent_field':{
-        'respondent.name.first': respondent.name.first,
-        'respondent.name.middle': respondent.name.middle,
-        'respondent.name.last': respondent.name.last
-      },
-      'plan_name':plan_name,
-      'who_is_participant':who_is_participant,
-      'participant.dob':encryptStr(str(participant.dob)),
-      'participant.ssn':encryptStr(participant.ssn),
-      'participant.phone':encryptStr(participant.phone),
-      'participant.email':participant.email,
-      'participant_address_info':{
-        'participant.address.address': participant.address.address,
-        'participant.address.unit': participant.address.unit,
-        'participant.address.city': participant.address.city,
-        'participant.address.state':participant.address.state,
-        'participant.address.zip':participant.address.zip
-      },
-      'alternate_payee.dob':encryptStr(str(alternate_payee.dob)),
-      'alternate_payee.ssn':encryptStr(alternate_payee.ssn),
-      'alternate_payee.phone':encryptStr(alternate_payee.phone),
-      'alternate_payee.email':alternate_payee.email,
-      'alternate_payee_address_info':{
-        'alternate_payee.address.address': alternate_payee.address.address,
-        'alternate_payee.address.unit': alternate_payee.address.unit,
-        'alternate_payee.address.city': alternate_payee.address.city,
-        'alternate_payee.address.state':alternate_payee.address.state,
-        'alternate_payee.address.zip':alternate_payee.address.zip
-      },
-      'awarding':awarding,
-      'percentage':percentage,
-      'assignment_date':str(assignment_date),
-      'date_of_marriage':str(date_of_marriage),
-      'other':other,
-      'add_other_plan': add_other_plan,
-      'other_plan': other_plan if add_other_plan else '',
-      }
-  if pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)" and Payment_type == "Coverture (Time Rule)":
-    date_of_marriage
+  if Payment_type == 'Fixed Percentage':
+    percentage
+  if Payment_type == 'Fixed Monthly Dollar Amount':
+    dollar 
+  if benifit_type['Should the Alternate Payee be provided survivor benefits under a pre-retirement death benefit?']:
     assignment_date
-    jsond = {
-      'f_name':f_name,
-      'l_name':l_name,
-      'email_id':email_id,
-      'pick_plan':pick_plan,
-      'Pension':Pension,
-      'Pension1':Pension1,
-      'document':document,
-      'role':role,
-      'role1':role1,
-      'filing_party_name_info':filingJson,
-      'filing_party_address_info':filingAddressJson,
-      'county':county,
-      'court':court,
-      'case_number':case_number,
-      'judicial_district':judicial_district,
-      'division_number':division_number,
-      'petitioner_field':{
-        'petitioner.name.first': petitioner.name.first,
-        'petitioner.name.middle': petitioner.name.middle,
-        'petitioner.name.last': petitioner.name.last
-      },
-      'respondent_field':{
-        'respondent.name.first': respondent.name.first,
-        'respondent.name.middle': respondent.name.middle,
-        'respondent.name.last': respondent.name.last
-      },
-      'plan_name':plan_name,
-      'who_is_participant':who_is_participant,
-      'participant.dob':encryptStr(str(participant.dob)),
-      'participant.ssn':encryptStr(participant.ssn),
-      'participant.phone':encryptStr(participant.phone),
-      'participant.email':participant.email,
-      'participant_address_info':{
-        'participant.address.address': participant.address.address,
-        'participant.address.unit': participant.address.unit,
-        'participant.address.city': participant.address.city,
-        'participant.address.state':participant.address.state,
-        'participant.address.zip':participant.address.zip
-      },
-      'alternate_payee.dob':encryptStr(str(alternate_payee.dob)),
-      'alternate_payee.ssn':encryptStr(alternate_payee.ssn),
-      'alternate_payee.phone':encryptStr(alternate_payee.phone),
-      'alternate_payee.email':alternate_payee.email,
-      'alternate_payee_address_info':{
-        'alternate_payee.address.address': alternate_payee.address.address,
-        'alternate_payee.address.unit': alternate_payee.address.unit,
-        'alternate_payee.address.city': alternate_payee.address.city,
-        'alternate_payee.address.state':alternate_payee.address.state,
-        'alternate_payee.address.zip':alternate_payee.address.zip
-      },
-      'assignment_date':str(assignment_date),
-      'date_of_marriage':str(date_of_marriage),
-      'Payment_type': Payment_type,
-      'other':other,
-      'add_other_plan': add_other_plan,
-      'other_plan': other_plan if add_other_plan else '',
-      }
-  if pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)" and Payment_type == "Frozen Coverture":
-    date_of_marriage
+  if benifit_type['Should the Alternate Payee be provided survivor benefits under a post-retirement death benefit?']:
     assignment_date
-    jsond = {
-      'f_name':f_name,
-      'l_name':l_name,
-      'email_id':email_id,
-      'pick_plan':pick_plan,
-      'Pension':Pension,
-      'Pension1':Pension1,
-      'document':document,
-      'role':role,
-      'role1':role1,
-      'filing_party_name_info':filingJson,
-      'filing_party_address_info':filingAddressJson,
-      'county':county,
-      'court':court,
-      'case_number':case_number,
-      'judicial_district':judicial_district,
-      'division_number':division_number,
-      'petitioner_field':{
-        'petitioner.name.first': petitioner.name.first,
-        'petitioner.name.middle': petitioner.name.middle,
-        'petitioner.name.last': petitioner.name.last
-      },
-      'respondent_field':{
-        'respondent.name.first': respondent.name.first,
-        'respondent.name.middle': respondent.name.middle,
-        'respondent.name.last': respondent.name.last
-      },
-      'plan_name':plan_name,
-      'who_is_participant':who_is_participant,
-      'participant.dob':encryptStr(str(participant.dob)),
-      'participant.ssn':encryptStr(participant.ssn),
-      'participant.phone':encryptStr(participant.phone),
-      'participant.email':participant.email,
-      'participant_address_info':{
-        'participant.address.address': participant.address.address,
-        'participant.address.unit': participant.address.unit,
-        'participant.address.city': participant.address.city,
-        'participant.address.state':participant.address.state,
-        'participant.address.zip':participant.address.zip
-      },
-      'alternate_payee.dob':encryptStr(str(alternate_payee.dob)),
-      'alternate_payee.ssn':encryptStr(alternate_payee.ssn),
-      'alternate_payee.phone':encryptStr(alternate_payee.phone),
-      'alternate_payee.email':alternate_payee.email,
-      'alternate_payee_address_info':{
-        'alternate_payee.address.address': alternate_payee.address.address,
-        'alternate_payee.address.unit': alternate_payee.address.unit,
-        'alternate_payee.address.city': alternate_payee.address.city,
-        'alternate_payee.address.state':alternate_payee.address.state,
-        'alternate_payee.address.zip':alternate_payee.address.zip
-      },
-      'assignment_date':str(assignment_date),
-      'date_of_marriage':str(date_of_marriage),
-      'Payment_type': Payment_type,
-      'other':other,
-      'add_other_plan': add_other_plan,
-      'other_plan': other_plan if add_other_plan else '',
-      }
-  if pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)" and Payment_type == "Fixed Monthly Dollar Amount":
+  if benifit_type["Should the Alternate Payee be provided a continuing benefit to preserve his/her pension payments in the event of the participant's death before the alternate payee?"]:
+    continuing_benefit
+    assignment_date
+  if tda_division_method == 'Fixed Monthly Dollar Amount':
+    shall
     dollar
-    jsond = {
-      'f_name':f_name,
-      'l_name':l_name,
-      'email_id':email_id,
-      'pick_plan':pick_plan,
-      'Pension':Pension,
-      'Pension1':Pension1,
-      'document':document,
-      'role':role,
-      'role1':role1,
-      'filing_party_name_info':filingJson,
-      'filing_party_address_info':filingAddressJson,
-      'county':county,
-      'court':court,
-      'case_number':case_number,
-      'judicial_district':judicial_district,
-      'division_number':division_number,
-      'petitioner_field':{
-        'petitioner.name.first': petitioner.name.first,
-        'petitioner.name.middle': petitioner.name.middle,
-        'petitioner.name.last': petitioner.name.last
-      },
-      'respondent_field':{
-        'respondent.name.first': respondent.name.first,
-        'respondent.name.middle': respondent.name.middle,
-        'respondent.name.last': respondent.name.last
-      },
-      'plan_name':plan_name,
-      'who_is_participant':who_is_participant,
-      'participant.dob':encryptStr(str(participant.dob)),
-      'participant.ssn':encryptStr(participant.ssn),
-      'participant.phone':encryptStr(participant.phone),
-      'participant.email':participant.email,
-      'participant_address_info':{
-        'participant.address.address': participant.address.address,
-        'participant.address.unit': participant.address.unit,
-        'participant.address.city': participant.address.city,
-        'participant.address.state':participant.address.state,
-        'participant.address.zip':participant.address.zip
-      },
-      'alternate_payee.dob':encryptStr(str(alternate_payee.dob)),
-      'alternate_payee.ssn':encryptStr(alternate_payee.ssn),
-      'alternate_payee.phone':encryptStr(alternate_payee.phone),
-      'alternate_payee.email':alternate_payee.email,
-      'alternate_payee_address_info':{
-        'alternate_payee.address.address': alternate_payee.address.address,
-        'alternate_payee.address.unit': alternate_payee.address.unit,
-        'alternate_payee.address.city': alternate_payee.address.city,
-        'alternate_payee.address.state':alternate_payee.address.state,
-        'alternate_payee.address.zip':alternate_payee.address.zip
-      },
-      'dollar':dollar,
-      'Payment_type': Payment_type,
-      'other':other,
-      'add_other_plan': add_other_plan,
-      'other_plan': other_plan if add_other_plan else '',
-      }
-    
-  if pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)" and Payment_type == "Fixed Percentage" and Pension1 == "Retired":
-    percentage
-    jsond = {
-      'f_name':f_name,
-      'l_name':l_name,
-      'email_id':email_id,
-      'pick_plan':pick_plan,
-      'Pension':Pension,
-      'Pension1':Pension1,
-      'document':document,
-      'role':role,
-      'role1':role1,
-      'filing_party_name_info':filingJson,
-      'filing_party_address_info':filingAddressJson,
-      'county':county,
-      'court':court,
-      'case_number':case_number,
-      'judicial_district':judicial_district,
-      'division_number':division_number,
-      'petitioner_field':{
-        'petitioner.name.first': petitioner.name.first,
-        'petitioner.name.middle': petitioner.name.middle,
-        'petitioner.name.last': petitioner.name.last
-      },
-      'respondent_field':{
-        'respondent.name.first': respondent.name.first,
-        'respondent.name.middle': respondent.name.middle,
-        'respondent.name.last': respondent.name.last
-      },
-      'plan_name':plan_name,
-      'who_is_participant':who_is_participant,
-      'participant.dob':encryptStr(str(participant.dob)),
-      'participant.ssn':encryptStr(participant.ssn),
-      'participant.phone':encryptStr(participant.phone),
-      'participant.email':participant.email,
-      'participant_address_info':{
-        'participant.address.address': participant.address.address,
-        'participant.address.unit': participant.address.unit,
-        'participant.address.city': participant.address.city,
-        'participant.address.state':participant.address.state,
-        'participant.address.zip':participant.address.zip
-      },
-      'alternate_payee.dob':encryptStr(str(alternate_payee.dob)),
-      'alternate_payee.ssn':encryptStr(alternate_payee.ssn),
-      'alternate_payee.phone':encryptStr(alternate_payee.phone),
-      'alternate_payee.email':alternate_payee.email,
-      'alternate_payee_address_info':{
-        'alternate_payee.address.address': alternate_payee.address.address,
-        'alternate_payee.address.unit': alternate_payee.address.unit,
-        'alternate_payee.address.city': alternate_payee.address.city,
-        'alternate_payee.address.state':alternate_payee.address.state,
-        'alternate_payee.address.zip':alternate_payee.address.zip
-      },
-      'percentage':percentage,
-      'Payment_type': Payment_type,
-      'other':other,
-      'add_other_plan': add_other_plan,
-      'other_plan': other_plan if add_other_plan else '',
-      }
-  if pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)" and Payment_type == "Fixed Percentage" and (Pension == "Shared" or Pension == "Separate"):
+    assignment_date
+  if tda_division_method == 'Fixed Percentage':
+    shall
     percentage
     assignment_date
-    jsond = {
-      'f_name':f_name,
-      'l_name':l_name,
-      'email_id':email_id,
-      'pick_plan':pick_plan,
-      'Pension':Pension,
-      'Pension1':Pension1,
-      'document':document,
-      'role':role,
-      'role1':role1,
-      'filing_party_name_info':filingJson,
-      'filing_party_address_info':filingAddressJson,
-      'county':county,
-      'court':court,
-      'case_number':case_number,
-      'judicial_district':judicial_district,
-      'division_number':division_number,
-      'petitioner_field':{
-        'petitioner.name.first': petitioner.name.first,
-        'petitioner.name.middle': petitioner.name.middle,
-        'petitioner.name.last': petitioner.name.last
-      },
-      'respondent_field':{
-        'respondent.name.first': respondent.name.first,
-        'respondent.name.middle': respondent.name.middle,
-        'respondent.name.last': respondent.name.last
-      },
-      'plan_name':plan_name,
-      'who_is_participant':who_is_participant,
-      'participant.dob':encryptStr(str(participant.dob)),
-      'participant.ssn':encryptStr(participant.ssn),
-      'participant.phone':encryptStr(participant.phone),
-      'participant.email':participant.email,
-      'participant_address_info':{
-        'participant.address.address': participant.address.address,
-        'participant.address.unit': participant.address.unit,
-        'participant.address.city': participant.address.city,
-        'participant.address.state':participant.address.state,
-        'participant.address.zip':participant.address.zip
-      },
-      'alternate_payee.dob':encryptStr(str(alternate_payee.dob)),
-      'alternate_payee.ssn':encryptStr(alternate_payee.ssn),
-      'alternate_payee.phone':encryptStr(alternate_payee.phone),
-      'alternate_payee.email':alternate_payee.email,
-      'alternate_payee_address_info':{
-        'alternate_payee.address.address': alternate_payee.address.address,
-        'alternate_payee.address.unit': alternate_payee.address.unit,
-        'alternate_payee.address.city': alternate_payee.address.city,
-        'alternate_payee.address.state':alternate_payee.address.state,
-        'alternate_payee.address.zip':alternate_payee.address.zip
-      },
-      'percentage':percentage,
-      'assignment_date':str(assignment_date),
-      'Payment_type': Payment_type,
-      'other':other,
-      'add_other_plan': add_other_plan,
-      'other_plan': other_plan if add_other_plan else '',
-      }
-  optional_questions
-  plan_sponsor_adress_details
-  if plan_sponsor.address.on_one_line() != ', ':
-    plan_sponsor_name
-  plan_admin_adress_details
-  if plan_admin.address.on_one_line() != ', ':
-    plan_admin_namee 
   if len(which_button) > 0 and which_button[0][2] == "reuse":
     draft_shown
-    if plan_admin.address.on_one_line() == ', ' and plan_sponsor.address.on_one_line() == ', ':
+    if plan_sponsor.address.on_one_line() == ', ':
       check1
       if check1:
         coupon_page
@@ -1004,7 +527,7 @@ code: |
           final_shown
       
     else:
-      if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')):
+      if (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != ''):
         CheckboX
         if CheckboX:
           check1
@@ -1039,7 +562,7 @@ code: |
 
   elif len(pay_d) > 0 and pay_d[0]['is_paid'] == 'true':
     draft_shown = ''
-    if plan_admin.address.on_one_line() == ', ' and plan_sponsor.address.on_one_line() == ', ':
+    if plan_sponsor.address.on_one_line() == ', ':
       check1
       if check1:
         coupon_page
@@ -1050,7 +573,7 @@ code: |
         if payment.paid:
           final_shown    
     else:
-      if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')):
+      if (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != ''):
         CheckboX
         if CheckboX:
           check1
@@ -1068,7 +591,7 @@ code: |
         final_shown
   elif len(pay_d) > 0 and pay_d[0]['is_paid'] == 'false':
     draft_shown
-    if plan_admin.address.on_one_line() == ', ' and plan_sponsor.address.on_one_line() == ', ':
+    if plan_sponsor.address.on_one_line() == ', ':
       check1
       if check1:
         coupon_page
@@ -1079,7 +602,7 @@ code: |
         if payment.paid:
           final_shown
     else:
-      if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')): 
+      if (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != ''): 
         CheckboX
         if CheckboX:
           check1
@@ -1114,7 +637,7 @@ code: |
       
   else:
     draft_shown
-    if plan_admin.address.on_one_line() == ', ' and plan_sponsor.address.on_one_line() == ', ':
+    if plan_sponsor.address.on_one_line() == ', ':
       check1
       if check1:
         coupon_page
@@ -1125,7 +648,7 @@ code: |
         if payment.paid:
           final_shown
     else:
-      if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')): 
+      if (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != ''): 
         CheckboX
         if CheckboX:
           check1
@@ -1157,6 +680,7 @@ code: |
             payment_screen
           if payment.paid:
             final_shown
+
 ---
 code: |
   if 'cid' in url_args:
@@ -1171,9 +695,11 @@ code: |
     origin_of_interviewee = 'unknown'
 
 ---
-ga id: Q_StartWithYou
+
+---
+ga id: TRS_StartWithYou
 question: |
-  Let’s start with you. 
+  Let’s start with you.
 subquestion: |
   We need your information to follow up with you for feedback on our QDRO machine and to provide our contact information in case you run into any issues with the retirement plan. 
 fields:
@@ -1188,66 +714,16 @@ fields:
       ${ user_info().email }
     datatype: email  
 ---
-event: plan_list
-code: |
-  set_save_status('ignore')
-  original = action_argument('wordstart')
-  wordstart = original.lower()
-  results = []
-  for key in plan:
-    if key == original:
-      json_response([[key]])
-    if key.lower().startswith(wordstart):
-      results.append([key])
-  json_response(results)
----
-ga id: Q_PickPlan
+progress: 15
+ga id: TRS_pick_plan
 question: |
-  What type of plan will you be dividing today?
+  Please pick your plan.
 fields: 
-  - Pick One: pick_plan
-    default: |
-        ${ get_plan_type(plan_name) }
+  - Pick One: pick_plan 
     datatype: radio
     choices:
-      - Deferred Compensation (Cash & Investment Account 401K)
-      - Pension Plan (Plans that guarantee monthly retirement income)
+      - TRS 
 
----
-progress: 15
-ga id: Q_PlanName
-question: |
-  What is the retirement plan name? 
-subquestion: |
-  Please reference a retirement statement, if you have one, to ensure that the plan doesn’t reject your order for using the wrong name. Some companies can have dozens of plans.
-fields:
-  - Plan Name: plan_name
-    input type: ajax
-    action: plan_list
-    trigger at: 3
-    default: |
-      ${ user_data1[0]['plan_name'] }
-    hide if: add_other_plan
-  - Other. (Type your plan name.): add_other_plan
-    datatype: yesno
-    default: |
-      ${ user_data1[0]['add_other_plan'] }
-  - Others: other_plan
-    show if: add_other_plan
-    default: |
-      ${ user_data1[0]['other_plan'] }
-post: |
-  **Note:** Please enter at least three letters, numbers, or spaces to search.
----
-code: |
-  plan = display_plan1() 
----
-initial: True
-code: |
-  if add_other_plan == 'false':
-    other_plan = ''
-  else:
-    plan_name = ''
 ---
 code: |
   if (user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0:
@@ -1268,7 +744,12 @@ code: |
     else:
       state = user_data1[0]['document']
 ---
-ga id: Q_Divorced_State
+code: |
+  plan_name = "Teachers Retirement System of the City of New York"
+  add_other_plan = False
+  other_plan = ''
+---
+ga id: TRS_divorced_state
 question: |
   In which state was the divorce?
 fields: 
@@ -1328,7 +809,7 @@ fields:
       - Wyoming
       - Washington
 ---
-ga id: Q_FilingPartyRole
+ga id: TRS_filing_party_role
 question: |
   What is the filing party's role in the case?
 subquestion: |
@@ -1384,7 +865,7 @@ code: |
     respondent_fname = user_data1[0]['respondent_field']['respondent.name.first']
     respondent_lname = user_data1[0]['respondent_field']['respondent.name.last']
 ---
-ga id: Q_PetitionerField
+ga id: TRS_petitioner_field
 field: petitioner_field
 question: |
   What is the Petitioner/Plaintiff's Name?
@@ -1400,7 +881,7 @@ fields:
     default: |
       ${ petitioner_lname }
 ---
-ga id: Q_RespondentField
+ga id: TRS_respondent_field
 field: respondent_field
 question: |
   What is the Respondent/Defendant's name?
@@ -1449,7 +930,7 @@ code: |
       filing_phone = user_data1[0]['filing_party_name_info']['filing_party.phone']
     
 ---
-ga id: Q_filing_prty_name
+ga id: TRS_filing_party_name_info
 field: filing_party_name_info
 question: |
   Who will be filing this with the court?
@@ -1551,14 +1032,14 @@ code: |
 ---
 code: |
   if len(register_dataq1) > 0 and len(data_from_registration) > 0:
-    filing_party_namE = register_dataq1[0]['first_name'] if 'first_name' in register_dataq1[0] else '' + ' ' + data_from_registration[0]['user.name.middle'] if 'user.name.middle' in data_from_registration[0] else '' + ' ' + register_dataq1[0]['last_name'] if 'last_name' in register_dataq1[0] else ''
-    filing_party_email= register_dataq1[0]['email'] if 'email' in register_dataq1[0] else ''
-    filing_party_phone= data_from_registration[0]['phone_number'] if 'phone_number' in data_from_registration[0] else ''
-    filing_party_bar_number= data_from_registration[0]['bar_number'] if 'bar_number' in data_from_registration[0] else ''
+    filing_party_namE = register_dataq1[0]['first_name'] + ' ' + data_from_registration[0]['user.name.middle'] + ' ' + register_dataq1[0]['last_name']
+    filing_party_email= register_dataq1[0]['email']
+    filing_party_phone= data_from_registration[0]['phone_number']
+    filing_party_bar_number= data_from_registration[0]['bar_number']
     if data_from_registration[0]['user.address.unit'] != '':
-      filing_party_addresS = data_from_registration[0]['user.address.address'] if 'user.address.address' in data_from_registration[0] else '' +'\n'+ data_from_registration[0]['user.address.unit'] if 'user.address.unit' in data_from_registration[0] else '' +'\n'+ data_from_registration[0]['user.address.city'] if 'user.address.city' in data_from_registration[0] else '' + ' '+ data_from_registration[0]['user.address.state'] if 'user.address.state' in data_from_registration[0] else '' + '' + data_from_registration[0]['user.address.zip_code'] if 'user.address.zip_code' in data_from_registration[0] else ''
+      filing_party_addresS = data_from_registration[0]['user.address.address'] +'\n'+ data_from_registration[0]['user.address.unit'] +'\n'+ data_from_registration[0]['user.address.city'] + ' '+ data_from_registration[0]['user.address.state'] + '' + data_from_registration[0]['user.address.zip_code']
     else :
-      filing_party_addresS = data_from_registration[0]['user.address.address'] if 'user.address.address' in data_from_registration[0] else '' +'\n'+ data_from_registration[0]['user.address.city'] if 'user.address.city' in data_from_registration[0] else '' + ' '+ data_from_registration[0]['user.address.state'] if 'user.address.state' in data_from_registration[0] else '' + '' + data_from_registration[0]['user.address.zip_code'] if 'user.address.zip_code' in data_from_registration[0] else ''
+      filing_party_addresS = data_from_registration[0]['user.address.address'] +'\n'+ data_from_registration[0]['user.address.city'] + ' '+ data_from_registration[0]['user.address.state'] + '' + data_from_registration[0]['user.address.zip_code']
   else:
     filing_party_namE = user_info().first_name + ' ' + user_info().last_name
     filing_party_email = user_info().email
@@ -1566,7 +1047,7 @@ code: |
     filing_party_bar_number = ''
     filing_party_addresS = ''
 ---
-ga id: Q_filing_prty_add
+ga id: TRS_filing_party_address_info
 field: filing_party_address_info
 question: |
   Please provide the filling party's address. 
@@ -1604,7 +1085,7 @@ code: |
     courtt = user_data1[0]['court']
     countyy = user_data1[0]['county']
 ---
-ga id: Q_county
+ga id: TRS_county
 question: |
   In which county did the divorce take place?
 subquestion: |
@@ -1614,7 +1095,8 @@ fields:
     default: |
       ${ countyy }
 ---
-ga id: Q_court
+
+ga id: TRS_court
 question: |
   Please provide the name of the court where your divorce was processed. 
 subquestion: |
@@ -1624,7 +1106,7 @@ fields:
     default: |
       ${ courtt }
 ---
-ga id: Q_division_number
+ga id: TRS_division_number
 question: |
   Division Number
 fields:
@@ -1632,7 +1114,7 @@ fields:
     default: |
       ${ user_data1[0]['division_number'] }
 ---
-ga id: Q_judicial_dist
+ga id: TRS_judicial_district
 question: |
   What is the judicial district?
 fields:
@@ -1646,281 +1128,38 @@ code: |
   else: 
     case_num = user_data1[0]['case_number']
 ---
-ga id: Q_case_number
+ga id: TRS_case_number
 question: |
   Case Number
 fields:
   - Case Number: case_number
     default: |  
       ${ case_num }
+
 ---
-code: |
-  add1 = address_of_admin_and_sponsor(plan_name)
----
-ga id: Q_sponsor_add_details
+ga id: TRS_plan_sponsor_adress_details
 field: plan_sponsor_adress_details
 question: |
   Please provide the Plan Sponsor's address details.
-subquestion: |
-  If you do not have this information, hit **continue to skip**.
 fields:
   - Street address: plan_sponsor.address.address
     default: |
-      ${ plan_sponsor_add1 }
+      55 Water Street
     address autocomplete: True
-    required: False
   - Unit: plan_sponsor.address.unit
-    default: |
-      ${ plan_sponsor_add2 }
     required: False
   - City: plan_sponsor.address.city
     default: |
-      ${ plan_sponsor_city }
-    required: False
+      New York
   - State: plan_sponsor.address.state
     default: |
-      ${ plan_sponsor_state }
-    required: False
+      NY
   - Zip: plan_sponsor.address.zip
     default: |
-      ${ plan_sponsor_zip }
-    required: False
+      11201
 ---
-ga id: Q_sponsor_name
-question: |
-  Please enter plan sponsor name.
-fields:
-  - Plan Sponsor Name : plan_sponsor_name
-    default: |
-      ${plan_sponsor_nme}
-    required: False
----
-ga id: Q_plan_admin_address
-field: plan_admin_adress_details
-question: |
-  Please provide the Plan Admin's address. 
-subquestion: |
-  If you do not have this information, hit **continue to skip**.
-fields:
-  - Street address: plan_admin.address.address
-    default: |
-      ${ plan_admin_add1 }
-    required: False
-    address autocomplete: True
-  - Unit: plan_admin.address.unit
-    default: |
-      ${ plan_admin_add2 }
-    required: False
-  - City: plan_admin.address.city
-    default: |
-      ${ plan_admin_city }
-    required: False
-  - State: plan_admin.address.state
-    default: |
-      ${ plan_admin_state }
-    required: False
-  - Zip: plan_admin.address.zip
-    default: |
-      ${ plan_admin_zip }
-    required: False
----
-ga id: Q_plan_admin_name
-question: |
-  Please enter plan admin name.
-fields:
-  - Plan Admin Name : plan_admin_namee
-    default: |
-      ${plan_admin_nme}
-    required: False
----
-code: |
-  if len(add1) > 0:
-    if add1[0]['plan_admin_name'] == None:
-      plan_admin_nme = ''
-    else:
-      plan_admin_nme = add1[0]['plan_admin_name']
-    if add1[0]['plan_admin_address1'] == None:
-      plan_admin_add1 = ''
-    else:
-      plan_admin_add1 = add1[0]['plan_admin_address1']
-    if add1[0]['plan_admin_address2'] == None:
-      plan_admin_add2 = ''
-    else:
-      plan_admin_add2 = add1[0]['plan_admin_address2']
-    if add1[0]['plan_admin_city'] == None:
-      plan_admin_city = ''
-    else:
-      plan_admin_city = add1[0]['plan_admin_city']
-    if add1[0]['plan_admin_state'] == None:
-      plan_admin_state = ''
-    else:
-      plan_admin_state = add1[0]['plan_admin_state']
-    if add1[0]['plan_admin_zip'] == None:
-      plan_admin_zip = ''
-    else:
-      plan_admin_zip = add1[0]['plan_admin_zip']
-    
-    if add1[0]['plan_sponsor_name'] == None:
-      plan_sponsor_nme = ''
-    else:
-      plan_sponsor_nme = add1[0]['plan_sponsor_name']
-    if add1[0]['plan_sponsor_address1'] == None:
-      plan_sponsor_add1 = ''
-    else:
-      plan_sponsor_add1 = add1[0]['plan_sponsor_address1']
-    if add1[0]['plan_sponsor_address2'] == None:
-      plan_sponsor_add2 = ''
-    else:
-      plan_sponsor_add2 = add1[0]['plan_sponsor_address2']
-    if add1[0]['plan_sponsor_city'] == None:
-      plan_sponsor_city = ''
-    else:
-      plan_sponsor_city = add1[0]['plan_sponsor_city']
-    if add1[0]['plan_sponsor_state'] == None:
-      plan_sponsor_state = ''
-    else:
-      plan_sponsor_state = add1[0]['plan_sponsor_state']
-    if add1[0]['plan_sponsor_zip'] == None:
-      plan_sponsor_zip = ''
-    else:
-      plan_sponsor_zip = add1[0]['plan_sponsor_zip']
-  else:
-    plan_sponsor_nme = ''
-    plan_admin_nme = ''
-    plan_admin_add1 = ''
-    plan_admin_add2 = ''
-    plan_admin_city = ''
-    plan_admin_state = ''
-    plan_admin_zip = ''
-    plan_sponsor_add1 = ''
-    plan_sponsor_add2 = ''
-    plan_sponsor_city = ''
-    plan_sponsor_state = ''
-    plan_sponsor_zip = ''
----
-code: |  
-  plan_admin_contact_info = ''
-  plan_sponsor_contact_info = ''
-  date= today()
-  if add_other_plan:
-    plan_admin_address =  plan_admin.address.address+"\n"+ plan_admin.address.unit+"\n"+ plan_admin.address.city+" "+plan_admin.address.state+" "+plan_admin.address.zip
-    plan_sponsor_address = plan_sponsor.address.address+"\n"+ plan_sponsor.address.unit+"\n"+ plan_sponsor.address.city+" "+plan_sponsor.address.state+" "+plan_sponsor.address.zip
-  plan_sponsor_address=''
-  plan_admin_address=''
-  plan_admin_foreign_address = ''
-  plan_sponsor_foreign_adress = ''
-  if not add_other_plan:
-    if add1[0]['plan_admin_foreign_address1'] is not None:
-      plan_admin_foreign_address2 = add1[0]['plan_admin_foreign_address1']
-    else:
-      plan_admin_foreign_address2 = ''
-    if add1[0]['plan_sponsor_address1'] is not None:
-      plan_sponsor_address += add1[0]['plan_sponsor_address1'] + "\n"
-    else:
-      plan_sponsor_address = plan_sponsor_address
-
-    if add1[0]['plan_sponsor_address2'] is not None:
-      plan_sponsor_address += add1[0]['plan_sponsor_address2'] + "\n"
-    else:
-      plan_sponsor_address = plan_sponsor_address
-
-    if add1[0]['plan_sponsor_city'] is not None:
-      plan_sponsor_address += add1[0]['plan_sponsor_city'] + " "
-    else:
-      plan_sponsor_address = plan_sponsor_address
-
-    if add1[0]['plan_sponsor_state'] is not None:
-      plan_sponsor_address += add1[0]['plan_sponsor_state'] + " "
-    else:
-      plan_sponsor_address = plan_sponsor_address
-
-    if add1[0]['plan_sponsor_zip'] is not None:
-      plan_sponsor_address += add1[0]['plan_sponsor_zip']
-    else:
-      plan_sponsor_address = plan_sponsor_address
-
-    if add1[0]['plan_sponsor_foreign_address1'] is not None:
-      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_address1'] + "\n"
-    else:
-      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
-    if add1[0]['plan_sponsor_foreign_address2'] is not None:
-      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_address2'] + "\n"
-    else:
-      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
-    if add1[0]['plan_sponsor_foreign_city'] is not None:
-      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_city'] + " "
-    else:
-      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
-    if add1[0]['plan_sponsor_foreign_state'] is not None:
-      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_state'] + " "
-    else:
-      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
-    if add1[0]['plan_sponsor_foreign_country'] is not None:
-      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_country'] + " "
-    else:
-      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
-    if add1[0]['plan_sponsor_foreign_zip'] is not None:
-      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_zip']
-    else:
-      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
-    if add1[0]['plan_admin_address1'] is not None:
-      plan_admin_address += add1[0]['plan_admin_address1'] + "\n"
-    else:
-      plan_admin_address = plan_admin_address
-    if add1[0]['plan_admin_address2'] is not None:
-      plan_admin_address += add1[0]['plan_admin_address2'] + "\n"
-    else:
-      plan_admin_address=plan_admin_address 
-    if add1[0]['plan_admin_city'] is not None:
-      plan_admin_address += add1[0]['plan_admin_city'] + " "
-    else:
-      plan_admin_address=plan_admin_address
-    if add1[0]['plan_admin_state'] is not None:
-      plan_admin_address += add1[0]['plan_admin_state'] + " "
-    else:
-      plan_admin_address=plan_admin_address
-    if add1[0]['plan_admin_zip'] is not None:
-      plan_admin_address += add1[0]['plan_admin_zip']
-    else:
-      plan_admin_address=plan_admin_address
-    if add1[0]['plan_admin_foreign_address1'] is not None:
-      plan_admin_foreign_address += add1[0]['plan_admin_foreign_address1'] + "\n"
-    if add1[0]['plan_admin_foreign_address2'] is not None:
-      plan_admin_foreign_address += add1[0]['plan_admin_foreign_address2'] + "\n"
-    if add1[0]['plan_admin_foreign_city'] is not None:
-      plan_admin_foreign_address += add1[0]['plan_admin_foreign_city'] + " "
-    if add1[0]['plan_admin_foreign_state'] is not None:
-      plan_admin_foreign_address += add1[0]['plan_admin_foreign_state'] + " "
-    if add1[0]['plan_admin_foreign_country'] is not None:
-      plan_admin_foreign_address += add1[0]['plan_admin_foreign_country'] + " "
-
-    if add1[0]['plan_admin_foreign_zip'] is not None:
-      plan_admin_foreign_address += add1[0]['plan_admin_foreign_zip']
 
 
-    if add1[0]['plan_admin_name'] is not None:
-      plan_admin_contact_info += add1[0]['plan_admin_name']+", "
-    else:
-      plan_admin_contact_info+=plan_name
-    if add1[0]['plan_admin_phone'] is not None:
-      plan_admin_contact_info += add1[0]['plan_admin_phone']+"\n"
-      plan_admin_contact_info += plan_admin_address
-    else:
-      if plan_admin_address != '':
-        plan_admin_contact_info += plan_admin_address
-      else:
-        plan_admin_contact_info += plan_admin_address
-  
-    if add1[0]['plan_sponsor_name'] is not None:
-      plan_sponsor_contact_info += add1[0]['plan_sponsor_name']+", "
-    else: 
-      plan_sponsor_contact_info+=plan_sponsor_contact_info
-    if add1[0]['plan_sponsor_phone'] is not None:
-      plan_sponsor_contact_info += add1[0]['plan_sponsor_phone']+"\n"
-      plan_sponsor_contact_info += plan_sponsor_address
-    else:
-      plan_sponsor_contact_info += plan_sponsor_address
----
 code: |
   if ((user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com") and len(reuse_intake_button) > 0 and not len(which_button) > 0):
     if qdro_intake_data_details[0]['data']['who_are_you'] == 'Petitioner/Plantiff':
@@ -1930,7 +1169,7 @@ code: |
   else:
     which_party = user_data1[0]['who_is_participant']
 ---
-ga id: Q_who_is_participant
+ga id: TRS_who_is_participant
 question: |
   Please select the employee (participant) spouse who is associated with this retirement plan.
 fields:
@@ -1991,7 +1230,8 @@ fields:
       is: Respondent-Defendant
 
 ---
-ga id: Q_participant_information
+progress: 50
+ga id: TRS_participant_info
 field: participant_info
 question: |
   Please fill in the Participant's information. 
@@ -2129,7 +1369,8 @@ code: |
         alternate_party_state=  user_data11[0]['petitioner_field']['petitioner.address.state']
         alternate_party_zip =  user_data11[0]['petitioner_field']['petitioner.address.zip']
 ---
-ga id: Q_participant_address_info
+progress: 55
+ga id: TRS_participant_address_info
 field: participant_address_info
 question: |
   Please fill in the Participant's address.
@@ -2153,7 +1394,8 @@ fields:
       ${ party_zip }
 
 ---
-ga id: Q_alternate_payee_info
+progress: 60
+ga id: TRS_alternate_payee_info
 field: alternate_payee_info
 question: |
   Please fill in the Alternate Payee's information.
@@ -2180,7 +1422,8 @@ validation code: |
   if not phone_number_is_valid(phone_number_formatted(alternate_payee.phone)):
     validation_error('Phone number is not valid')
 ---
-ga id: Q_alternate_payee_address_info
+progress: 70
+ga id: TRS_alternate_payee_address_info
 field: alternate_payee_address_info
 question: |
   Please fill in the Alternate Payee's address.
@@ -2340,9 +1583,9 @@ code: |
     alternate_payee_email = ''
 
 ---
-ga id: Q_assignment_date
+ga id: TRS_assignment_date
 question: |
-  What is the assignment date?
+  What is the assignment (plan division) date?
 subquestion: |
   Please note: this date is very important and is set by law in your state, unless you agreed otherwise in your divorce agreement. [(Read more here)](${ url_of('https://www.lexyalgo.com/what-is-the-assignment-date-valuation-date-in-a-qdro/') }){:target="_blank"}.
 fields:
@@ -2350,22 +1593,6 @@ fields:
     default: |
       ${ user_data1[0]['assignment_date'] }
     datatype: date
----
-ga id: Q_how_plan_is_divided
-question: |
-  How should the plan be divided? 
-fields:
-  - Please select how the plan should be divided [(Read More)](${ url_of('https://www.lexyalgo.com/how-should-your-deferred-compensation-401k-457b-or-other-cash-based-account-be-divided-in-a-qdro/') }){:target="_blank"}: awarding
-    default: |
-      ${ user_data1[0]['awarding'] }
-    datatype: radio
-    choices:
-      - Percentage To The Alternate Payee 
-      - Fixed Dollar Amount With Gains Or Losses
-      - Fixed Dollar Amount With No Gains Or Losses
-      - Percentage, But Excluding Pre-Marital Balance
-      - Percentage, But Excluding Pre-Marital Balance With Passive Growth
-      - Percentage Of An Employee Stock Ownership Plan (ESOP)
 
 ---
 code: |
@@ -2377,16 +1604,34 @@ code: |
     else:
       dom = user_data1[0]['date_of_marriage']
 ---
-ga id: Q_date_of_marriage
+ga id: TRS_Date_Ddvorce_was_commenced
 question: |
-  Date of Marriage
+  When did the divorce proceedings begin?
+fields:
+  - Date of divorce proceedings: Date_Ddvorce_was_commenced
+    default: |
+      ${ user_data1[0]['Date_Ddvorce_was_commenced'] }
+    datatype: date
+---
+ga id: TRS_date_of_judgment
+question: |
+  What is the date of judgment?
+fields:
+  - Date of judgment: date_of_judgment
+    default: |
+      ${ user_data1[0]['date_of_judgment'] }
+    datatype: date
+---
+ga id: TRS_date_of_marriage
+question: |
+  What is the date of marriage
 fields:
   - Date of Marriage: date_of_marriage
     default: |
       ${ dom }
     datatype: date
 ---
-ga id: Q_dollar
+ga id: TRS_dollar
 question: |
   What is the dollar amount that the non-employee spouse will receive?  
 fields:
@@ -2396,7 +1641,7 @@ fields:
     datatype: currency 
 continue button color: primary
 ---
-ga id: Q_percentage
+ga id: TRS_percentage
 question: |
   What is the percentage that the non-employee spouse will receive? 
 subquestion: |
@@ -2408,37 +1653,7 @@ fields:
     datatype: integer
 
 ---
-ga id: Q_pension_plan
-question: |
-  Has the plan participant (employee) retired or are they still working?
-fields:
-  - Pick One: Pension1
-    datatype: radio
-    default: |
-      ${ user_data1[0]['Pension1'] }
-    choices:
-      - Retired
-      - Not Retired
-  - Select one: Pension
-    datatype: radio
-    default: |
-      ${ user_data1[0]['Pension'] }
-    help: |
-        **Separate:** The non-employee gets their own pension.[(Read more here)](${ url_of('https://www.lexyalgo.com/what-is-the-difference-between-a-separate-interest-qdro-and-a-shared-interest-qdro/') }){:target="_blank"}
-        **Shared:** The non-employee gets a percent of each check.[(Read more here)](${ url_of('https://www.lexyalgo.com/what-is-the-difference-between-a-separate-interest-qdro-and-a-shared-interest-qdro/') }){:target="_blank"}.
-    choices:
-      - Shared
-      - Separate
-    show if: 
-      variable: Pension1
-      is: Not Retired
----
-code: |
-  if Pension1 == 'Retired':
-    Pension = ''
----
-progress: 92
-ga id: Q_division_payment_type
+ga id: TRS_Payment_type
 question: |
   Select your division method.
 fields:
@@ -2448,92 +1663,130 @@ fields:
     datatype: radio
     choices:
       - Coverture (Time Rule)
-      - Frozen Coverture
       - Fixed Monthly Dollar Amount
       - Fixed Percentage
-    show if:
-      code: |
-        Pension1 == "Retired" or Pension == "Separate" or Pension == "Shared"
 ---
-progress: 100
-ga id: optional_questions
-field: optional_questions
+progress: 85
+ga id: TRS_tda_division_method
 question: |
-  Your QDRO is ready. The following optional questions will help us build your cover letter to the retirement plan. If you do not have this information, hit continue to skip.
+  TDA (Tax Deferred Annuity – Deferred Compensation Plan).
+fields:
+  - Choose one: tda_division_method
+    default: |
+      ${ user_data1[0]['tda_division_method'] }
+    datatype: radio
+    choices:
+      - Fixed Monthly Dollar Amount
+      - Fixed Percentage
+      - Do Not Divide TDA Plan
+---
+ga id: TRS_shall_shallNot
+question: |
+  Should the amount assigned be adjusted for investment earnings and/or losses from the assignment date to the date the money is distributed?
+fields: 
+  - Adjust for investment changes between assignment and distribution?: shall
+    default: |
+      ${ user_data1[0]['shall'] }
+    datatype: yesnoradio
+
+    
+---
+code: |
+  serialized_benefit_type = {
+    "survivor_pre_retirement": benifit_type.get("Should the Alternate Payee be provided survivor benefits under a pre-retirement death benefit?", False),
+    "survivor_post_retirement": benifit_type.get("Should the Alternate Payee be provided survivor benefits under a post-retirement death benefit?", False),
+    "continuing_benefit": benifit_type.get("Should the Alternate Payee be provided a continuing benefit to preserve his/her pension payments in the event of the participant's death before the alternate payee?", False)}
+---
+ga id: TRS_benifit_type
+question: |
+  Choose the type of benefit.
+fields:
+  - Choose one: benifit_type
+    default: |
+      ${ user_data1[0]['benifit_type'] }
+    datatype: checkboxes
+    choices:
+      - Should the Alternate Payee be provided survivor benefits under a pre-retirement death benefit?
+      - Should the Alternate Payee be provided survivor benefits under a post-retirement death benefit?
+      - Should the Alternate Payee be provided a continuing benefit to preserve his/her pension payments in the event of the participant's death before the alternate payee?
+---
+ga id: TRS_continuing_benefit
+question: |
+  Choose the ongoing form of benefit. 
+fields:
+  - Select one: continuing_benefit
+    default: |
+      ${ user_data1[0]['continuing_benefit'] }
+    datatype: radio
+    choices:
+      - No Continuing Benefit
+      - CONTINUING PAYMENT OPTION
+      - TERM-CERTAIN OPTION
+    show if: 
+      code: | 
+        benifit_type["Should the Alternate Payee be provided a continuing benefit to preserve his/her pension payments in the event of the participant's death before the alternate payee?"]
+
 ---
 mandatory: True
 code: |
   interview_id = retrieve_interview_id()
-
+  
 ---
-ga id: Q_you_to_pay_first
+ga id: TRS_you_need_to_pay_first
 event: payment_screen
 question: |
   You need to pay first. ${ check } 
 ---
 code: |
   Cookie_value = get_cookies()
-  output_file = [final_document.path(),addendum_final.path()]
+  output_file = [final_document.path()]
   urls=''
   if len(which_button) > 0 and which_button[0][2] == "reuse":
-    if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')):
+    if (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != ''):
       if CheckboX:
         urls = [item['data']['_url'] for item in file_url(output_file)]
-        if (plan_sponsor.address.on_one_line() != ', ' and plan_admin.address.on_one_line() != ', '):
-          payment_amount = (9.99*2)+99.00
-        elif (plan_sponsor.address.on_one_line() != ', ' or plan_admin.address.on_one_line() != ', '):
-          payment_amount = 108.99
+        payment_amount = 108.99
       else:
         payment_amount = 99.00
     else:
       payment_amount = 99.00
   elif len(which_button) > 0 and which_button[0][2] == "edit" and len(pay_d) > 0 and pay_d[0]['is_paid'] == 'false':
-    if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')):
+    if (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != ''):
       if CheckboX:
-        urls =  [item['data']['_url'] for item in file_url(output_file)]
-        if (plan_sponsor.address.on_one_line() != ', ' and plan_admin.address.on_one_line() != ', '):
-          payment_amount = (9.99*2)+99.00
-        elif (plan_sponsor.address.on_one_line() != ', ' or plan_admin.address.on_one_line() != ', '):
-          payment_amount = 108.99
+        urls = [item['data']['_url'] for item in file_url(output_file)]
+        payment_amount = 108.99
       else:
         payment_amount = 99.00
     else:
       payment_amount = 99.00
   elif len(which_button) > 0 and which_button[0][2] == "edit" and len(pay_d) > 0 and pay_d[0]['is_paid'] == 'true':
-    if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')):
+    if (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != ''):
       if CheckboX:
-        urls =  [item['data']['_url'] for item in file_url(output_file)]
-        if (plan_sponsor.address.on_one_line() != ', ' and plan_admin.address.on_one_line() != ', '):
-          payment_amount = (9.99*2)
-        elif (plan_sponsor.address.on_one_line() != ', ' or plan_admin.address.on_one_line() != ', '):
-          payment_amount = 9.99
-    else:
-      final_shown
+        urls = [item['data']['_url'] for item in file_url(output_file)]
+        payment_amount = 9.99
   else:
-    if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')):
+    if (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != ''):
       if CheckboX:
-        urls =  [item['data']['_url'] for item in file_url(output_file)]
-        if (plan_sponsor.address.on_one_line() != ', ' and plan_admin.address.on_one_line() != ', '):
-          payment_amount = (9.99*2)+99.00
-        else:
-          payment_amount = 108.99
+        urls = [item['data']['_url'] for item in file_url(output_file)]
+        payment_amount = 108.99
       else:
         payment_amount = 99.00
     else:
       payment_amount = 99.00
   payment.amount = payment_amount
 ---
-ga id: Q_to_proceed_make_payment
+ga id: TRS_To_proceed_please_make_payment
 question: |
   To proceed, please make a payment for your documents.
 subquestion: |
   In order to cover our development costs, we are initially charging $${payment.amount} per QDRO. If you are unhappy with your QDRO, we have a 100% satisfaction guarantee - just reach out within three months, give us a chance to make the QDRO right, and we'll give a full refund if the QDRO can't be fixed.
   
-   % if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')):
+   % if (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != ''):
    % if CheckboX:
     *Since you asked us to mail your documents to the plan admin and/or sponsor, an additional charge of $9.99 per mailing for postage and handling is included in your total.*
    % endif
    % endif
+   
 post: |
   Can't afford the fee? Though we charge less than any other QDRO website out there, we've got your back. Please reach out to us via the contact form on [(http://lexyalgo.com/)](${ url_of('https://Lexyalgo.com/') }){:target="_blank"}.
 field: check1
@@ -2543,7 +1796,7 @@ buttons:
   
   
 ---
-ga id: Q_Payment_page
+ga id: TRS_payment_page
 event: payment.demand
 question: |
   Payment
@@ -2557,19 +1810,19 @@ code: |
   interview_id = retrieve_interview_id()
 
 ---
-ga id: Q_check_the_box_to_mail
-question: |
-  Would you like us to mail your order to the retirement plan?
+ga id: TRS_CheckboX_to_mail
+question:
+  Do you want us to send your documents to plan administrator, If yes please confirm it by checking the checkbox.
 fields:
-  - note: By checking the box, you’re giving us consent to send your documents to the plan administrator and sponsor, if we have their contact information. There’s a charge of $9.99 per document for postage and handling.
+  - note: Please check the box, if you want us to send it to plan administrator.
   - Check here: CheckboX
     datatype: yesno
 
 ---
-ga id: Q_coupon_page
+ga id: TRS_coupon_page
 field: coupon_page
 question: |
-  Enter coupon code?
+  Enter coupon code? 
 fields:
   - Coupon code: coupon_code
 validation code: |
@@ -2579,16 +1832,12 @@ validation code: |
     check_coupon(coupon_code, retrieve_interview_id())
     #yml_variables(retrieve_interview_id(),user_info().filename,url_args)
     check_cookie_value(get_cookies())  
-    if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')):
-      if CheckboX:
-        delete_return_id = delete_return_addresses()
-        if data_from_registration and len(data_from_registration) > 0:
-          return_address = clicksend_post_return_adress(data_from_registration[0])
-          return_address_id = return_address['data']['return_address_id']
-          if (plan_sponsor_address != '' or plan_sponsor.address.on_one_line() != ', ') :
-            clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
-          if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
-            clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
+    if CheckboX:
+      delete_return_id = delete_return_addresses()
+      if data_from_registration and len(data_from_registration) > 0:
+        return_address = clicksend_post_return_adress(data_from_registration[0])
+        return_address_id = return_address['data']['return_address_id']
+        clicksend_send_post_letter("Teachers' Retirement System of the City of New York",plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
 ---
 event: payment.success
 code: |
@@ -2597,18 +1846,15 @@ code: |
   if update_payment_status(interview_id):
     #yml_variables(retrieve_interview_id(),user_info().filename,url_args)
     check_cookie_value(get_cookies())  
-    if ((plan_admin.address.address != '' and plan_admin.address.city != '' and plan_admin.address.state != '' and plan_admin.address.zip != '' and plan_admin_namee != '') or (plan_sponsor.address.address != '' and plan_sponsor.address.city != '' and plan_sponsor.address.state != '' and plan_sponsor.address.zip != '' and plan_sponsor_name != '')):
-      if CheckboX:
-        delete_return_id = delete_return_addresses()
-        if data_from_registration and len(data_from_registration) > 0:
-          return_address = clicksend_post_return_adress(data_from_registration[0])
-          return_address_id = return_address['data']['return_address_id']
-          if (plan_sponsor_address != '' or plan_sponsor.address.on_one_line() != ', ') :
-            clicksend_send_post_letter(plan_sponsor_name,plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
-          if (plan_admin_address != '' or plan_admin.address.on_one_line() != ', ') :
-            clicksend_send_post_letter(plan_admin_namee, plan_admin.address.address,plan_admin.address.city,plan_admin.address.state,plan_admin.address.zip,return_address,urls)
+    if CheckboX:
+      delete_return_id = delete_return_addresses()
+      if data_from_registration and len(data_from_registration) > 0:
+        return_address = clicksend_post_return_adress(data_from_registration[0])
+        return_address_id = return_address['data']['return_address_id']
+        clicksend_send_post_letter("Teachers' Retirement System of the City of New York",plan_sponsor.address.address,plan_sponsor.address.city,plan_sponsor.address.state,plan_sponsor.address.zip,return_address,urls)
 ---
-ga id: Q_final_page
+progress: 100
+ga id: TRS_final_page
 event: final_shown
 question: |
   Download document for **${ document }** and **Addendum** attached below. ${ user_data } ${ delete_button_info(qdro_intake_data_details[0]['id']) }
@@ -2619,101 +1865,35 @@ action buttons:
     action: restart_interview
     color: warning
   - label: Dashboard
-    action: 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml#page1'
+    action: 'https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml'
     color: link
     
 attachment code: |  
-  [instructions_document,sample_preapproval_letter,final_document, addendum_final]
+  [final_document]
 
 ---
+if: pick_plan == "TRS"
 attachment:
-  name: Personal Information Addendum File
-  docx template file: ADDENDUM_TEMPLATE_v2.docx
-  valid formats:
-    - pdf
-    - docx
-  variable name: addendum_final
-always include editable files: True
----
-if: pick_plan == "Deferred Compensation (Cash & Investment Account 401K)"
-attachment:
-  name: ${ document } QDRO
+  name: ${ document } TRS
   variable name: final_document
-  docx template file: DEFERRED_COMPENSATION_NEW.docx
-  valid formats:
-    - pdf
-    - docx
-always include editable files: True
----
-attachment:
-  name: Sample Pre-Approval Letter
-  variable name: sample_preapproval_letter
-  docx template file: Sample_Pre-Approval_Cover_Letter_f.docx
-  valid formats:
-    - pdf
-    - docx
-always include editable files: True
----
-attachment:
-  name: Instructions
-  variable name: instructions_document
-  docx template file: QDRO_Pre-Approval_And_Finalization_Instructions_1.docx
+  docx template file: TRS_combined.docx
   valid formats:
     - pdf
     - docx
 always include editable files: True
 ---
 
-if: (document == "California" or document == "Arizona" or document == "District of Columbia" or document == "Nevada" or document == "New Mexico" or document == "Oregon" or document == "Washington" )and pick_plan == "Deferred Compensation (Cash & Investment Account 401K)"
+if: (document == "California" or document == "Arizona" or document == "District of Columbia" or document == "Nevada" or document == "New Mexico" or document == "Oregon" or document == "Washington" )and pick_plan == "TRS"
 attachment:
-  name: ${ document } QDRO
+  name: ${ document } TRS
   variable name: final_document
-  docx template file: california_template_1.docx
+  docx template file: trs_cal.docx
   valid formats:
     - pdf
     - docx
 always include editable files: True
 ---
-if: document == "North Dakota" and pick_plan == "Deferred Compensation (Cash & Investment Account 401K)"
-attachment:
-  name: ${ document } QDRO
-  variable name: final_document
-  docx template file: North_Dakota_template.docx
-  valid formats:
-    - pdf
-    - docx
-always include editable files: True
----
-if: pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)"
-attachment:
-  name: ${ document } QDRO
-  variable name: final_document
-  docx template file: pension_combined_5_States.docx
-  valid formats:
-    - pdf
-    - docx
-always include editable files: True
----
-if: (document == "California" or document == "Arizona" or document == "District of Columbia" or document == "Nevada" or document == "New Mexico" or document == "Oregon" or document == "Washington" )and pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)"
-attachment:
-  name: ${ document } QDRO
-  variable name: final_document
-  docx template file: pension_california.docx
-  valid formats:
-    - pdf
-    - docx
-always include editable files: True
----
-if: document == "North Dakota" and pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)"
-attachment:
-  name: ${ document } QDRO
-  variable name: final_document
-  docx template file: pension_North_Dakota.docx
-  valid formats:
-    - pdf
-    - docx
-always include editable files: True
----
+
 event: restart_interview
 code: |
   command('restart')
@@ -2721,9 +1901,9 @@ code: |
 code: |
   interview_id = retrieve_interview_id()
 ---
-ga id: Q_preview_page
+ga id: TRS_preview_page
 question: |
-  **Preview** Your QDRO Documents Before You Pay. ${ user_data } ${ delete_button_info(qdro_intake_data_details[0]['id']) } 
+  **Preview** Your TRS Documents Before You Pay. ${ user_data } ${ delete_button_info(qdro_intake_data_details[0]['id']) }   
   
 subquestion: |
   We've created these watermarked preview drafts for you to review before you pay. If needed, you can use the "Back" button to edit your answers or you can click the "Restart" button to start from scratch.
@@ -2735,76 +1915,23 @@ action buttons:
     action: restart_interview
     color: warning
 attachment code: |
-  [instructions_document_preview,sample_preapproval_letter_preview ,the_document, addendum]
-allow emailing: False
+  [the_document]
+allow emailing: True
+
 
 ---
+if: pick_plan == "TRS"
 attachment:
-  name: Personal Information Addendum File
-  docx template file: ADDENDUM_d.docx
-  valid formats:
-    - pdf
-  variable name: addendum
----
-attachment:
-  name: Sample Pre-Approval Letter
-  docx template file: draft_sample_pre_Approval.docx
-  valid formats:
-    - pdf
-  variable name: sample_preapproval_letter_preview
----
-attachment:
-  name: Instructions
-  docx template file: draft_QDRO_pre_Approval_cover_letter.docx
-  valid formats:
-    - pdf
-  variable name: instructions_document_preview
----
-if: pick_plan == "Deferred Compensation (Cash & Investment Account 401K)"
-attachment:
-  name: ${ document } QDRO
+  name: ${ document } TRS
   variable name: the_document
-  docx template file: DF_combined_draft.docx
+  docx template file: draft_TRS_combined.docx
   valid formats:
     - pdf
 ---
-if: (document == "California" or document == "Arizona" or document == "District of Columbia" or document == "Nevada" or document == "New Mexico" or document == "Oregon" or document == "Washington" )and pick_plan == "Deferred Compensation (Cash & Investment Account 401K)"
+if: (document == "California" or document == "Arizona" or document == "District of Columbia" or document == "Nevada" or document == "New Mexico" or document == "Oregon" or document == "Washington" )and pick_plan == "TRS"
 attachment:
-  name: ${ document } QDRO
+  name: ${ document } TRS
   variable name: the_document
-  docx template file: DF_Cal_draft.docx
+  docx template file: draft_trs_cal.docx
   valid formats:
     - pdf
----
-if: document == "North Dakota" and pick_plan == "Deferred Compensation (Cash & Investment Account 401K)"
-attachment:
-  name: ${ document } QDRO
-  variable name: the_document
-  docx template file: DF_ND_draft.docx
-  valid formats:
-    - pdf
----
-if: pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)"
-attachment:
-  name: ${ document } QDRO
-  variable name: the_document
-  docx template file: P_combined_draft.docx
-  valid formats:
-    - pdf
----
-if: (document == "California" or document == "Arizona" or document == "District of Columbia" or document == "Nevada" or document == "New Mexico" or document == "Oregon" or document == "Washington" )and pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)"
-attachment:
-  name: ${ document } QDRO
-  variable name: the_document
-  docx template file: P_Cal_draft.docx
-  valid formats:
-    - pdf
----
-if: document == "North Dakota" and pick_plan == "Pension Plan (Plans that guarantee monthly retirement income)"
-attachment:
-  name: ${ document } QDRO
-  variable name: the_document
-  docx template file: P_ND_draft.docx
-  valid formats:
-    - pdf
----

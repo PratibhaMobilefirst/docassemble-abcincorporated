@@ -9,7 +9,6 @@ metadata:
   exit link: logout
   exit label: |
     Exit
-  error action: on_error
 ---
 modules:
   - .read_data
@@ -27,22 +26,24 @@ code: |
   set_parts(logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
 ---
 features:
+  navigation back button: False
+  labels above fields: True
   css: buttons.css
+  question back button: True
+---
+initial: True
+code: |
+  if user_logged_in():
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml')  
 ---
 code: |
   jsond = {
     'user.name.middle':user.name.middle,
-    'user.address.address':user.address.address,
-    'user.address.unit':user.address.unit,
-    'user.address.city':user.address.city,
-    'user.address.state':user.address.state,
-    'user.address.zip_code':user.address.zip_code,
     'user_type':user_type,
     'bar_number':bar_num,
     'phone_number':phone_number,
-    'dob':str(dob),
   }
-  user_data = add_registered_data(jsond,infor)
+  user_data = add_registered_data1(jsond,infor)
 ---
 code: |
   if user_type == 'lawyer':
@@ -57,7 +58,9 @@ ga id: registration_first_page
 mandatory: True
 field: registration_main
 question: |
-  Member Registration
+  <p class="member-register">Member Registration</p>
+  
+  > <p class = "reg-pre-text">Welcome to LexyAlgo. It order to proceed with generating a document, you will need to register for a free account. We require this in order to encrypt your sensitive personal data - the encryption makes it so that only someone with your account login information can access that data, not even our team. We also make it easy to delete that sensitive data via your dashboard, once you are logged in. <br/><br/> If you already have an account, you can log in below. Otherwise, please register using the registration link. It only takes a few seconds and you’ll be on your way to drafting your documents.</p>
 subquestion: | 
   Already Registered? [Sign in](https://doc.lexyalgo.com/user/sign-in?${click_id_key_value})
   > Required fields are marked as <span class = "astric">*</span>
@@ -98,15 +101,6 @@ fields:
   - Middle Name: user.name.middle
     required: false
   - Last Name: user.name.last
-  - Address Line1: user.address.address
-    address autocomplete: True
-  - Address Line2: user.address.unit
-    required: false
-  - City: user.address.city
-  - State: user.address.state
-    code: |
-      states_list()
-  - Zip Code: user.address.zip_code
   - User Type: user_type
     choices:
       - Lawyer: lawyer
@@ -117,9 +111,6 @@ fields:
       is: lawyer
   - E-mail Address: email
     datatype: email
-  - Date of Birth: dob
-    hint: MM/DD/YYYY
-    datatype: date 
   - Phone number: phone_number
 validation code: |
   if not phone_number_is_valid(phone_number):
@@ -142,15 +133,6 @@ fields:
   - Middle Name: user.name.middle
     required: false
   - Last Name: user.name.last
-  - Address Line1: user.address.address
-    address autocomplete: True
-  - Address Line2: user.address.unit
-    required: false
-  - City: user.address.city
-  - State: user.address.state
-    code: |
-      states_list()
-  - Zip Code: user.address.zip_code
   - User Type: user_type
     choices:
       - Lawyer: lawyer
@@ -162,10 +144,7 @@ fields:
   - E-mail Address: email
     datatype: email
   - Phone: phone_number
-    required: false
-  - Date of Birth: dob
-    hint: MM/DD/YYYY
-    datatype: date 
+    required: false 
     disable others:
       - member_name
 back button: registration_main
@@ -211,7 +190,7 @@ code: |
   if len(password)>=6 and len(password)<=20:
     if password == confirm_password:
       infor = create_user(email, password)
-      set_user_info(user_id= infor, first_name=user.name.first, middle_name=user.name.middle, last_name=user.name.last, Address= user.address.address, Unit=user.address.unit, City=user.address.city, State=user.address.state, Zip_code= user.address.zip_code, Phone_number=phone_number, Date_of_birth=dob)
+      set_user_info(user_id= infor, first_name=user.name.first, middle_name=user.name.middle, last_name=user.name.last,Phone_number=phone_number)
       
 ---
 ga id: registration_final_page

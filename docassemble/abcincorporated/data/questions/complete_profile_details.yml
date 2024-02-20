@@ -1,0 +1,71 @@
+metadata: 
+  title: |
+    Complete Profile
+  short title: |
+    Thanks
+  show login: False
+  allow registration: False
+  exit url: 'https://www.lexyalgo.com/'
+  exit link: logout
+  exit label: |
+    Exit
+  error action: on_error
+---
+modules:
+  - .read_data
+  - .registered_emails
+  - .click_id
+  - .parameters
+  
+---
+objects:
+  - user: Individual
+  - company_logo: DAStaticFile.using(filename='logo.png')
+---
+mandatory: True
+code: |
+  set_parts(logo='<img src="' + company_logo.url_for() + '" style="height: 50px;">')
+---
+features:
+  css: buttons.css
+  labels above fields: True
+  navigation back button: False
+  question back button: True
+---
+code: |
+  jsond = {
+    'user.address.address':user.address.address,
+    'user.address.unit':user.address.unit,
+    'user.address.city':user.address.city,
+    'user.address.state':user.address.state,
+    'user.address.zip_code':user.address.zip_code,
+    'dob':str(dob),
+  }
+  user_data = add_registered_data(jsond)
+
+---
+mandatory: True
+ga id: complete_profile
+question: |
+  In order to proceed further you need to complete your profile deatils.
+fields:
+  - Address Line1: user.address.address
+    address autocomplete: True
+  - Address Line2: user.address.unit
+    required: false
+  - City: user.address.city
+  - State: user.address.state
+    code: |
+      states_list()
+  - Zip Code: user.address.zip_code
+  - Date of Birth: dob
+    hint: MM/DD/YYYY
+    datatype: date 
+continue button field: go_to_dashboard
+---
+mandatory: True
+code: |
+  user_data
+  if go_to_dashboard == True:
+    command('leave', url='https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml')
+---

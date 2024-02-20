@@ -1,3 +1,6 @@
+@import url('./external_css2.css');
+/*@import url( 'http://localhost:3000/css/styles.css' );*/
+
 .da-button-set.da-field-buttons .btn{
   color: #fff;
   border-color: #E80D4E;

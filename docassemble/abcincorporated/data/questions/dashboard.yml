@@ -9,12 +9,18 @@ metadata:
   exit link: logout
   exit label: |
     Exit
+  navigation bar html: |
+    <li class="nav-item">
+      <a class="nav-link home" href="https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml">Home</a>
+    </li>
 ---
 metadata:
   temporary session: True
   hidden: True
 ---
 features:
+  navigation back button: False
+  labels above fields: True
   go full screen: True
   javascript: my-functions.js
   css: buttons.css
@@ -75,6 +81,7 @@ question: |
       <option value="https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:qdro.yml&new_session=1">QDRO</option>
       <option value="https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:joinder_generator.yml&new_session=1">Joinder</option>
       <option value="https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:adverse.yml&new_session=1">Notice of Adverse Interest</option>
+      <option value="https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:Government_Plan_DRO.yml&new_session=1">Government Plan DRO</option>
   </select>
 subquestion: |
   % if user_info().email == "willie@lexyalgo.com" or user_info().email == "law@williepeacock.com" or user_info().email == "pratibha.mobilefirst@gmail.com":
@@ -96,7 +103,8 @@ subquestion: |
 script: |
   <script>
      var dropdown = document.getElementById("dropdown");
-
+      
+      dropdown.style.borderColor = "#E80D4E";
       // Redirect to the selected option's link when an option is selected
       dropdown.addEventListener("change", function () {
       dropdown.style.borderColor = "#fff";
@@ -126,7 +134,7 @@ columns:
   - Case Name: |
       '<b  class="title">' + str(row_item['data']['petitioner_field']['petitioner.name.first'] + ' ' + row_item['data']['petitioner_field']['petitioner.name.middle'] + ' ' + row_item['data']['petitioner_field']['petitioner.name.last'] + ' vs. ' + row_item['data']['respondent_field']['respondent.name.first']+ ' ' + row_item['data']['respondent_field']['respondent.name.middle'] + ' ' + row_item['data']['respondent_field']['respondent.name.last']) + '</b>'
   - Filename: |
-      'QDRO' if (row_item['filename']== 'docassemble.playground3QDRO:qdro.yml' or row_item['filename']== 'docassemble.playground3:qdro.yml') else 'Joinder' if (row_item['filename'] == 'docassemble.playground3QDRO:joinder_generator.yml'  or row_item['filename']== 'docassemble.playground3:joinder_generator.yml') else 'Notice of Adverse Interest' if (row_item['filename'] == 'docassemble.playground3QDRO:adverse.yml'  or row_item['filename']== 'docassemble.playground3:adverse.yml') else 'something_else'
+      'QDRO' if (row_item['filename']== 'docassemble.playground3QDRO:qdro.yml' or row_item['filename']== 'docassemble.playground3:qdro.yml') else 'Joinder' if (row_item['filename'] == 'docassemble.playground3QDRO:joinder_generator.yml'  or row_item['filename']== 'docassemble.playground3:joinder_generator.yml') else 'Notice of Adverse Interest' if (row_item['filename'] == 'docassemble.playground3QDRO:adverse.yml'  or row_item['filename']== 'docassemble.playground3:adverse.yml') else 'Government Plan DRO' if (row_item['filename'] == 'docassemble.playground3QDRO:Government_Plan_DRO.yml'  or row_item['filename']== 'docassemble.playground3:Government_Plan_DRO.yml') else 'something_else'
   - Plan Name: |
       row_item['data']['other_plan'] if row_item['data']['add_other_plan'] else row_item['data']['plan_name']
   - Creation Date: |
