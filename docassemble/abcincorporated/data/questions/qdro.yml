@@ -17,6 +17,15 @@ metadata:
 metadata:
   temporary session: True
   hidden: True
+  error action: on_error
+---
+event: on_error
+question: |
+  Sorry, something went wrong, please click on dashboard button and restart your interview.
+buttons:
+  - Dashboard: leave
+    url: https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml
+    color: danger
 ---
 modules:
   - .dastripe
@@ -1551,14 +1560,14 @@ code: |
 ---
 code: |
   if len(register_dataq1) > 0 and len(data_from_registration) > 0:
-    filing_party_namE = register_dataq1[0]['first_name'] if 'first_name' in register_dataq1[0] else '' + ' ' + data_from_registration[0]['user.name.middle'] if 'user.name.middle' in data_from_registration[0] else '' + ' ' + register_dataq1[0]['last_name'] if 'last_name' in register_dataq1[0] else ''
+    filing_party_namE = register_dataq1[0]['first_name'] + ' ' + data_from_registration[0]['user.name.middle'] + ' ' + register_dataq1[0]['last_name']
     filing_party_email= register_dataq1[0]['email'] if 'email' in register_dataq1[0] else ''
     filing_party_phone= data_from_registration[0]['phone_number'] if 'phone_number' in data_from_registration[0] else ''
     filing_party_bar_number= data_from_registration[0]['bar_number'] if 'bar_number' in data_from_registration[0] else ''
     if data_from_registration[0]['user.address.unit'] != '':
-      filing_party_addresS = data_from_registration[0]['user.address.address'] if 'user.address.address' in data_from_registration[0] else '' +'\n'+ data_from_registration[0]['user.address.unit'] if 'user.address.unit' in data_from_registration[0] else '' +'\n'+ data_from_registration[0]['user.address.city'] if 'user.address.city' in data_from_registration[0] else '' + ' '+ data_from_registration[0]['user.address.state'] if 'user.address.state' in data_from_registration[0] else '' + '' + data_from_registration[0]['user.address.zip_code'] if 'user.address.zip_code' in data_from_registration[0] else ''
+      filing_party_addresS = data_from_registration[0]['user.address.address'] +'\n'+ data_from_registration[0]['user.address.unit'] +'\n'+ data_from_registration[0]['user.address.city'] + ' '+ data_from_registration[0]['user.address.state'] + ' ' + data_from_registration[0]['user.address.zip_code']
     else :
-      filing_party_addresS = data_from_registration[0]['user.address.address'] if 'user.address.address' in data_from_registration[0] else '' +'\n'+ data_from_registration[0]['user.address.city'] if 'user.address.city' in data_from_registration[0] else '' + ' '+ data_from_registration[0]['user.address.state'] if 'user.address.state' in data_from_registration[0] else '' + '' + data_from_registration[0]['user.address.zip_code'] if 'user.address.zip_code' in data_from_registration[0] else ''
+      filing_party_addresS = data_from_registration[0]['user.address.address'] +'\n'+ data_from_registration[0]['user.address.city'] + ' '+ data_from_registration[0]['user.address.state']  + ' ' + data_from_registration[0]['user.address.zip_code'] 
   else:
     filing_party_namE = user_info().first_name + ' ' + user_info().last_name
     filing_party_email = user_info().email
@@ -1735,7 +1744,7 @@ fields:
 ---
 code: |
   if len(add1) > 0:
-    if add1[0]['plan_admin_name'] == None:
+    if 'plan_admin_name' in add1[0] and add1[0]['plan_admin_name'] == None:
       plan_admin_nme = ''
     else:
       plan_admin_nme = add1[0]['plan_admin_name']
@@ -1810,99 +1819,99 @@ code: |
   plan_admin_foreign_address = ''
   plan_sponsor_foreign_adress = ''
   if not add_other_plan:
-    if add1[0]['plan_admin_foreign_address1'] is not None:
+    if len(add1) > 0 and 'plan_admin_foreign_address1' in add1[0] and add1[0]['plan_admin_foreign_address1'] is not None:
       plan_admin_foreign_address2 = add1[0]['plan_admin_foreign_address1']
     else:
       plan_admin_foreign_address2 = ''
-    if add1[0]['plan_sponsor_address1'] is not None:
+    if len(add1) > 0 and 'plan_sponsor_address1' in add1[0] and add1[0]['plan_sponsor_address1'] is not None:
       plan_sponsor_address += add1[0]['plan_sponsor_address1'] + "\n"
     else:
       plan_sponsor_address = plan_sponsor_address
 
-    if add1[0]['plan_sponsor_address2'] is not None:
+    if len(add1) > 0 and 'plan_sponsor_address2' in add1[0] and add1[0]['plan_sponsor_address2'] is not None:
       plan_sponsor_address += add1[0]['plan_sponsor_address2'] + "\n"
     else:
       plan_sponsor_address = plan_sponsor_address
 
-    if add1[0]['plan_sponsor_city'] is not None:
+    if len(add1) > 0 and 'plan_sponsor_city' in add1[0] and add1[0]['plan_sponsor_city'] is not None:
       plan_sponsor_address += add1[0]['plan_sponsor_city'] + " "
     else:
       plan_sponsor_address = plan_sponsor_address
 
-    if add1[0]['plan_sponsor_state'] is not None:
+    if len(add1) > 0 and 'plan_sponsor_state' in add1[0] and add1[0]['plan_sponsor_state'] is not None:
       plan_sponsor_address += add1[0]['plan_sponsor_state'] + " "
     else:
       plan_sponsor_address = plan_sponsor_address
 
-    if add1[0]['plan_sponsor_zip'] is not None:
+    if len(add1) > 0 and 'plan_sponsor_zip' in add1[0] and add1[0]['plan_sponsor_zip'] is not None:
       plan_sponsor_address += add1[0]['plan_sponsor_zip']
     else:
       plan_sponsor_address = plan_sponsor_address
 
-    if add1[0]['plan_sponsor_foreign_address1'] is not None:
+    if len(add1) > 0 and 'plan_sponsor_foreign_address1' in add1[0] and add1[0]['plan_sponsor_foreign_address1'] is not None:
       plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_address1'] + "\n"
     else:
       plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
-    if add1[0]['plan_sponsor_foreign_address2'] is not None:
+    if len(add1) > 0 and 'plan_sponsor_foreign_address2' in add1[0] and add1[0]['plan_sponsor_foreign_address2'] is not None:
       plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_address2'] + "\n"
     else:
       plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
-    if add1[0]['plan_sponsor_foreign_city'] is not None:
+    if len(add1) > 0 and 'plan_sponsor_foreign_city' in add1[0] and add1[0]['plan_sponsor_foreign_city'] is not None:
       plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_city'] + " "
     else:
       plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
-    if add1[0]['plan_sponsor_foreign_state'] is not None:
+    if len(add1) > 0 and 'plan_sponsor_foreign_state' in add1[0] and add1[0]['plan_sponsor_foreign_state'] is not None:
       plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_state'] + " "
     else:
       plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
-    if add1[0]['plan_sponsor_foreign_country'] is not None:
+    if len(add1) > 0 and 'plan_sponsor_foreign_country' in add1[0] and add1[0]['plan_sponsor_foreign_country'] is not None:
       plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_country'] + " "
     else:
       plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
-    if add1[0]['plan_sponsor_foreign_zip'] is not None:
+    if len(add1) > 0 and 'plan_sponsor_foreign_zip' in add1[0] and add1[0]['plan_sponsor_foreign_zip'] is not None:
       plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_zip']
     else:
       plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
-    if add1[0]['plan_admin_address1'] is not None:
+    if len(add1) > 0 and 'plan_admin_address1' in add1[0] and add1[0]['plan_admin_address1'] is not None:
       plan_admin_address += add1[0]['plan_admin_address1'] + "\n"
     else:
       plan_admin_address = plan_admin_address
-    if add1[0]['plan_admin_address2'] is not None:
+    if len(add1) > 0 and 'plan_admin_address2' in add1[0] and add1[0]['plan_admin_address2'] is not None:
       plan_admin_address += add1[0]['plan_admin_address2'] + "\n"
     else:
       plan_admin_address=plan_admin_address 
-    if add1[0]['plan_admin_city'] is not None:
+    if len(add1) > 0 and 'plan_admin_city' in add1[0] and add1[0]['plan_admin_city'] is not None:
       plan_admin_address += add1[0]['plan_admin_city'] + " "
     else:
       plan_admin_address=plan_admin_address
-    if add1[0]['plan_admin_state'] is not None:
+    if len(add1) > 0 and 'plan_admin_state' in add1[0] and add1[0]['plan_admin_state'] is not None:
       plan_admin_address += add1[0]['plan_admin_state'] + " "
     else:
       plan_admin_address=plan_admin_address
-    if add1[0]['plan_admin_zip'] is not None:
+    if len(add1) > 0 and 'plan_admin_zip' in add1[0] and add1[0]['plan_admin_zip'] is not None:
       plan_admin_address += add1[0]['plan_admin_zip']
     else:
       plan_admin_address=plan_admin_address
-    if add1[0]['plan_admin_foreign_address1'] is not None:
+    if len(add1) > 0 and 'plan_admin_foreign_address1' in add1[0] and add1[0]['plan_admin_foreign_address1'] is not None:
       plan_admin_foreign_address += add1[0]['plan_admin_foreign_address1'] + "\n"
-    if add1[0]['plan_admin_foreign_address2'] is not None:
+    if len(add1) > 0 and 'plan_admin_foreign_address2' in add1[0] and add1[0]['plan_admin_foreign_address2'] is not None:
       plan_admin_foreign_address += add1[0]['plan_admin_foreign_address2'] + "\n"
-    if add1[0]['plan_admin_foreign_city'] is not None:
+    if len(add1) > 0 and 'plan_admin_foreign_city' in add1[0] and add1[0]['plan_admin_foreign_city'] is not None:
       plan_admin_foreign_address += add1[0]['plan_admin_foreign_city'] + " "
-    if add1[0]['plan_admin_foreign_state'] is not None:
+    if len(add1) > 0 and 'plan_admin_foreign_state' in add1[0] and add1[0]['plan_admin_foreign_state'] is not None:
       plan_admin_foreign_address += add1[0]['plan_admin_foreign_state'] + " "
-    if add1[0]['plan_admin_foreign_country'] is not None:
+    if len(add1) > 0 and 'plan_admin_foreign_country' in add1[0] and add1[0]['plan_admin_foreign_country'] is not None:
       plan_admin_foreign_address += add1[0]['plan_admin_foreign_country'] + " "
 
-    if add1[0]['plan_admin_foreign_zip'] is not None:
+    if len(add1) > 0 and 'plan_admin_foreign_zip' in add1[0] and add1[0]['plan_admin_foreign_zip'] is not None:
       plan_admin_foreign_address += add1[0]['plan_admin_foreign_zip']
 
 
-    if add1[0]['plan_admin_name'] is not None:
+    if len(add1) > 0 and 'plan_admin_name' in add1[0] and add1[0]['plan_admin_name'] is not None:
       plan_admin_contact_info += add1[0]['plan_admin_name']+", "
     else:
       plan_admin_contact_info+=plan_name
-    if add1[0]['plan_admin_phone'] is not None:
+    if len(add1) > 0 and 'plan_admin_phone' in add1[0] and add1[0]['plan_admin_phone'] is not None:
       plan_admin_contact_info += add1[0]['plan_admin_phone']+"\n"
       plan_admin_contact_info += plan_admin_address
     else:
@@ -1911,11 +1920,11 @@ code: |
       else:
         plan_admin_contact_info += plan_admin_address
   
-    if add1[0]['plan_sponsor_name'] is not None:
+    if len(add1) > 0 and 'plan_sponsor_name' in add1[0] and add1[0]['plan_sponsor_name'] is not None:
       plan_sponsor_contact_info += add1[0]['plan_sponsor_name']+", "
     else: 
       plan_sponsor_contact_info+=plan_sponsor_contact_info
-    if add1[0]['plan_sponsor_phone'] is not None:
+    if len(add1) > 0 and 'plan_sponsor_phone' in add1[0] and add1[0]['plan_sponsor_phone'] is not None:
       plan_sponsor_contact_info += add1[0]['plan_sponsor_phone']+"\n"
       plan_sponsor_contact_info += plan_sponsor_address
     else:
@@ -2342,7 +2351,7 @@ code: |
 ---
 ga id: Q_assignment_date
 question: |
-  What is the assignment date?
+  What is the assignment (plan division) date?
 subquestion: |
   Please note: this date is very important and is set by law in your state, unless you agreed otherwise in your divorce agreement. [(Read more here)](${ url_of('https://www.lexyalgo.com/what-is-the-assignment-date-valuation-date-in-a-qdro/') }){:target="_blank"}.
 fields:
@@ -2351,6 +2360,7 @@ fields:
       ${ user_data1[0]['assignment_date'] }
     datatype: date
 ---
+progress: 80
 ga id: Q_how_plan_is_divided
 question: |
   How should the plan be divided? 
@@ -2406,6 +2416,8 @@ fields:
     default: |
       ${ user_data1[0]['percentage'] }
     datatype: integer
+    min: 0
+    max: 100
 
 ---
 ga id: Q_pension_plan

@@ -17,6 +17,15 @@ metadata:
 metadata:
   temporary session: True
   hidden: True
+  error action: on_error
+---
+event: on_error
+question: |
+  Sorry, something went wrong, please click on dashboard button and restart your interview.
+buttons:
+  - Dashboard: leave
+    url: https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml
+    color: danger
 ---
 features:
   labels above fields: True

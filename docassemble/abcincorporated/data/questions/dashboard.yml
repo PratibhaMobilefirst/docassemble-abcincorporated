@@ -144,7 +144,7 @@ columns:
   - Reuse: |
       action_button_html(url_action('reuse_ev',id=row_item['id']),  label="Reuse", color='warning', new_window = True)
   - Delete: |
-      action_button_html(url_action('delete_ev',id=row_item['id']), label="Delete", color='warning')
+      action_button_html(url_action('delete_ev',id=row_item['id']), label="Delete", color='danger')
 ---
 code: |
   if 'id' in url_args:

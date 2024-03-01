@@ -17,6 +17,15 @@ metadata:
 metadata:
   temporary session: True
   hidden: True
+  error action: on_error
+---
+event: on_error
+question: |
+  Sorry, something went wrong, please click on dashboard button and restart your interview.
+buttons:
+  - Dashboard: leave
+    url: https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml
+    color: danger
 ---
 modules:
   - .dastripe
@@ -141,6 +150,13 @@ code: |
         user_data1 = user_data11
     else:
       user_data1[0]['role1'] = ''
+    if "pick_plan" in user_data11[0]:
+      if len(which_button) > 0 and which_button[0][2] == "reuse":
+        user_data1[0]['pick_plan'] = ''
+      else:
+        user_data1 = user_data11
+    else:
+      user_data1[0]['pick_plan'] = ''
     if "filing_party_name_info" in user_data11[0]:
       user_data1 = user_data11
     else:
@@ -425,6 +441,7 @@ code: |
   'alternate_payee.address.state':alternate_payee.address.state,
   'alternate_payee.address.zip':alternate_payee.address.zip
     },
+    'date_of_marriage':str(date_of_marriage),
     'Payment_type':Payment_type,
     'benifit_type': serialized_benefit_type,
     'continuing_benefit': continuing_benefit if serialized_benefit_type["continuing_benefit"] else '',
@@ -720,6 +737,8 @@ question: |
   Please pick your plan.
 fields: 
   - Pick One: pick_plan 
+    default: |
+      ${ user_data1[0]['pick_plan'] }
     datatype: radio
     choices:
       - TRS 
@@ -1651,6 +1670,8 @@ fields:
     default: |
       ${ user_data1[0]['percentage'] }
     datatype: integer
+    min: 0
+    max: 100
 
 ---
 ga id: TRS_Payment_type
@@ -1901,6 +1922,7 @@ code: |
 code: |
   interview_id = retrieve_interview_id()
 ---
+progress: 100
 ga id: TRS_preview_page
 question: |
   **Preview** Your TRS Documents Before You Pay. ${ user_data } ${ delete_button_info(qdro_intake_data_details[0]['id']) }   
@@ -1916,7 +1938,7 @@ action buttons:
     color: warning
 attachment code: |
   [the_document]
-allow emailing: True
+allow emailing: False
 
 
 ---

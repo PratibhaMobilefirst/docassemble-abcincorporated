@@ -17,6 +17,15 @@ metadata:
 metadata:
   temporary session: True
   hidden: True
+  error action: on_error
+---
+event: on_error
+question: |
+  Sorry, something went wrong, please click on dashboard button and restart your interview.
+buttons:
+  - Dashboard: leave
+    url: https://doc.lexyalgo.com/interview?i=docassemble.playground3QDRO:dashboard.yml
+    color: danger
 ---
 modules:
   - .dastripe
@@ -1480,6 +1489,7 @@ code: |
     alternate_payee_email = ''
 
 ---
+mandatory: True
 code: |
   plan_admin_contact_info = ''
   plan_sponsor_contact_info = ''
@@ -1604,7 +1614,7 @@ code: |
       plan_sponsor_contact_info += plan_sponsor_address
     else:
       plan_sponsor_contact_info += plan_sponsor_address
-
+  
 ---
 code: |
   if plan_admin.address.on_one_line() != ', ' and plan_sponsor.address.on_one_line() != ', ':
@@ -1625,7 +1635,7 @@ question: |
 ---
 ga id: A_To_Proceed_Please_Make_Payment
 question: |
-  To proceed, please make a payment for your documents.
+  To proceed, please make a payment for your documents. 
 subquestion: |
   In order to cover our development costs, we are initially charging $${payment1.amount} per QDRO. If you are unhappy with your QDRO, we have a 100% satisfaction guarantee - just reach out within three months, give us a chance to make the QDRO right, and we'll give a full refund if the QDRO can't be fixed.
   
@@ -1659,6 +1669,131 @@ code: |
   if CheckboX:
     urls =  [item['data']['_url'] for item in file_url(output_file)]
     a = ''
+  plan_admin_contact_info = ''
+  plan_sponsor_contact_info = ''
+  date= today()
+  plan_add_details = ''
+  if add_other_plan:
+    plan_admin_address =  plan_admin.address.address+"\n"+ plan_admin.address.unit+"\n"+ plan_admin.address.city+" "+plan_admin.address.state+" "+plan_admin.address.zip
+    plan_sponsor_address = plan_sponsor.address.address+"\n"+ plan_sponsor.address.unit+"\n"+ plan_sponsor.address.city+" "+plan_sponsor.address.state+" "+plan_sponsor.address.zip
+  plan_sponsor_address=''
+  plan_admin_address=''
+  plan_admin_foreign_address = ''
+  plan_sponsor_foreign_adress = ''
+  if not add_other_plan:
+    plan_add_details = add1[0]
+    if add1[0]['plan_admin_foreign_address1'] is not None:
+      plan_admin_foreign_address2 = add1[0]['plan_admin_foreign_address1']
+    else:
+      plan_admin_foreign_address2 = ''
+    if add1[0]['plan_sponsor_address1'] is not None:
+      plan_sponsor_address += add1[0]['plan_sponsor_address1'] + "\n"
+    else:
+      plan_sponsor_address = plan_sponsor_address
+
+    if add1[0]['plan_sponsor_address2'] is not None:
+      plan_sponsor_address += add1[0]['plan_sponsor_address2'] + "\n"
+    else:
+      plan_sponsor_address = plan_sponsor_address
+
+    if add1[0]['plan_sponsor_city'] is not None:
+      plan_sponsor_address += add1[0]['plan_sponsor_city'] + " "
+    else:
+      plan_sponsor_address = plan_sponsor_address
+
+    if add1[0]['plan_sponsor_state'] is not None:
+      plan_sponsor_address += add1[0]['plan_sponsor_state'] + " "
+    else:
+      plan_sponsor_address = plan_sponsor_address
+
+    if add1[0]['plan_sponsor_zip'] is not None:
+      plan_sponsor_address += add1[0]['plan_sponsor_zip']
+    else:
+      plan_sponsor_address = plan_sponsor_address
+
+    if add1[0]['plan_sponsor_foreign_address1'] is not None:
+      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_address1'] + "\n"
+    else:
+      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
+    if add1[0]['plan_sponsor_foreign_address2'] is not None:
+      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_address2'] + "\n"
+    else:
+      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
+    if add1[0]['plan_sponsor_foreign_city'] is not None:
+      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_city'] + " "
+    else:
+      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
+    if add1[0]['plan_sponsor_foreign_state'] is not None:
+      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_state'] + " "
+    else:
+      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
+    if add1[0]['plan_sponsor_foreign_country'] is not None:
+      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_country'] + " "
+    else:
+      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
+    if add1[0]['plan_sponsor_foreign_zip'] is not None:
+      plan_sponsor_foreign_adress += add1[0]['plan_sponsor_foreign_zip']
+    else:
+      plan_sponsor_foreign_adress=plan_sponsor_foreign_adress
+    if add1[0]['plan_admin_address1'] is not None:
+      plan_admin_address += add1[0]['plan_admin_address1'] + "\n"
+    else:
+      plan_admin_address = plan_admin_address
+    if add1[0]['plan_admin_address2'] is not None:
+      plan_admin_address += add1[0]['plan_admin_address2'] + "\n"
+    else:
+      plan_admin_address=plan_admin_address 
+    if add1[0]['plan_admin_city'] is not None:
+      plan_admin_address += add1[0]['plan_admin_city'] + " "
+    else:
+      plan_admin_address=plan_admin_address
+    if add1[0]['plan_admin_state'] is not None:
+      plan_admin_address += add1[0]['plan_admin_state'] + " "
+    else:
+      plan_admin_address=plan_admin_address
+    if add1[0]['plan_admin_zip'] is not None:
+      plan_admin_address += add1[0]['plan_admin_zip']
+    else:
+      plan_admin_address=plan_admin_address
+    if add1[0]['plan_admin_foreign_address1'] is not None:
+      plan_admin_foreign_address += add1[0]['plan_admin_foreign_address1'] + "\n"
+    if add1[0]['plan_admin_foreign_address2'] is not None:
+      plan_admin_foreign_address += add1[0]['plan_admin_foreign_address2'] + "\n"
+    if add1[0]['plan_admin_foreign_city'] is not None:
+      plan_admin_foreign_address += add1[0]['plan_admin_foreign_city'] + " "
+    if add1[0]['plan_admin_foreign_state'] is not None:
+      plan_admin_foreign_address += add1[0]['plan_admin_foreign_state'] + " "
+    if add1[0]['plan_admin_foreign_country'] is not None:
+      plan_admin_foreign_address += add1[0]['plan_admin_foreign_country'] + " "
+
+    if add1[0]['plan_admin_foreign_zip'] is not None:
+      plan_admin_foreign_address += add1[0]['plan_admin_foreign_zip']
+
+
+    if add1[0]['plan_admin_name'] is not None:
+      plan_admin_contact_info += add1[0]['plan_admin_name']+", "
+    else:
+      plan_admin_contact_info+=plan_name
+    if add1[0]['plan_admin_phone'] is not None:
+      plan_admin_contact_info += add1[0]['plan_admin_phone']+"\n"
+      plan_admin_contact_info += plan_admin_address
+    else:
+      if plan_admin_address != '':
+        plan_admin_contact_info += plan_admin_address
+      else:
+        plan_admin_contact_info += plan_admin_address
+  
+    if add1[0]['plan_sponsor_name'] is not None:
+      plan_sponsor_contact_info += add1[0]['plan_sponsor_name']+", "
+    else: 
+      plan_sponsor_contact_info+=plan_sponsor_contact_info
+    if add1[0]['plan_sponsor_phone'] is not None:
+      plan_sponsor_contact_info += add1[0]['plan_sponsor_phone']+"\n"
+      plan_sponsor_contact_info += plan_sponsor_address
+    else:
+      plan_sponsor_contact_info += plan_sponsor_address
+      
+
 ---
 ga id: A_coupon_page
 field: coupon_page1
